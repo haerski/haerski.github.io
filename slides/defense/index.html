@@ -1,0 +1,1614 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Marc Härkönen, PhD defense</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="marc.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h3>Dual representations of polynomial modules with applications to partial differential equations</h3>
+					<div class="thm", style="padding: 2em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px;" class="r-frame">
+						$$
+						\begin{gather*}
+						\frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 g}{\partial x \partial y} = 0 \\
+						\frac{\partial^2 f }{\partial y \partial z } + \frac{\partial^2 g}{\partial z^2} = 0 \\
+
+						\frac{\partial^3 f }{\partial x^2 \partial z } + \frac{\partial^3 g}{\partial z \partial y \partial w} = 0
+						\end{gather*}
+						$$
+					</div>
+					<p>
+						<a href="https://people.math.gatech.edu/~mharkonen3/">Marc Härkönen</a><br>
+						<small>PhD dissertation defense,<br>Apr 15 2022</small>
+					</p>
+				</section>
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div>
+							<p>
+								$$ I = (x_1^2, x_1 x_2) \subset R = \mathbb{Q}[x_1, x_2] $$
+							</p>
+							<ul>
+								<li class="fragment" data-fragment-index="1">Primary decomposition $ I = (x_1) \cap (x_1^2, x_2)$.</li>
+								<li class="fragment" data-fragment-index="3">"Differential" primary decomposition $$ I = \left\{ f \in R \colon f \text{ vanishes on the line $x_1=0$ and } \frac{\partial f}{\partial x_1} \text{ vanishes at the origin} \right\}$$</li>
+							</ul>
+							<div class="r-stack fragment" data-fragment-index="2">
+								<div style="background: #FFFFFF; width: 10px; height: 300px; border-radius: 30px;" data-id="line"></div>
+								<div style="background: #FFFFFF; width: 30px; height: 30px; border-radius: 30px;" data-id="point"></div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div style="font-size: .6em;">
+							<p>
+								$$ I = (x_1^2, x_1 x_2) \subset R = \mathbb{Q}[x_1, x_2] $$
+							</p>
+
+							<ul>
+								<li>Primary decomposition $ I = (x_1) \cap (x_1^2, x_2)$.</li>
+								<li>"Differential" primary decomposition $$ \begin{aligned} I = \{ f \in R \colon f \text{ vanishes on the line $x_1=0$ and }& \\ \frac{\partial f}{\partial x_1} \text{ vanishes at the origin} &\} \end{aligned}$$</li>
+							</ul>
+							<div class="r-stack">
+								<div style="background: #FFFFFF; width: 5px; height: 150px; border-radius: 15px;" data-id="line"></div>
+								<div style="background: #FFFFFF; width: 15px; height: 15px; border-radius: 15px;" data-id="point"></div>
+							</div>
+						</div>
+						<div style="margin: 5em;">
+							<p>
+								$$ \frac{\partial^2 \phi}{\partial z_1^2} = \frac{\partial^2 \phi}{\partial z_1 \partial z_2} = 0 $$
+							</p>
+							<p>
+								Find $ \phi(z_1,z_2) \colon \RR^2 \to \CC$ satisfying the above
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div style="font-size: .6em;">
+							<p>
+								$$ I = (x_1^2, x_1 x_2) \subset R = \mathbb{Q}[x_1, x_2] $$
+							</p>
+
+							<ul>
+								<li>Primary decomposition $ I = (x_1) \cap (x_1^2, x_2)$.</li>
+								<li>"Differential" primary decomposition $$ \begin{aligned} I = \{ f \in R \colon f \text{ vanishes on the line $x_1=0$ and }& \\ \frac{\partial f}{\partial x_1} \text{ vanishes at the origin} &\} \end{aligned}$$</li>
+							</ul>
+							<div class="r-stack">
+								<div style="background: #FFFFFF; width: 5px; height: 150px; border-radius: 15px;" data-id="line"></div>
+								<div style="background: #FFFFFF; width: 15px; height: 15px; border-radius: 15px;" data-id="point"></div>
+							</div>
+						</div>
+						<div style="margin: 5em;">
+							<p>
+								$$ \frac{\partial^2 \phi}{\partial z_1^2} = \frac{\partial^2 \phi}{\partial z_1 \partial z_2} = 0 $$
+							</p>
+							<p>
+								Find $ \phi(z_1,z_2) \colon \RR^2 \to \CC$ satisfying the above
+							</p>
+							<p style="padding-top: 3em;">
+								Solution: $\phi(z_1,z_2) = \psi(z_2) + c_1 z_1$,
+							</p>
+							<p style="padding-top: 1em;">
+								$c_1 \in \CC,~~\psi(z_2) \colon \RR \to \CC$ differentiable.
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div style="font-size: .6em;">
+							<p>
+								$$ I = (x_1^2, x_1 x_2) \subset R = \mathbb{Q}[x_1, x_2] $$
+							</p>
+
+							<ul>
+								<li>Primary decomposition $ I = (x_1) \cap (x_1^2, x_2)$.</li>
+								<li>"Differential" primary decomposition $$ \begin{aligned} I = \{ f \in R \colon f \text{ vanishes on the line $x_1=0$ and }& \\ \frac{\partial f}{\partial x_1} \text{ vanishes at the origin} &\} \end{aligned}$$</li>
+							</ul>
+							<div class="r-stack">
+								<div style="background: #FFFFFF; width: 5px; height: 150px; border-radius: 15px;" data-id="line"></div>
+								<div style="background: #FFFFFF; width: 15px; height: 15px; border-radius: 15px;" data-id="point"></div>
+							</div>
+						</div>
+						<div style="margin: 5em; font-size: .6em">
+							<p>
+								$$ \frac{\partial^2 \phi}{\partial z_1^2} = \frac{\partial^2 \phi}{\partial z_1 \partial z_2} = 0 $$
+							</p>
+							<p>
+								Find $ \phi(z_1,z_2) \colon \RR^2 \to \CC$ satisfying the above
+							</p>
+							<p style="padding-top: 3em;">
+								Solution: $\phi(z_1,z_2) = \psi(z_2) + c_1 z_1$,
+							</p>
+							<p style="padding-top: 1em;">
+								$c_1 \in \CC,~~\psi(z_2) \colon \RR \to \CC$ differentiable.
+							</p>
+						</div>
+					</div>
+					<div class="thm", style="margin-top: -1em;">
+						<p>Dualities at two levels</p>
+						<ul>
+							<li>ideals and their differential equations,</li>
+							<li>differential equations and their solutions</li>
+						</ul>
+					</div>
+
+					<aside class="notes">
+						The talk is split into 3 parts.
+						First we will discuss the left side, i.e. algebra.
+						We will describe a new construction that makes the left side very concrete. We will define and characterize differential primary decompositions.
+
+						Then analysis, ideals as PDE, solutions sets
+
+						Finally applications.
+					</aside>
+				</section>
+
+				<section data-auto-animate>
+					<h1>Gröbner duality</h1>
+					<p>
+						$$ R = \KK[x_1,\dotsc,x_n], \qquad p \in \KK^n $$
+					</p>
+					<p style="padding-top: 1em", class="fragment">
+						$$
+						\begin{aligned}
+							\partial_i \colon R &\to \KK \\
+							f &\mapsto \partial_i \bullet f = \frac{\partial f}{\partial x_i}(p).
+						\end{aligned}
+						$$
+					</p>
+					<p style="padding-top: 1em;", class="fragment">
+						$$W_{\KK} := \KK[\partial_1,\dotsc,\partial_n], \qquad \partial^\alpha \bullet f = \frac{\partial^{|\alpha|} f}{\partial x^\alpha}(p)$$
+						<ul>
+							<li class="fragment">A $\KK$-vector space</li>
+							<li class="fragment">A right $R$-module: $(Dg) \bullet f := D \bullet (gf)$</li>
+						</ul>
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="padding-top: 1em; font-size: 0.8em;">
+						$$W_{\KK} := \KK[\partial_1,\dotsc,\partial_n], \qquad \partial^\alpha \bullet f = \frac{\partial^{|\alpha|} f}{\partial x^\alpha}(p)$$
+						<ul>
+							<li style="font-size: 0.8em;">A $\KK$-vector space</li>
+							<li style="font-size: 0.8em;">A right $R$-module: $(Dg) \bullet f := D \bullet (gf)$</li>
+						</ul>
+					</p>
+
+					<div class="thm", data-id="foo">
+						<h3>Definition</h3>
+						The <span class="dfn">dual space</span> of $I \subseteq R$ at the point $p$ is
+						$$ I^\perp = \{ D \in W_\KK \colon D \bullet f = 0 \text{ for all } f \in I \}$$
+						For $\Lambda \subseteq \KK[\partial]$, we have a set of polynomial solutions
+						$$ \Lambda^\perp = \{f \in R \colon D \bullet f = 0 \text{ for all } D \in \Lambda \}$$
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="r-hstack">
+						<div>
+							<p style="font-size: 0.6em;">
+								$$W_{\KK} := \KK[\partial_1,\dotsc,\partial_n], \qquad \partial^\alpha \bullet f = \frac{\partial^{|\alpha|} f}{\partial x^\alpha}(p)$$
+								<ul>
+									<li style="font-size: 0.6em;">A $\KK$-vector space</li>
+									<li style="font-size: 0.6em;">A right $R$-module: $(Dg) \bullet f := D \bullet (gf)$</li>
+								</ul>
+							</p>
+						</div>
+
+						<div class="thm", data-id="foo", style="font-size: 0.6em;">
+							<h3>Definition</h3>
+							The <span class="dfn">dual space</span> of $I \subseteq R$ at the point $p$ is
+							$$ I^\perp = \{ D \in W_\KK \colon D \bullet f = 0 \text{ for all } f \in I \}$$
+							For $\Lambda \subseteq \KK[\partial]$, we have a set of polynomial solutions
+							$$ \Lambda^\perp = \{f \in R \colon D \bullet f = 0 \text{ for all } D \in \Lambda \}$$
+						</div>
+
+						<img src="images/grobner.jpg">
+					</div>
+
+					<div class="thm", style="max-width: 70%;">
+						<h3>Theorem (Gröbner)</h3>
+						Let $p \in \KK^n$, $\mm = (x_1 - p_1, \dotsc, x_n - p_n)$. There is a bijection between $\mm$-primary ideals in $R$ and finite dimensional right $R$-modules in $W_\KK$.
+<!-- 						<ol>
+							<li>$\mm$-primary ideals in $R$ and finite dimensional right $R$-modules in $W_\KK$</li>
+							<li>$\mm$-closed ideals in $R$ and right $R$-modules $\Lambda \subseteq W_\KK$</li>
+						</ol>
+						<br>
+						<span style="font-size: 0.5em;">$I \subseteq R$ is $\mm$-closed if $I_\mm \cap R = I$.</span> -->
+					</div>
+					<!-- <div class="fragment">In Macaulay2, if $\mm = (x_1,\dotsc,x_n)$: <code>toDual</code> and <code>fromDual</code> -->
+				</section>
+
+<!-- 				<section>
+					<h1>Local dual spaces</h1>
+					<p>
+						Suppose $\mm \subset R$ is an arbitrary maximal ideal, $\kappa(\mm) = R/\mm$ the residue field.
+					</p>
+					<p>
+						$$
+							\begin{aligned}
+							\partial_i \colon R &\to \kappa(\mm)\\
+							f &\mapsto \frac{\partial f}{\partial x_i} \mod{\mm}
+							\end{aligned}
+						$$
+					</p>
+				</section> -->
+				<section data-auto-animate>
+					<h1>Local dual spaces</h1>
+					<p>
+						Suppose $\mm \subset R$ is an arbitrary maximal ideal, $\kappa(\mm) = R/\mm$ the residue field.
+					</p>
+					<p style="padding-top: 1em", class="fragment">
+						$$
+						\begin{aligned}
+							\partial_i \colon R &\to \kappa(\mm) \\
+							f &\mapsto \partial_i \bullet f = \frac{\partial f}{\partial x_i} \mod{\mm}
+						\end{aligned}
+						$$
+					</p>
+					<p style="padding-top: 1em;", class="fragment">
+						$$W_{\kappa(\mm)} := \kappa(\mm)[\partial_1,\dotsc,\partial_n], \qquad \partial^\alpha \bullet f = \frac{\partial^{|\alpha|} f}{\partial x^\alpha} \mod{\mm}$$
+						<ul>
+							<li class="fragment">A $\kappa(\mm)$-vector space</li>
+							<li class="fragment">A right $R$-module: $(Dg) \bullet f := D \bullet (gf)$</li>
+						</ul>
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="padding-top: 1em; font-size: 0.8em;">
+						$$W_{\kappa(\mm)} := \kappa(\mm)[\partial_1,\dotsc,\partial_n], \qquad \partial^\alpha \bullet f = \frac{\partial^{|\alpha|} f}{\partial x^\alpha} \mod{\mm}$$
+						<ul>
+							<li>A $\kappa(\mm)$-vector space</li>
+							<li>A right $R$-module: $(Dg) \bullet f := D \bullet (gf)$</li>
+						</ul>
+					</p>
+
+					<div class="thm", data-id="foo">
+						<h3>Definition</h3>
+						The <span class="dfn">local dual space</span> of $I \subseteq R$ at the $\mm$ is
+						$$ D_\mm[I] = \{ D \in W_{\kappa(\mm)} \colon D \bullet f = 0 \text{ for all } f \in I \}$$
+						For $\Lambda \subseteq W_{\kappa(\mm)}$, we have a set of polynomial solutions
+						$$ I_\mm[\Lambda] = \{f \in R \colon D \bullet f = 0 \text{ for all } D \in \Lambda \}$$
+						If $\Lambda \subseteq W_{\kappa(\pp)}$ is a $\kappa(\pp)$-vector space and a right $R$-module, we say that $\Lambda$ is <span class="dfn">a local dual space</span>.
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="r-hstack">
+						<div>
+							<p style="font-size: 0.6em;">
+								$$W_{\kappa(\mm)} := \kappa(\mm)[\partial_1,\dotsc,\partial_n], \qquad \partial^\alpha \bullet f = \frac{\partial^{|\alpha|} f}{\partial x^\alpha} \mod{\mm}$$
+								<ul>
+									<li>A $\kappa(\mm)$-vector space</li>
+									<li>A right $R$-module: $(Dg) \bullet f := D \bullet (gf)$</li>
+								</ul>
+							</p>
+						</div>
+
+						<div class="thm", data-id="foo", style="font-size: 0.6em;">
+							<h3>Definition</h3>
+							The <span class="dfn">local dual space</span> of $I \subseteq R$ at the $\mm$ is
+							$$ D_\mm[I] = \{ D \in W_{\kappa(\mm)} \colon D \bullet f = 0 \text{ for all } f \in I \}$$
+							For $\Lambda \subseteq W_{\kappa(\mm)}$, we have a set of polynomial solutions
+							$$ I_\mm[\Lambda] = \{f \in R \colon D \bullet f = 0 \text{ for all } D \in \Lambda \}$$
+							If $\Lambda \subseteq W_{\kappa(\pp)}$ is a $\kappa(\pp)$-vector space and a right $R$-module, we say that $\Lambda$ is <span class="dfn">a local dual space</span>.
+						</div>
+					</div>
+
+					<div class="thm", style="max-width: 70%;">
+						<h3>Theorem</h3>
+						Let $\mm$ be a maximal ideal. We have bijections
+						<ul>
+							<li>$\mm$-primary ideals in $R$ $\leftrightarrow$ finite dimensional local dual spaces in $W_{\kappa(\mm)}$</li>
+							<li>$\mm$-closed ideals in $R$ $\leftrightarrow$ local dual spaces in $W_{\kappa(\mm)}$</li>
+						</ul>
+						<br>
+						<span style="font-size: 0.6em; ">$I \subseteq R$ is $\mm$-closed if $I_\mm \cap R = I$.</span>
+					</div>
+				</section>
+
+				<section data-background="#082828">
+					<h2>Example</h2>
+					<div>
+						$R = \RR[x,y], \qquad \mm = (x-y, y^2+1)$
+						$$ I = (2xy-y^2+1, x^2 + 1) $$
+						$$ D_{\mm}[I] = \Span_{\kappa(\mm)}\{ 1, \partial_y \} $$
+					</div>
+					<div style="margin-top: 4em", class="fragment">
+						$\Lambda = \langle \partial_x^2 + \partial_x\partial_y,\,\partial_y^2 \rangle$ <span class="fragment">$ = \Span_{\kappa(\mm)}\{1,\,\partial_x,\,\partial_y,\,\partial_y^2,\,\partial_x^2 + \partial_x\partial_y\}$</span>
+						<span class="fragment">$$ I_{\mm}[\Lambda] = ((x-y)^3, (y^2+1)^2 + 4(x-y)^2, (y^2+1)(x^2-2xy-1)-4(x-y)^2) $$</span>
+					</div>
+				</section>
+
+				<section data-auto-animate  data-visibility="hidden">
+					<h2>Some properties</h2>
+					<p class="fragment box">
+						$I$ is an arbitrary ideal<br>
+						$ D_{\kappa(\mm)}[I] = D_{\kappa(\mm)}[I_\mm \cap R] $
+					</p>
+				</section>
+
+				<section data-auto-animate data-visibility="hidden">
+					<h2>Some properties</h2>
+					<p class="box", style="font-size: 0.5em;">
+						$I$ is an arbitrary ideal<br>
+						$ D_{\kappa(\mm)}[I] = D_{\kappa(\mm)}[I_\mm \cap R] $
+					</p>
+					<p class="box", style="margin-top: 2em;">
+						$I$ is an ideal if and only if $D_\mm[I]$ is a local dual space<br>
+						$\Lambda$ is a local dual space if and only if $I_\mm[\Lambda]$ is an ideal.
+					</p>
+				</section>
+
+				<section data-auto-animate data-visibility="hidden">
+					<h2>Some properties</h2>
+					<p class="box", style="font-size: 0.5em;">
+						$I$ is an arbitrary ideal<br>
+						$ D_{\kappa(\mm)}[I] = D_{\kappa(\mm)}[I_\mm \cap R] $
+					</p>
+					<p class="box", style="margin-top: 2em; font-size: 0.5em;">
+						$I$ is an ideal if and only if $D_\mm[I]$ is a local dual space<br>
+						$\Lambda$ is a local dual space if and only if $I_\mm[\Lambda]$ is an ideal.
+					</p>
+					<p class="box", style="margin-top: 2em;">
+						$$I \subseteq J \implies D_\mm[I] \supseteq D_\mm[J] \qquad \Lambda \subseteq \Xi \implies I_\mm[\Lambda] \supseteq I_\mm[\Xi] $$
+					</p>
+				</section>
+
+				<section data-auto-animate data-visibility="hidden">
+					<h2>Some properties</h2>
+					<p class="box", style="font-size: 0.5em;">
+						$I$ is an arbitrary ideal<br>
+						$ D_{\kappa(\mm)}[I] = D_{\kappa(\mm)}[I_\mm \cap R] $
+					</p>
+					<p class="box", style="margin-top: 2em; font-size: 0.5em;">
+						$I$ is an ideal if and only if $D_\mm[I]$ is a local dual space<br>
+						$\Lambda$ is a local dual space if and only if $I_\mm[\Lambda]$ is an ideal.
+					</p>
+					<p class="box", style="margin-top: 2em; font-size: 0.5em">
+						$$I \subseteq J \implies D_\mm[I] \supseteq D_\mm[J] \qquad \Lambda \subseteq \Xi \implies I_\mm[\Lambda] \supseteq I_\mm[\Xi] $$
+					</p>
+					<p class="box", style="margin-top: 2em;">
+						If $I$, $J$ ideals, $\Lambda, \Xi$ local dual spaces, then
+						$$
+						\begin{aligned}
+						D_{\mm}[I \cap J] = D_{\mm}[I] + D_{\mm}[J] && D_{\mm}[I + J] = D_{\mm}[I] \cap D_{\mm}[J] \\
+						I_{\mm}[\Lambda \cap \Xi] = I_{\mm}[\Lambda] + I_{\mm}[\Xi] && I_{\mm}[\Lambda + \Xi] = I_{\mm}[\Lambda] \cap D_{\mm}[\Xi]
+						\end{aligned}
+						$$
+					</p>
+				</section>
+
+				<section data-auto-animate data-visibility="hidden">
+					<h2>Some properties</h2>
+					<p class="box", style="font-size: 0.5em;">
+						$I$ is an arbitrary ideal<br>
+						$ D_{\kappa(\mm)}[I] = D_{\kappa(\mm)}[I_\mm \cap R] $
+					</p>
+					<p class="box", style="margin-top: 2em; font-size: 0.5em;">
+						$I$ is an ideal if and only if $D_\mm[I]$ is a local dual space<br>
+						$\Lambda$ is a local dual space if and only if $I_\mm[\Lambda]$ is an ideal.
+					</p>
+					<p class="box", style="margin-top: 2em; font-size: 0.5em;">
+						$$I \subseteq J \implies D_\mm[I] \supseteq D_\mm[J] \qquad \Lambda \subseteq \Xi \implies I_\mm[\Lambda] \supseteq I_\mm[\Xi] $$
+					</p>
+					<p class="box", style="margin-top: 2em; font-size: 0.5em;">
+						If $I$, $J$ ideals, $\Lambda, \Xi$ local dual spaces, then
+						$$
+						\begin{aligned}
+						D_{\mm}[I \cap J] = D_{\mm}[I] + D_{\mm}[J] && D_{\mm}[I + J] = D_{\mm}[I] \cap D_{\mm}[J] \\
+						I_{\mm}[\Lambda \cap \Xi] = I_{\mm}[\Lambda] + I_{\mm}[\Xi] && I_{\mm}[\Lambda + \Xi] = I_{\mm}[\Lambda] \cap D_{\mm}[\Xi]
+						\end{aligned}
+						$$
+					</p>
+					<p class="box", style="margin-top: 2em;">
+						$$D_\mm[\mm^k] = \{ D \in W_{\kappa(\mm)} \colon \deg(D) < k \}$$
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<h2>Non maximal primes</h2>
+					<p>
+						Let $\pp \subset R = \KK[x_1,\dotsc,x_n]$ be a prime.<br>
+						Let $\tt = \{x_{i_1}, \dotsc, x_{i_d}\}$ denote a maximal set of algebraically independent variables in $R/\pp$,<br>let $\yy = \{x_{j_1}, \dotsc, x_{j_c}\}$ denote the rest.<br>
+						Relabel the variables so that $R = \KK[\tt, \yy]$.
+					</p>
+
+					<p class="fragment", style="margin-top: 2em">
+						Denote by $\cdot^\ttt$ the localization at the multiplicatively closed set $\KK[\tt] \setminus \{0\}$.
+					</p>
+					<p class="fragment" style="margin-top: 2em;">
+						$$ R^\ttt = \KK(\tt)[\yy] $$
+					</p>
+					<p class="fragment">
+						$ \pp^\ttt $ is a maximal ideal in $R^\ttt$
+					</p>
+					<p class="fragment" style="margin-top: 1em">
+						$ \kappa(\pp^\ttt) = R^\ttt/\pp^\ttt $ is isomorphic to the residue field $ \kappa(\pp) = (R/\pp)_\pp $ 
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="font-size: 0.7em">
+						$$ R^\ttt = \KK(\tt)[\yy] $$
+					</p>
+					<p style="font-size: 0.7em">
+						$ \pp^\ttt $ is a maximal ideal in $R^\ttt$
+					</p>
+					<p style="font-size: 0.7em;">
+						$ \kappa(\pp^\ttt) = R^\ttt/\pp^\ttt $ is isomorphic to the residue field $ \kappa(\pp) = (R/\pp)_\pp $ 
+					</p>
+					<div class="r-hstack">
+						<p>
+							Study the local dual space $$ D_{\pp^\ttt}[I^\ttt] \subseteq W_{\kappa(\pp^\ttt)}$$
+						</p>
+						<span class="fragment">
+							<div class="thm", style="background: #420516; margin-left: 3em;">
+								Warning: if $D \in W_{\kappa(\pp^\ttt)}$, then
+								$$ D = \sum_\alpha c_\alpha \partial_\yy^\alpha $$
+								where $c_\alpha \in \kappa(\pp)$.<br>
+								<span class="fragment highlight-blue">There are no $\partial_\tt$ variables!</span>
+							</div>
+						</span>
+					</div>
+				</section>
+
+				<section>
+					<div class="thm", style="width: 75%;">
+						<h3>Theorem</h3>
+						$\pp \in R$ prime, $\tt$ a maximal set of independent variables over $\pp$.<br>
+						There are bijections<br>
+						<ul>
+							<li>$\pp$-primary ideals $I \subset R$ $\leftrightarrow$ <span class="dfn">finite dimensional</span> local dual spaces $\Lambda \subseteq W_{\kappa(\pp^\ttt)}$</li>
+							<li>$\pp$-closed ideals $I \subset R$ $\leftrightarrow$ local dual spaces $\Lambda \subseteq W_{\kappa(\pp^\ttt)}$,</li>
+						</ul><br>
+						given by
+						$$
+						\begin{aligned}
+						I &\mapsto D_{\pp^\ttt}[I^\ttt] \\
+						\Lambda &\mapsto I_{\pp^\ttt}[\Lambda] \cap R
+						\end{aligned}
+						$$
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>$R = \QQ[t,x,y]$<br>$I = (x^2, y-tx)$ is a $\pp = (x,y)$-primary ideal.</p>
+					<p class="fragment", style="margin-top: 2em">The set $\{t\}$ is a maximal set of independent variables.<br>
+					$\kappa(\pp) = \QQ(t)$</p>
+					<p class="fragment", style="margin-top: 2em">
+						$$ D_{\pp^\ttt}[I^\ttt] = \Span_{\kappa(\pp)} \left\{ 1,~\partial_y,~\partial_y^2 - \frac{2}{t}\partial_x,~\partial_y^3+\frac{6}{t}\partial_x\partial_y \right\} $$
+					</p>
+					<p class="fragment fade-up", style="padding-left: 5em;">
+						$ = \Span_{\kappa(\pp)} \left\{ 1,~\partial_y,~t\partial_y^2 - 2\partial_x,~t\partial_y^3+6\partial_x\partial_y \right\} $
+					</p>
+				</section>
+
+				<section>
+					<div class="thm">
+						<h3>Definition</h3>
+						Let $I$ be $\pp$-primary, $\tt$ a maximal independent set.<br>
+						A <span class="dfn">set of Noetherian operators</span> is a finite set $\DD \subseteq W_{\kappa(\pp^\ttt)}$ such that $$ \Span_{\kappa(\pp)} \DD = D_{\pp^\ttt}[I^\ttt] $$
+					</div>
+
+					<div class="thm">
+						<h3>Theorem</h3>
+						$\DD$ is a set of Noetherian operators for $I$ if and only if
+						$$ I = \{ f \in R \colon D \bullet f = 0 \text{ for all } D \in \DD \} $$
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>$ I = (y^4, xy^3, x^3y^2)$ <span class="fragment">$ = (y^2) \cap (x^3,\,y^4,\,x^3y^2)$</span></p>
+					<div class="r-hstack" style="margin-top: 2em">
+						<div style="margin-right: 2em">
+							<p>
+								<span class="fragment">Noetherian operators:<br></span>
+								<span class="fragment">$\pp_1 = (y), \DD = \{1,\partial_y\}$<br><br><br></span>
+								<span class="fragment">$\pp_2 = (x,y)$
+								$$\begin{aligned}\DD = \{& 1, \partial_x, \partial_x^2, \\ & \partial_y, \partial_y\partial_x, \partial_y\partial_x^2, \\ & \partial_y^2, \partial_y^2\partial_x, \partial_y^2\partial_x^2, \partial_y^3 \} \end{aligned}$$</span>
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>$ I = (y^4, xy^3, x^3y^2)$ <span>$ = (y^2) \cap (x^3,\,y^4,\,x^3y^2)$</span></p>
+					<div class="r-hstack" style="margin-top: 2em">
+						<div style="margin-right: 2em">
+							<p>
+								Noetherian operators:<br>
+								$\pp_1 = (y), \DD = \{1,\partial_y\}$<br><br><br>
+								$\pp_2 = (x,y)$
+								$$\begin{aligned}\DD = \{& 1, \partial_x, \partial_x^2, \\ & \partial_y, \partial_y\partial_x, \partial_y\partial_x^2, \\ & \partial_y^2, \partial_y^2\partial_x, \partial_y^2\partial_x^2, \partial_y^3 \} \end{aligned}$$
+							</p>
+						</div>
+						<div style="margin-left: 2em">
+							<img src="images/stairs.png" style="width: 600px">
+							<p>
+								<span style="color: #ff4c29ff; margin-right: 2em">$D_{(x,y)}[I]$</span>
+								<span style="color: #6e85b2ff">$D_{(x,y)}[(y^2)]$</span>
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>$ I = (y^4, xy^3, x^3y^2)$ <span>$ = (y^2) \cap (x^3,\,y^4,\,x^3y^2)$</span></p>
+					<div class="r-hstack" style="margin-top: 2em">
+						<div style="margin-right: 2em">
+							<p>
+								<strike>Noetherian operators:</strike><br>
+								$\pp_1 = (y), \DD = \{1,\partial_y\}$<br><br><br>
+								$\pp_2 = (x,y)$
+								$$\begin{aligned}\DD = \{& \partial_y^2, \partial_y^2\partial_x, \partial_y^2\partial_x^2, \partial_y^3 \} \end{aligned}$$
+							</p>
+						</div>
+						<div style="margin-left: 2em">
+							<img src="images/stairs.png" style="width: 600px">
+							<p>
+								<span style="color: #ff4c29ff; margin-right: 2em">$D_{(x,y)}[I]$</span>
+								<span style="color: #6e85b2ff">$D_{(x,y)}[(y^2)]$</span>
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h1>Arbitrary ideals</h1>
+					<p>
+						Let $I \subseteq R$, $\pp$ an associated prime, $\tt$ a maximal set of independent variables.
+					</p>
+					<p>
+						Let $J = I_\pp \cap R$ be the $\pp$-closure of $I$.
+					</p>
+					<p class="fragment">
+						$$ J = Q \cap (J \colon \pp^\infty) $$
+					</p>
+					<div class="r-stack">
+						<p class="fragment fade-in-then-out">
+							$$ D_{\pp^\ttt}[J^\ttt] = D_{\pp^\ttt}[Q^\ttt] + D_{\pp^\ttt}[(J \colon \pp^\infty)^\ttt] $$
+						</p>
+						<p class="fragment">
+							$$ D_{\pp^\ttt}[I^\ttt] = D_{\pp^\ttt}[Q^\ttt] + D_{\pp^\ttt}[(I \colon \pp^\infty)^\ttt] $$
+						</p>
+					</div>
+					<p class="fragment">
+						$ \implies $ $ \frac{D_{\pp^\ttt}[I^\ttt]}{D_{\pp^\ttt}[(I \colon \pp^\infty)^\ttt]} $ is a finite dimensional $\kappa(\pp)$-vector space.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<h1>Arbitrary ideals</h1>
+					<p>
+						Let $I \subseteq R$, $\pp$ an associated prime, $\tt$ a maximal set of independent variables.
+					</p>
+					<div class="thm">
+						<h3>Definition</h3>
+						<p>
+							The <span class="dfn">excess dual space</span> of $I$ at $\pp$ is the finite dimensional $\kappa(\pp)$-vector space $ \frac{D_{\pp^\ttt}[I^\ttt]}{D_{\pp^\ttt}[(I \colon \pp^\infty)^\ttt]} $.
+				</section>
+
+				<section data-auto-animate data-auto-animate-restart>
+					<div class="thm">
+						<h3>Definition</h3>
+						<p>
+							Let $I \subseteq R$ be an ideal.<br>For each $\pp \in \Ass(I)$ let $\tt_\pp$ be a maximal set of independent variables over $\pp$.
+						</p>
+						<p>
+							A <span class="dfn">differential primary decomposition</span> is a list of triples
+							$$ \{(\pp, \tt_\pp, \DD_\pp) \}_{\pp \in \Ass(I)} $$
+							such that the images of $\DD_\pp \in W_{\kappa(\pp^\ttp)}$ span the excess dual space.
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm", style="font-size: 0.5em;">
+						<h3>Definition</h3>
+						<p>
+							Let $I \subseteq R$ be an ideal.<br>For each $\pp \in \Ass(I)$ let $\tt_\pp$ be a maximal set of independent variables over $\pp$.
+						</p>
+						<p>
+							A <span class="dfn">differential primary decomposition</span> is a list of triples
+							$$ \{(\pp, \tt_\pp, \DD_\pp) \}_{\pp \in \Ass(I)} $$
+							such that the images of $\DD_\pp \in W_{\kappa(\pp^\ttp)}$ span the excess dual space.
+						</p>
+					</div>
+					<div class="thm">
+						<h3>Proposition</h3>
+						<p>$ I = \{ f \in R \colon D \bullet f = 0 \text{ for all } D \in \DD_{\mathfrak{p}},\, \pp \in \Ass(I) \} $</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="r-hstack">
+						<div class="thm", style="font-size: 0.5em;">
+							<h3>Definition</h3>
+							<p>
+								Let $I \subseteq R$ be an ideal.<br>For each $\pp \in \Ass(I)$ let $\tt_\pp$ be a maximal set of independent variables over $\pp$.
+							</p>
+							<p>
+								A <span class="dfn">differential primary decomposition</span> is a list of triples
+								$$ \{(\pp, \tt_\pp, \DD_\pp) \}_{\pp \in \Ass(I)} $$
+								such that the images of $\DD_\pp \in W_{\kappa(\pp^\ttp)}$ span the excess dual space.
+							</p>
+						</div>
+						<div class="thm", style="font-size: 0.7em;">
+							<h3>Proposition</h3>
+							<p>$ I = \{ f \in R \colon D \bullet f = 0 \text{ for all } D \in \DD_{\mathfrak{p}},\, \pp \in \Ass(I) \} $ </p>
+						</div>
+					</div>
+					<div class="thm">
+						<h3>Theorem</h3>
+						$ \{(\pp, \tt_\pp, \DD_\pp) \}_{\pp \in \Ass(I)} $ is a differential primary decomposition if and only if, for each $\pp \in \Ass(I)$
+						$$ I_\pp \cap R = \{ f \in R \colon D \bullet f = 0 \text{ for all } D \in \DD_{\mathfrak{q}},\, \pp \supseteq {\mathfrak{q}} \in \Ass(I) \} $$
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>
+						Let $I = (x(y-z), x^2z, x^3)$: a plane $x=0$ with an embedded line $x=y-z = 0$ with a further embedded point at the origin.
+					</p>
+					<div class="r-hstack">
+						<p class="fragment" data-fragment-index="2">
+							$$
+							\begin{Bmatrix}
+							((x), & \{y,z\}, & \{1\}), \\
+							((x,y-z), & \{z\}, & \{\partial_x\}), \\
+							((x,y,z), & \emptyset, & \{\partial_x^2\})
+							\end{Bmatrix}
+							$$
+						</p>
+						<img src="images/plane.png" style="height: 300px; margin-left: 5em" class="fragment" data-fragment-index="1">
+				</div>
+					<pre class="fragment" data-fragment-index="3"><code class="plaintext">
+Macaulay2, version 1.19.1.1
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : I = ideal(x*y-x*z,x^2*z,x^3);
+i4 : differentialPrimaryDecomposition I
+
+o4 = {{ideal x, {| 1 |}}, {ideal (y - z, x), {| dx |}}, {ideal (z, y, x), {| dx^2 |}}}
+
+o4 : List
+					</code></pre>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>
+						Let $I = (x(y-z), x^2z, x^3)$: a plane $x=0$ with an embedded line $x=y-z = 0$ with a further embedded point at the origin.
+					</p>
+					<div class="r-hstack">
+						<p>
+							$$
+							\begin{Bmatrix}
+							((x), & \{y,z\}, & \{1\}), \\
+							((x,y-z), & \{z\}, & \{\partial_x\}), \\
+							((x,y,z), & \emptyset, & \{\partial_x^2\})
+							\end{Bmatrix}
+							$$
+						</p>
+						<img src="images/plane.png" style="height: 300px; margin-left: 5em">
+				</div>
+					<pre><code class="plaintext">
+Macaulay2, version 1.19.1.1
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : I = ideal(x*y-x*z,x^2*z,x^3);
+i4 : differentialPrimaryDecomposition I
+
+o4 = {{ideal x, {| 1 |}}, {ideal (y - z, x), {| dx |}}, {ideal (z, y, x), {| dx^2 |}}}
+
+o4 : List
+					</code></pre>
+					<p class="thm cite">
+						J. Chen, Y. Cid-Ruiz, M. Härkönen, R. Krone, and A. Leykin, Noetherian operators in Macaulay2, 2021. <em>arXiv:2101.01002</em>.<br>
+						J. Chen, M. Härkönen, R. Krone, and A. Leykin, “Noetherian operators and primary decomposition,” <em>J. Symbolic Comput.</em>, vol. 110, 2022.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<h1>Modules</h1>
+					<div class="r-hstack">
+						<div>
+							<p>
+								Everything translates to $R$-submodules $U \subseteq R^k$!
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h1>Modules</h1>
+					<div class="r-hstack">
+						<div class="thm", style="padding: 2em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px;">
+							$
+							\begin{gathered}
+							\frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 g}{\partial x \partial y} = 0 \\
+							\frac{\partial^2 f }{\partial y \partial z } + \frac{\partial^2 g}{\partial z^2} = 0 \\
+
+							\frac{\partial^3 f }{\partial x^2 \partial z } + \frac{\partial^3 g}{\partial z \partial y \partial w} = 0
+							\end{gathered}
+							$
+						</div>
+						<div>
+							<p>
+								Everything translates to $R$-submodules $U \subseteq R^k$!
+							</p>
+							<p class="fragment" style="margin-top: 2em">
+								If $D \in W_{\kappa(\mm)}^k$, $f \in R^k$, then<br><br>
+								$ D \bullet f = \sum_{i=1}^k D_i \bullet f_i $
+							</p>
+							<p class="fragment" style="margin-top: 2em">
+								$$ \begin{aligned} U &\mapsto D_{\pp^\ttt}[U^\ttt] \subseteq (W_{\kappa(\pp^\ttt)})^k \\
+								 \Lambda &\mapsto I_{\pp^\ttt}[\Lambda] \cap R^k \end{aligned}$$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<div class="r-hstack">
+						<p style="margin: 3em">Let $$ U = \im_R \begin{bmatrix}0 & x^2 & xy^2 \\ x & 0 & -2y^2 \end{bmatrix} $$ </p>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<div class="r-hstack">
+						<p style="margin: 3em">Let $$ U = \im_R \begin{bmatrix}0 & x^2 & xy^2 \\ x & 0 & -2y^2 \end{bmatrix} $$ </p>
+						<pre style="width: fit-content;"><code class="plaintext", style="max-height: fit-content; font-size: 0.8em">
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : U = image matrix {{0, x^2, x*y^2}, {x, 0, -2*y^2}}
+
+o3 = image | 0 x2 xy2  |
+					 | x 0  -2y2 |
+
+														 2
+o3 : R-module, submodule of R
+
+i4 : differentialPrimaryDecomposition U
+
+o4 = {{ideal x, {| 1 |, | 2dx |}}, {ideal (y, x), {| dx |, |  0 |}}}
+								 | 0 |  |  1  |                    |  0 |  | dy |
+						</code></pre>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<div class="r-hstack">
+						<p style="margin: 3em">Let $$ U = \im_R \begin{bmatrix}0 & x^2 & xy^2 \\ x & 0 & -2y^2 \end{bmatrix} $$ </p>
+						<pre style="width: fit-content;"><code class="plaintext", style="max-height: fit-content; font-size: 0.8em">
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : U = image matrix {{0, x^2, x*y^2}, {x, 0, -2*y^2}}
+
+o3 = image | 0 x2 xy2  |
+					 | x 0  -2y2 |
+
+														 2
+o3 : R-module, submodule of R
+
+i4 : differentialPrimaryDecomposition U
+
+o4 = {{ideal x, {| 1 |, | 2dx |}}, {ideal (y, x), {| dx |, |  0 |}}}
+								 | 0 |  |  1  |                    |  0 |  | dy |
+						</code></pre>
+					</div>
+					<p>
+						$\left[\begin{smallmatrix}f \\ g \end{smallmatrix} \right] \in R^2$ belongs to $U$ if and only if<br>
+						<ul>
+							<li>$f$ and $2\frac{\partial f}{\partial x} + g$ vanish on the line $x = 0$</li>
+							<li>$\frac{\partial f}{\partial x}$ and $\frac{\partial g}{\partial y}$ vanish at the point $x = y = 0$.</li>
+						</ul>
+					</p>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<div class="r-hstack">
+						<p style="margin: 3em">Let $$ U = \im_R \begin{bmatrix}0 & x^2 & xy^2 \\ x & 0 & -2y^2 \end{bmatrix} $$ </p>
+						<pre style="width: fit-content;"><code class="plaintext", style="max-height: fit-content; font-size: 0.8em">
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : U = image matrix {{0, x^2, x*y^2}, {x, 0, -2*y^2}}
+
+o3 = image | 0 x2 xy2  |
+					 | x 0  -2y2 |
+
+														 2
+o3 : R-module, submodule of R
+
+i4 : differentialPrimaryDecomposition U
+
+o4 = {{ideal x, {| 1 |, | 2dx |}}, {ideal (y, x), {| dx |, |  0 |}}}
+								 | 0 |  |  1  |                    |  0 |  | dy |
+						</code></pre>
+					</div>
+					<p>
+						$\left[\begin{smallmatrix}f \\ g \end{smallmatrix} \right] \in R^2$ belongs to $U$ if and only if<br>
+						<ul>
+							<li>$f$ and $2\frac{\partial f}{\partial x} + g$ vanish on the line $x = 0$</li>
+							<li>$\frac{\partial f}{\partial x}$ and $\frac{\partial g}{\partial y}$ vanish at the point $x = y = 0$.</li>
+						</ul>
+					</p>
+					<p class="thm cite">
+						J. Chen and Y. Cid-Ruiz, “Primary decomposition of modules: A computational differential approach,” <em>Journal of Pure and Applied Algebra</em>, 2022.<br>
+						R. Ait El Manssour, M. Härkönen, and B. Sturmfels, “Linear PDE with constant coefficients,” <em>Glasgow Mathematical Journal, First View</em>, 2021.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<h1>PDE</h1>
+					<div class="r-hstack">
+						<div data-id="foo">
+							<p>Let $R = \CC[x_1,\dotsc,x_n] = \CC[\partial_{z_1}, \dotsc, \partial_{z_n}]$.</p>
+							<p class="fragment">A $\ell \times k$ matrix with entries in $R$ describes a system of $\ell$ <span class="dfn">linear homogeneous PDE with constant coefficients</span></p>
+							<p class="fragment">Its solution is an unknown function<br>$v(z_1,\dotsc,z_n) \colon \RR^n \to \CC^k$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h1>PDE</h1>
+					<div class="r-hstack">
+						<div style="width: 40%", data-id="foo">
+							<p>Let $R = \CC[x_1,\dotsc,x_n] = \CC[\partial_{z_1}, \dotsc, \partial_{z_n}]$.</p>
+							<p>A $\ell \times k$ matrix with entries in $R$ describes a system of $\ell$ <span class="dfn">linear homogeneous PDE with constant coefficients</span></p>
+							<p>Its solution is an unknown function<br>$v(z_1,\dotsc,z_n) \colon \RR^n \to \CC^k$
+							</p>
+						</div>
+						<div style="margin-left: 2em; background: #082828;", class="box">
+							<h3>Example</h3>
+							<p>$\ell = 3, k = 2 $</p>
+							<p class="fragment">
+								$ M = \begin{bmatrix} 0 & x_1 \\ x_1^2 & 0 \\ x_1 x_2^2 & -2x_2^2 \end{bmatrix} $
+							</p>
+							<p class="fragment">
+								$ M \bullet v = 0 $ means finding $ v(z_1,z_2) \colon \RR^2 \to \CC^2 $ such that
+								$$ \begin{gathered}
+								\partial_{z_1} \bullet v_2 = 0 \\
+								\partial_{z_1}^2 \bullet v_1 = 0 \\
+								\partial_{z_1}\partial_{z_2}^2 \bullet v_1 - 2 \partial_{z_2}^2 \bullet v_2 = 0
+								\end{gathered}
+								$$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<p>
+						Let $\ff$ be an $R$-module of functions, $M \in R^{\ell \times k}$.
+					</p>
+					<p class="fragment">
+						The <span class="dfn">solution space</span>
+						$$ \Sol_\ff(M) = \{v \in \ff^k \colon M \bullet v = 0 \} $$
+						is an $R$-module.
+					</p>
+					<p class="fragment">
+						It only depends on the module $U = \im_R M^T \subseteq R^k$
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<h2 style="text-transform: none;"><span class="r-frame", style="padding: 0.2em;">$\ff 	= C_c^\infty$</span></h2>
+					<div class="thm" data-id="thm1">
+						<h4>Theorem (Malgrange 1960)</h4>
+						<p>The set of compactly supported smooth functions is an injective $R$-module</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h2 style="text-transform: none;"><span class="r-frame", style="padding: 0.2em;">$\ff 	= C_c^\infty$</span></h2>
+					<div class="thm" data-id="thm1">
+						<h4>Theorem (Malgrange 1960)</h4>
+						<p>The set of compactly supported smooth functions is an injective $R$-module</p>
+					</div>
+					<div class="r-stack">
+						<p class="fragment fade-in-then-out">
+							$$ R^{k'} \xrightarrow{S} R^k \xrightarrow{M} R^\ell $$
+						</p>
+						<p class="fragment fade-in-then-out">
+							$$ R^{k'} \otimes_R C_c^\infty \xrightarrow{S \otimes 1} R^k \otimes_R C_c \xrightarrow{M \otimes 1} R^\ell \otimes_R C_c^\infty $$
+						</p>
+						<p class="fragment">
+							$$ (C_c^\infty)^{k'}  \xrightarrow{S} (C_c^\infty)^k \xrightarrow{M} (C_c^\infty)^\ell $$
+						</p>
+					</div>
+					<p class="fragment">
+						$$\Sol_{C_c^\infty}(M) = \im_{C_c^\infty}(S) = \{ S \bullet u \colon u \in (C_c^\infty)^{k'} \} $$
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<h2 style="text-transform: none;"><span class="r-frame", style="padding: 0.2em;">$\ff = C^\infty$ or $\DD'$</span></h2>
+					<div class="r-hstack">
+						<div class="box" style="background: #082828; padding-left: 1em; padding-right: 1em;">
+							<h3>Example</h3>
+							<p>
+								$ v'''(z) - 3v''(z) + 4 = 0 $
+							</p>
+							<div class="r-stack">
+								<p><span class="fragment fade-in-then-out">Characteristic polynomial<br>$ x^3 - 3x^2 - 4 = 0 $</span></p>
+								<p><span class="fragment">Characteristic polynomial<br>$ (x-2)^2(x+1) = 0 $</span></p>
+							</div>
+							<p class="fragment">
+								Solutions<br> $ e^{2z}, ze^{2z}$<br>$ e^{-z} $
+							</p>
+							<p class="fragment">
+								Local dual spaces
+								$$\begin{aligned}
+								x=2&: & \langle 1, \partial_x \rangle\\
+								x=-1&: & \langle 1 \rangle
+								\end{aligned}$$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h2 style="text-transform: none;"><span class="r-frame", style="padding: 0.2em;">$\ff = C^\infty$ or $\DD'$</span></h2>
+					<div class="r-hstack">
+						<div class="box" style="background: #082828; padding-left: 1em; padding-right: 1em;">
+							<h3>Example</h3>
+							<p>
+								$ v'''(z) - 3v''(z) + 4 = 0 $
+							</p>
+							<div class="r-stack">
+								<p>Characteristic polynomial<br><span>$ (x-2)^2(x+1) = 0 $</span></p>
+							</div>
+							<p>
+								Solutions<br> $ e^{2z}, ze^{2z}$<br>$ e^{-z} $
+							</p>
+							<p>
+								Local dual spaces
+								$$\begin{aligned}
+								x=2&: & \langle 1, \partial_x \rangle\\
+								x=-1&: & \langle 1 \rangle
+								\end{aligned}$$
+							</p>
+						</div>
+						<div class="thm">
+							<h3>Theorem</h3>
+							<p>
+								Let $U \subseteq R^k$ be an $R$-submodule, $\pp$ a prime.<br>
+								The operator $D = D(x,\partial_x) \in D_{\pp^\ttt}[I^\ttt]$ if and only if
+								$$ D(x_0, z) \exp(x_0^T \cdot z) \in \Sol_\ff (U) $$
+								for (almost) all $x_0 \in V(\pp)$.
+							</p>
+						</div>
+					</div>
+					<aside class="notes">
+						A similar statement was known by analysts in the 60's, we show that this characterizes the local dual spaces (i.e. the other direction)
+					</aside>
+				</section>
+
+				<section>
+					<div class="thm">
+						<h3>Theorem (improved Ehrenpreis-Palamodov)</h3>
+						<p>
+							Let $\{(\pp, \tt_\pp, \DD_\pp)\}_{\pp \in \Ass(R^k/U)}$ be a differential primary decomposition for the $R$-submodule $U \subseteq R$.
+							All distributional solutions $u \in \Sol_{\DD'}(U)$ are of the form
+							$$
+							u(z) = \sum_{\pp \in \Ass(R^k/U)} \sum_{D \in \DD_\pp} \int_{V(\pp)} D(x,z) \exp(x^T \cdot z)\,\mathrm{d}\mu_{\pp,D}(x)
+							$$
+							for a suitable set of measures $\mu_{\pp,D}$.
+						</p>
+					</div>
+					</section>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<div class="r-hstack">
+						<p>
+							$$ M = \begin{bmatrix} 0 & x_1 \\ x_1^2 & 0 \\ x_1 x_2^2 & -2x_2^2 \end{bmatrix} $$
+							$$ U = \im_R M^T $$
+							Find $v \in \Sol_{\DD'}(M)$
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<div class="r-hstack">
+						<div style="margin-right: 3em">
+							<p>
+								$$ M = \begin{bmatrix} 0 & x_1 \\ x_1^2 & 0 \\ x_1 x_2^2 & -2x_2^2 \end{bmatrix} $$
+								$$ U = \im_R M^T $$
+								Find $v \in \Sol_{\DD'}(M)$
+							</p>
+						</div>
+						<div>
+							<pre style="width: fit-content;"><code class="plaintext", style="max-height: fit-content; font-size: 0.8em">
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : U = image matrix {{0, x^2, x*y^2}, {x, 0, -2*y^2}}
+
+o3 = image | 0 x2 xy2  |
+					 | x 0  -2y2 |
+
+														 2
+o3 : R-module, submodule of R
+
+i4 : solvePDE U
+
+o4 = {{ideal x, {| 1 |, | 2dx |}}, {ideal (y, x), {| dx |, |  0 |}}}
+								 | 0 |  |  1  |                    |  0 |  | dy |
+							</code></pre>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<div class="r-hstack">
+						<div style="margin-right: 3em">
+							<p>
+								$$ M = \begin{bmatrix} 0 & x_1 \\ x_1^2 & 0 \\ x_1 x_2^2 & -2x_2^2 \end{bmatrix} $$
+								$$ U = \im_R M^T $$
+								Find $v \in \Sol_{\DD'}(M)$
+							</p>
+						</div>
+						<div>
+							<pre style="width: fit-content;"><code class="plaintext", style="max-height: fit-content; font-size: 0.8em">
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : U = image matrix {{0, x^2, x*y^2}, {x, 0, -2*y^2}}
+
+o3 = image | 0 x2 xy2  |
+					 | x 0  -2y2 |
+
+														 2
+o3 : R-module, submodule of R
+
+i4 : solvePDE U
+
+o4 = {{ideal x, {| 1 |, | 2dx |}}, {ideal (y, x), {| dx |, |  0 |}}}
+								 | 0 |  |  1  |                    |  0 |  | dy |
+							</code></pre>
+						</div>
+					</div>
+					<div class="r-stack">
+						<p class="fragment fade-in-then-out">
+							$$
+							\begin{aligned}
+							v(z_1,z_2) =& 
+							\int_{V(x_1)} \big(\begin{smallmatrix} 1 \\ 0 \end{smallmatrix}\big) e^{x_1z_1 + x_2z_2}\,\mathrm{d}\mu_1(x) + 
+							\int_{V(x_1)} \big(\begin{smallmatrix} 2z_1 \\ 1 \end{smallmatrix}\big) e^{x_1z_1 + x_2z_2}\,\mathrm{d}\mu_2(x) \\
+							&+ \int_{V(x_1,x_2)} \big(\begin{smallmatrix} z_1 \\ 0 \end{smallmatrix}\big) e^{x_1z_1 + x_2z_2}\,\mathrm{d}\mu_3(x) +
+							\int_{V(x_1,x_2)} \big(\begin{smallmatrix} 0 \\ z_2 \end{smallmatrix}\big) e^{x_1z_1 + x_2z_2}\,\mathrm{d}\mu_4(x)
+							\end{aligned}
+							$$
+						</p>
+						<p class="fragment fade-in-then-out">
+							$$
+							\begin{aligned}
+							v(z_1,z_2) =& 
+							\int_{V(x_1)} \big(\begin{smallmatrix} 1 \\ 0 \end{smallmatrix}\big) e^{x_1z_1 + x_2z_2}\,\mathrm{d}\mu_1(x) + 
+							\int_{V(x_1)} \big(\begin{smallmatrix} 2z_1 \\ 1 \end{smallmatrix}\big) e^{x_1z_1 + x_2z_2}\,\mathrm{d}\mu_2(x) \\
+							&+ \big(\begin{smallmatrix} z_1 \\ 0 \end{smallmatrix}\big)c_3 +
+							\int_{V(x_1,x_2)} \big(\begin{smallmatrix} 0 \\ z_2 \end{smallmatrix}\big) e^{x_1z_1 + x_2z_2}\,\mathrm{d}\mu_4(x)
+							\end{aligned}
+							$$
+						</p>
+						<p class="fragment fade-in-then-out">
+							$$
+							\begin{aligned}
+							v(z_1,z_2) =& 
+							\int_{V(x_1)} \big(\begin{smallmatrix} 1 \\ 0 \end{smallmatrix}\big) e^{x_1z_1 + x_2z_2}\,\mathrm{d}\mu_1(x) + 
+							\int_{V(x_1)} \big(\begin{smallmatrix} 2z_1 \\ 1 \end{smallmatrix}\big) e^{x_1z_1 + x_2z_2}\,\mathrm{d}\mu_2(x) \\
+							&+ \big(\begin{smallmatrix} z_1 \\ 0 \end{smallmatrix}\big)c_3 +
+							\big(\begin{smallmatrix} 0 \\ z_2 \end{smallmatrix}\big)c_4
+							\end{aligned}
+							$$
+						</p>
+						<p class="fragment fade-in-then-out">
+							$$
+							\begin{aligned}
+							v(z_1,z_2) =& 
+							\int_{\CC} \big(\begin{smallmatrix} 1 \\ 0 \end{smallmatrix}\big) e^{0z_1+x_2z_2}\,\mathrm{d}\mu_1(x_2) + 
+							\int_{\CC} \big(\begin{smallmatrix} 2z_1 \\ 1 \end{smallmatrix}\big) e^{0z_1+x_2z_2}\,\mathrm{d}\mu_2(x_2) \\
+							&+ \big(\begin{smallmatrix} z_1 \\ 0 \end{smallmatrix}\big)c_3 +
+							\big(\begin{smallmatrix} 0 \\ z_2 \end{smallmatrix}\big)c_4
+							\end{aligned}
+							$$
+						</p>
+						<p class="fragment fade-in-then-out">
+							$$
+							\begin{aligned}
+							v(z_1,z_2) =& 
+							\int_{\CC} \big(\begin{smallmatrix} 1 \\ 0 \end{smallmatrix}\big) e^{x_2z_2}\,\mathrm{d}\mu_1(x_2) + 
+							\int_{\CC} \big(\begin{smallmatrix} 2z_1 \\ 1 \end{smallmatrix}\big) e^{x_2z_2}\,\mathrm{d}\mu_2(x_2) \\
+							&+ \big(\begin{smallmatrix} z_1 \\ 0 \end{smallmatrix}\big)c_3 +
+							\big(\begin{smallmatrix} 0 \\ z_2 \end{smallmatrix}\big)c_4
+							\end{aligned}
+							$$
+						</p>
+						<p class="fragment fade-in-then-out">
+							$$
+							\begin{aligned}
+							v(z_1,z_2) =& 
+							\big(\begin{smallmatrix} 1 \\ 0 \end{smallmatrix}\big) \int_{\CC} e^{x_2z_2}\,\mathrm{d}\mu_1(x_2) + 
+							\big(\begin{smallmatrix} 2z_1 \\ 1 \end{smallmatrix}\big) \int_{\CC} e^{x_2z_2}\,\mathrm{d}\mu_2(x_2) \\
+							&+ \big(\begin{smallmatrix} z_1 \\ 0 \end{smallmatrix}\big)c_3 +
+							\big(\begin{smallmatrix} 0 \\ z_2 \end{smallmatrix}\big)c_4
+							\end{aligned}
+							$$
+						</p>
+						<p class="fragment fade-in-then-out">
+							$$
+							\begin{aligned}
+							v(z_1,z_2) =& 
+							\big(\begin{smallmatrix} 1 \\ 0 \end{smallmatrix}\big) \phi_1(z_2) + 
+							\big(\begin{smallmatrix} 2z_1 \\ 1 \end{smallmatrix}\big) \phi_2(z_2) \\
+							&+ \big(\begin{smallmatrix} z_1 \\ 0 \end{smallmatrix}\big)c_3 +
+							\big(\begin{smallmatrix} 0 \\ z_2 \end{smallmatrix}\big)c_4
+							\end{aligned}
+							$$
+						</p>
+						<p class="fragment">
+							$$
+							\begin{aligned}
+							v(z_1,z_2) = \begin{pmatrix} \phi_1(z_2) + 2z_1 \phi_2(z_2) + c_3 z_1 \\ \phi_2(z_2) + c_4z_2 \end{pmatrix}
+							\end{aligned}
+							$$
+							for some univariate functions $\phi_1,\phi_2 \colon \RR \to \CC$ and complex values $c_3,c_4$.
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<div class="r-hstack">
+						<div style="margin-right: 3em">
+							<p>
+								$$ M = \begin{bmatrix} 0 & x_1 \\ x_1^2 & 0 \\ x_1 x_2^2 & -2x_2^2 \end{bmatrix} $$
+								$$ U = \im_R M^T $$
+								Find $v \in \Sol_{\DD'}(M)$
+							</p>
+						</div>
+						<div>
+							<pre style="width: fit-content;"><code class="plaintext", style="max-height: fit-content; font-size: 0.8em">
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : U = image matrix {{0, x^2, x*y^2}, {x, 0, -2*y^2}}
+
+o3 = image | 0 x2 xy2  |
+					 | x 0  -2y2 |
+
+														 2
+o3 : R-module, submodule of R
+
+i4 : solvePDE U
+
+o4 = {{ideal x, {| 1 |, | 2dx |}}, {ideal (y, x), {| dx |, |  0 |}}}
+								 | 0 |  |  1  |                    |  0 |  | dy |
+							</code></pre>
+						</div>
+					</div>
+					<div class="r-stack">
+						<p>
+							$$
+							\begin{aligned}
+							v(z_1,z_2) = \begin{pmatrix} \phi_1(z_2) + 2z_1 \phi_2(z_2) + c_3 z_1 \\ \phi_2(z_2) + c_4z_2 \end{pmatrix}
+							\end{aligned}
+							$$
+							for some univariate functions $\phi_1,\phi_2 \colon \RR \to \CC$ and complex values $c_3,c_4$.
+						</p>
+					</div>
+					<p class="thm cite">M. Härkönen, J. Hirsch, and B. Sturmfels, <em>Making waves</em>, 2021. <a href="https://arxiv.org/abs/2111.14045">arXiv:2111.14045</a>.</p>
+				</section>
+
+				<section data-auto-animate>
+					<h1>Constant rank operators</h1>
+					<p>
+						Let $R = \KK[x_1,\dotsc,x_n]$, where $\KK = \RR$ or $\CC$.<br>
+						Let $\ff = \DD'$, the space of distributions.<br>
+						Let $M \in R^{\ell \times k}$ have homogeneous rows.<br>
+					</p>
+					<p class="fragment">
+						We say that $M$ has <span class="dfn">$\KK$-constant rank $r$</span> if $\rank_\KK M(x) = r$ for all $x \in \KK^m \setminus \{0\}$.
+					</p>
+					<aside class="notes">
+						Motivated by the fact that const rank operators have solutions with certain nice properties when solved over L1
+					</aside>
+				</section>
+
+				<section>
+					<div class="thm">
+						<h3>Theorem (controllable-uncontrollable decomposition)</h3>
+						<p>
+							Let $M \in R^{\ell \times k}$ and let $S$ be the syzygy matrix of $M$.<br>
+							Then there is an operator $M_1$ such that
+							$$ \Sol_\ff(M) = \im_\ff S + \Sol_\ff(M_1) $$
+							where $\Sol_\ff(M_1)$ contains no compactly supported distributions.
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<p style="margin-bottom: 2em">$$ \Sol_\ff(M) = \im_\ff S + \Sol_\ff(M_1) \\ v = S\bullet u + w $$</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="margin-bottom: 2em">$$ \Sol_\ff(M) = \im_\ff S + \Sol_\ff(M_1) \\ v = S\bullet u + w $$</p>
+					<div class="thm">
+						<h3>Theorem</h3>
+						<p>
+							If $M$ has $\KK$-constant rank (where $\KK$ is either $\CC$ or $\RR$), then $M_1$ is $\KK$-elliptic.
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<p style="margin-bottom: 2em">$$ \Sol_\ff(M) = \im_\ff S + \Sol_\ff(M_1) \\ v = S\bullet u + w $$</p>
+					<div class="thm">
+						<h3>Theorem</h3>
+						<p>
+							If $M$ has $\KK$-constant rank (where $\KK$ is either $\CC$ or $\RR$), then $M_1$ is $\KK$-elliptic.
+						</p>
+					</div>
+					<p>
+						We say that $M$ is <span class="dfn">$\KK$-elliptic</span> if $\ker_\KK M(x) = \{0\}$ for all $x \in \KK^m \setminus \{0\}$.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="margin-bottom: 2em">$$ \Sol_\ff(M) = \im_\ff S + \Sol_\ff(M_1) \\ v = S\bullet u + w $$</p>
+					<div class="thm">
+						<h3>Theorem</h3>
+						<p>
+							If $M$ has $\KK$-constant rank (where $\KK$ is either $\CC$ or $\RR$), then $M_1$ is $\KK$-elliptic.
+						</p>
+					</div>
+					<p>
+						We say that $M$ is <span class="dfn">$\KK$-elliptic</span> if $\ker_\KK M(x) = \{0\}$ for all $x \in \KK^m \setminus \{0\}$.
+					</p>
+					<p class="box", style="width: fit-content; padding: 1em 3em;">
+						If $M$ is $\RR$-elliptic, solutions to $M \bullet w = 0$ are smooth.<br>
+						<span class="fragment">If $M$ is $\CC$-elliptic, solutions to $M \bullet w = 0$ are polynomials.</span>
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="margin-bottom: 2em">$$ \Sol_\ff(M) = \im_\ff S + \Sol_\ff(M_1) \\ v = S\bullet u + w $$</p>
+					<div class="thm">
+						<h3>Theorem</h3>
+						<p>
+							If $M$ has $\KK$-constant rank (where $\KK$ is either $\CC$ or $\RR$), then $M_1$ is $\KK$-elliptic.
+						</p>
+					</div>
+					<p>
+						We say that $M$ is <span class="dfn">$\KK$-elliptic</span> if $\ker_\KK M(x) = \{0\}$ for all $x \in \KK^m \setminus \{0\}$.
+					</p>
+					<p class="box", style="width: fit-content; padding: 1em 3em;">
+						If $M$ is $\RR$-elliptic, solutions to $M \bullet w = 0$ are smooth.<br>
+						<span>If $M$ is $\CC$-elliptic, solutions to $M \bullet w = 0$ are polynomials.</span>
+					</p>
+					<p class="thm cite" style="margin-top: 1em">M. Härkönen, B. Raiță, and L. Nicklasson, <em>Syzygies, constant rank, and beyond</em>, 2021. arXiv:2112.12663.</p>
+				</section>
+
+
+				<section data-auto-animate>
+					<h1>Conclusion</h1>
+					<div class="r-hstack">
+						<div style="width: 50%">
+							<p>
+								<h3 class="fragment fade-up">Algebra</h3>
+								<ul>
+									<li class="fragment fade-up">Ideals and modules: generators vs differential primary decomposition</li>
+									<li class="fragment fade-up">Numerical methods</li>
+								</ul>
+								<h3 style="margin-top: 2em" class="fragment fade-up">Analysis</h3>
+								<ul>
+									<li class="fragment fade-up">Analytic intuition for solving algebra problems</li>
+									<li class="fragment fade-up">Examples and counterexamples in analysis</li>
+								</ul>
+								<h3 style="margin-top: 2em" class="fragment fade-up">Algebra $\cap$ Analysis</h3>
+								<ul>
+									<li class="fragment fade-up">Interesting algebraic objects as PDE</li>
+									<li class="fragment fade-up">Interesting PDE as algebraic objects</li>
+								</ul>
+							</p>
+						</div>
+					</div>
+					<aside class="notes">
+						Alg: operations on ideals;
+						num: used to extend the toolbox of numerical algebraic geometry non-reduced schemes;
+
+						Ana: dictionnary, algebraic methods for proofs;
+						algorithms, concrete instances;
+
+
+						Isect: Quiver representations encoded as PDE;
+						PDE from elasticity theory give nice determinantal varieties;
+					</aside>
+				</section>
+
+				<section data-auto-animate>
+					<h1>Conclusion</h1>
+					<div class="r-hstack">
+						<div style="width: 50%">
+							<p>Homework: Solve the PDE</p>
+							<div class="thm", style="padding: 2em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px;">
+								$
+								\begin{gathered}
+								\frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 g}{\partial x \partial y} = 0 \\
+								\frac{\partial^2 f }{\partial y \partial z } + \frac{\partial^2 g}{\partial z^2} = 0 \\
+
+								\frac{\partial^3 f }{\partial x^2 \partial z } + \frac{\partial^3 g}{\partial z \partial y \partial w} = 0
+								\end{gathered}
+								$
+							</div>
+							<p style="font-size: 0.7em;">Hint: <pre><code style="font-size: 0.7em">needsPackage "NoetherianOperators";
+viewHelp(solvePDE)</code></pre></p>
+						</div>
+						<div style="width: 50%">
+							<p>
+								<h3>Algebra</h3>
+								<ul>
+									<li>Ideals and modules: generators vs differential primary decomposition</li>
+									<li>Numerical methods</li>
+								</ul>
+								<h3 style="margin-top: 2em">Analysis</h3>
+								<ul>
+									<li>Analytic intuition for solving algebra problems</li>
+									<li>Examples and counterexamples in analysis</li>
+								</ul>
+								<h3 style="margin-top: 2em">Algebra $\cap$ Analysis</h3>
+								<ul>
+									<li>Interesting algebraic objects as PDE</li>
+									<li>Interesting PDE as algebraic objects</li>
+								</ul>
+							</p>
+						</div>
+					</div>
+
+				</section>
+
+				<section data-visibility="hidden">
+					<div class="thm">
+						BREAK
+					</div>
+				</section>
+
+				<section data-auto-animate, data-visibility="hidden">
+					<h1>Waves</h1>
+					<h2>Motivation</h2>
+					<div class="r-hstack">
+						<div>
+							<p>
+								Let
+								$$ M = \begin{bmatrix} x_1 & x_2 & x_3 \\ x_2 & x_1 & x_4 \\ x_3 & x_4 & x_1 \end{bmatrix} $$
+							</p>
+							<img src="images/cubic.png" style="transform: scale(0.5); padding-top: 10px">
+						</div>
+						<div style="padding: 100px; width: 1200px">
+							<pre data-id="code-animation" style=""><code class="plaintext" style="font-size: .7em; line-height: 1.5; max-height: 100%;">
+i9 : R = QQ[x_1,x_2,x_3,x_4];
+
+i10 : M = matrix{{x_1, x_2, x_3},{x_2, x_1, x_4},{x_3,x_4,x_1}};
+
+              3       3
+o10 : Matrix R  <--- R
+
+i11 : U = image transpose M;
+							</code></pre>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate, data-visibility="hidden">
+					<h1>Waves</h1>
+					<h2>Motivation</h2>
+					<div class="r-hstack">
+						<div>
+							<p>
+								Let
+								$$ M = \begin{bmatrix} x_1 & x_2 & x_3 \\ x_2 & x_1 & x_4 \\ x_3 & x_4 & x_1 \end{bmatrix} $$
+							</p>
+							<img src="images/cubic.png" style="transform: scale(0.5); padding-top: 10px">
+						</div>
+						<div style="padding: 100px; width: 1200px">
+							<pre data-id="code-animation" style=""><code class="plaintext" style="font-size: .7em; line-height: 1.5; max-height: 100%;">
+i9 : R = QQ[x_1,x_2,x_3,x_4];
+
+i10 : M = matrix{{x_1, x_2, x_3},{x_2, x_1, x_4},{x_3,x_4,x_1}};
+
+              3       3
+o10 : Matrix R  <--- R
+
+i11 : U = image transpose M;
+
+i17 : solvePDE U
+
+               3      2      2                2
+o17 = {{ideal(x  - x x  - x x  + 2x x x  - x x ), {| -x_1^2x_2x_3+x_1x_2^2x_4+x_1x_3^2x_4-x_2x_3x_4^2 |}}}
+               1    1 2    1 3     2 3 4    1 4    |  x_1x_2^2x_3-x_1^2x_2x_4-x_2x_3^2x_4+x_1x_3x_4^2 |
+                                                   |  x_1x_2x_3^2-x_1^2x_3x_4-x_2^2x_3x_4+x_1x_2x_4^2 |
+
+o17 : List
+							</code></pre>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate, data-visibility="hidden">
+					<h1>Waves</h1>
+					<h2>Motivation</h2>
+					<div class="r-hstack">
+						<div>
+							<p>
+								Let
+								$$ M = \begin{bmatrix} x_1 & x_2 & x_3 \\ x_2 & x_1 & x_4 \\ x_3 & x_4 & x_1 \end{bmatrix} $$
+							</p>
+							<img src="images/cubic.png" style="transform: scale(0.5); padding-top: 10px">
+						</div>
+						<div style="padding: 100px; width: 1200px">
+							<p style="font-size: 70%;">
+								$$ \phi(z_1,z_2,z_3,z_3) = \int_V \begin{bmatrix} -x_1^2x_2x_3+x_1x_2^2x_4+x_1x_3^2x_4-x_2x_3x_4^2 \\ x_1x_2^2x_3-x_1^2x_2x_4-x_2x_3^2x_4+x_1x_3x_4^2 \\ x_1x_2x_3^2-x_1^2x_3x_4-x_2^2x_3x_4+x_1x_2x_4^2 \end{bmatrix} e^{x_1z_1 + \dotsb + x_4z_4} \,\mathrm{d}\mu(x)$$
+							</p>
+							<p style="margin-top: 100px;">
+								$$V = V(x_1^3 - x_1x_2^2 - x_1x_3^2 - x_1x_4^2 + 2x_2x_3x_4) $$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate, data-visibility="hidden">
+					<h1>Waves</h1>
+					<h2>Motivation</h2>
+					<div class="r-hstack">
+						<div>
+							<p>
+								Let
+								$$ M = \begin{bmatrix} x_1 & x_2 & x_3 \\ x_2 & x_1 & x_4 \\ x_3 & x_4 & x_1 \end{bmatrix} $$
+							</p>
+							<img src="images/cubic.png" style="transform: scale(0.5); padding-top: 10px">
+						</div>
+						<div style="padding: 100px; width: 1200px">
+							<p style="font-size: 70%;">
+								$$ \phi(z_1,z_2,z_3,z_3) = \int_V \begin{bmatrix} -x_1^2x_2x_3+x_1x_2^2x_4+x_1x_3^2x_4-x_2x_3x_4^2 \\ x_1x_2^2x_3-x_1^2x_2x_4-x_2x_3^2x_4+x_1x_3x_4^2 \\ x_1x_2x_3^2-x_1^2x_3x_4-x_2^2x_3x_4+x_1x_2x_4^2 \end{bmatrix} e^{x_1z_1 + \dotsb + x_4z_4} \,\mathrm{d}\mu(x)$$
+							</p>
+							<p style="margin-top: 100px;">
+								$$V = V(x_1^3 - x_1x_2^2 - x_1x_3^2 - x_1x_4^2 + 2x_2x_3x_4) $$
+							</p>
+							<p style="margin-top: 100px;">
+								$$\pi = \Span_\RR\left\{ \begin{bmatrix} 1 \\ 1 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 0 \\ 1 \\ 1 \end{bmatrix}\right\} \subset V$$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate, data-visibility="hidden">
+					<h1>Waves</h1>
+					<h2>Motivation</h2>
+					<div class="r-hstack">
+						<div>
+							<p>
+								Let
+								$$ M = \begin{bmatrix} x_1 & x_2 & x_3 \\ x_2 & x_1 & x_4 \\ x_3 & x_4 & x_1 \end{bmatrix} $$
+							</p>
+							<img src="images/cubic.png" style="transform: scale(0.5); padding-top: 10px">
+						</div>
+						<div style="padding: 100px; width: 1200px">
+							<p style="font-size: 70%;">
+								$$ \phi(z_1,z_2,z_3,z_3) = \int_\pi \begin{bmatrix} -x_1^2x_2x_3+x_1x_2^2x_4+x_1x_3^2x_4-x_2x_3x_4^2 \\ x_1x_2^2x_3-x_1^2x_2x_4-x_2x_3^2x_4+x_1x_3x_4^2 \\ x_1x_2x_3^2-x_1^2x_3x_4-x_2^2x_3x_4+x_1x_2x_4^2 \end{bmatrix} e^{x_1z_1 + \dotsb + x_4z_4} \,\mathrm{d}\mu(x)$$
+							</p>
+							<p style="margin-top: 100px;">
+								$$\pi = \Span_\RR\left\{ \begin{bmatrix} 1 \\ 1 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 0 \\ 1 \\ 1 \end{bmatrix}\right\} \subset V$$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate, data-visibility="hidden">
+					<h1>Waves</h1>
+					<h2>Motivation</h2>
+					<div class="r-hstack">
+						<div>
+							<p>
+								Let
+								$$ M = \begin{bmatrix} x_1 & x_2 & x_3 \\ x_2 & x_1 & x_4 \\ x_3 & x_4 & x_1 \end{bmatrix} $$
+							</p>
+							<img src="images/cubic.png" style="transform: scale(0.5); padding-top: 10px">
+						</div>
+						<div style="padding: 100px; width: 1200px">
+							<p style="font-size: 70%;">
+								$$ \phi(z_1,z_2,z_3,z_3) = \int_{\CC^2} \begin{bmatrix} -x_1^2x_2x_3+x_1x_2^2x_4+x_1x_3^2x_4-x_2x_3x_4^2 \\ x_1x_2^2x_3-x_1^2x_2x_4-x_2x_3^2x_4+x_1x_3x_4^2 \\ x_1x_2x_3^2-x_1^2x_3x_4-x_2^2x_3x_4+x_1x_2x_4^2 \end{bmatrix} e^{x_1z_1 + \dotsb + x_4z_4} \,\mathrm{d}\mu(x)$$
+							</p>
+							<p style="margin-top: 100px;">
+								$$\pi = \Span_\RR\left\{ \begin{bmatrix} 1 \\ 1 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 0 \\ 1 \\ 1 \end{bmatrix}\right\} \subset V$$
+							</p>
+						</div>
+					</div>
+				</section>
+
+
+				<section data-visibility="hidden">
+					<h1>Example</h1>
+					<p>$$ \mm \xrightarrow{\pp} R^k $$</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				width: 1920,
+				height: 1080,
+				backgroundTransition: 'zoom',
+				katex: {
+					macros: {
+						"\\mm": "\\mathfrak{m}",
+						"\\pp": "\\mathfrak{p}",
+						"\\DD": "\\mathcal{D}",
+						"\\ff": "\\mathcal{F}",
+						"\\RR": "\\mathbb{R}",
+						"\\QQ": "\\mathbb{Q}",
+						"\\CC": "\\mathbb{C}",
+						"\\KK": "\\mathbb{K}",
+						"\\tt": "\\mathbf{t}",
+						"\\yy": "\\mathbf{y}",
+						"\\ttt": "{(\\mathbf{t})}",
+						"\\ttp": "{(\\mathbf{t}_\\mathfrak{p})}",
+						"\\Span": "\\operatorname{span}",
+						"\\Ass": "\\operatorname{Ass}",
+						"\\im": "\\operatorname{im}",
+						"\\ker": "\\operatorname{ker}",
+						"\\Sol": "\\operatorname{Sol}",
+						"\\rank": "\\operatorname{rank}",
+					}
+				},
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+			});
+		</script>
+	</body>
+</html>

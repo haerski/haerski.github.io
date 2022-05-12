@@ -1,0 +1,888 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Linear PDE with constant coefficients</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<!-- <a href="https://revealjs.com"> -->
+						<!-- <img src="https://static.slid.es/reveal/logo-v1/reveal-white-text.svg" alt="reveal.js logo" style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo"> -->
+					<!-- </a> -->
+					<h2>Linear PDE with constant coefficients</h2>
+          <p>
+          \begin{gather*}
+            \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 g}{\partial x \partial y} = 0 \\
+            \frac{\partial^2 f }{\partial y \partial z } + \frac{\partial^2 g}{\partial z^2} = 0 \\
+
+            \frac{\partial^3 f }{\partial x^2 \partial z } + \frac{\partial^3 g}{\partial z \partial y \partial w} = 0
+          \end{gather*}
+          </p>
+					<p>
+						<small><a href="http://people.math.gatech.edu/~mharkonen3/">Marc Härkönen</a>, Georgia Tech</small>
+					</p>
+				</section>
+
+        <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
+          <script type="text/template">
+            ## Introduction
+            In an undergraduate differential equations course, we learn how to solve linear homogeneous ODE with constant coefficients
+
+            $y^{(n)}+a_{n-1} y^{(n-1)} + \dotsb + a_1 y' +a_0 y = 0$
+
+            --
+
+            ### Example
+
+            $y'''-3y''+4y = 0$
+
+            Find the characteristic polynomial
+
+            $\lambda^3 - 3\lambda^2 + 4 = 0$
+
+            Factor it
+
+            $(\lambda - 2)^2 (\lambda +1) = 0$
+
+            The the set of solutions is the $\mathbb{C}$-span of
+
+            `\[
+              \{ e^{2t}, te^{2t}, e^{-t} \}
+            \]`
+          </script>
+        </section>
+
+        <section data-auto-animate>
+          <h2>History</h2>
+          <p> In 1938, Wolfgang Gröbner derived a characterization of 0-dimensional ideals using differential operators</p>
+
+          <h3 class="fragment">Example</h3>
+          <p class="fragment"> Let $I = (x^2, xy, y^2) \subseteq \mathbb{C}[x,y]$</p>
+          <p class="fragment">Then $I$ is the set of polynomials that are $\mathbb{C}[x,y]$-linear combinations of $x^2, xy,$ and $y^2$</p>
+          <p class="fragment"> $I$ is also the set of polynomials $f \in \mathbb{C}[x,y]$ such that</p>
+          <p class="fragment"> $f(0,0) = 0$ </p>
+          <p class="fragment"> $(\partial_x f)(0,0) := \frac{\partial f}{\partial x}(0,0) = 0$ </p>
+          <p class="fragment"> $(\partial_y f)(0,0) := \frac{\partial f}{\partial y}(0,0) = 0$ </p>
+        </section>
+
+        <section data-auto-animate>
+          <h3>History</h3>
+          <p>In 1938, Wolfgang Gröbner derived a characterization of 0-dimensional ideals using differential operators</p>
+
+          <p>He envisioned a future where one could derive such characterizations <span class="fragment highlight-red">for all ideals.</span></p>
+
+          <p class="fragment">In this talk I will present an answer</p>
+        </section>
+
+        <section data-auto-animate>
+          <h3>History</h3>
+          <p>Later in the 1960s, analysts were interested in solving linear PDE with constant coefficients.</p>
+          <p class="fragment">The Ehrenpreis-Palamodov Fundamental Principle provides the full set of solutions of such equations.</p>
+          <p class="fragment">A key step in the construction are <span class="fragment highlight-red">Noetherian Operators</span>, which characterize membership in a primary ideal.</p>
+        </section>
+
+        <section data-auto-animate>
+        	<p class="fragment fade-up"> <span style="color:red">Question 1:</span> solve the system of polynomials
+        	\begin{align*}
+        		x^2 = y^2 = xz - yz^2 = 0
+        	\end{align*}
+        	</p>
+        	<p class="fragment fade-up"> <span style="color:red">Question 2:</span> find functions $\phi(x,y,z)$ satisfying the PDE
+        	\begin{align*}
+        		\frac{\partial^2 \phi}{\partial x^2} = \frac{\partial^2 \phi}{\partial y^2} = \frac{\partial^2 \phi}{\partial x\partial z} - \frac{\partial^3 \phi}{\partial y \partial z^2} = 0
+        	\end{align*}
+        	</p>
+        	<p class="fragment fade-up"> <span style="color:red">Question 3:</span> find differential conditions for membership in the ideal
+        	\begin{align*}
+        		I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle
+        	\end{align*}
+        	</p>
+        	<p class="fragment fade-up"> <span style="color:red">Question 4:</span> describe the scheme structure of the subscheme of affine 3-space given by $I$.
+        	</p>
+        </section>
+        <section data-auto-animate>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 1:</span> solve the system of polynomials
+	        	\begin{align*}
+	        		x^2 = y^2 = xz - yz^2 = 0
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:red">Question 2:</span> find functions $\phi(x,y,z)$ satisfying the PDE
+	        	\begin{align*}
+	        		\frac{\partial^2 \phi}{\partial x^2} = \frac{\partial^2 \phi}{\partial y^2} = \frac{\partial^2 \phi}{\partial x\partial z} - \frac{\partial^3 \phi}{\partial y \partial z^2} = 0
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:red">Question 3:</span> find differential conditions for membership in the ideal
+	        	\begin{align*}
+	        		I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:red">Question 4:</span> describe the scheme structure of the subscheme of affine 3-space given by $I$.
+	        	</p>
+	        </section>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 1:</span> solve the system of polynomials
+	        	\begin{align*}
+	        		x^2 = y^2 = xz - yz^2 = 0
+	        	\end{align*}
+	        	</p>
+	        </section>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 1:</span> solve the system of polynomials
+	        	\begin{align*}
+	        		x^2 = y^2 = xz - yz^2 = 0
+	        	\end{align*}
+	        	</p>
+
+	        	<p> <span style="color:#268bd2">Answer:</span> Clearly $x =0$, $y=0$ and $z$ can be any complex number. The solution set is the $z$-axis.
+	        	</p>
+
+	        </section>
+	    </section>
+
+        <section data-auto-animate>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 1:</span> solve the system of polynomials
+	        	\begin{align*}
+	        		x^2 = y^2 = xz - yz^2 = 0
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:#268bd2">Answer:</span> Clearly $x =0$, $y=0$ and $z$ can be any complex number. The solution set is the $z$-axis.
+	        	</p>
+	        	<p> <span style="color:red">Question 2:</span> find functions $\phi(x,y,z)$ satisfying the PDE
+	        	\begin{align*}
+	        		\frac{\partial^2 \phi}{\partial x^2} = \frac{\partial^2 \phi}{\partial y^2} = \frac{\partial^2 \phi}{\partial x\partial z} - \frac{\partial^3 \phi}{\partial y \partial z^2} = 0
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:red">Question 3:</span> find differential conditions for membership in the ideal
+	        	\begin{align*}
+	        		I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:red">Question 4:</span> describe the scheme structure of the subscheme of affine 3-space given by $I$.
+	        	</p>
+	        </section>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 2:</span> find functions $\phi(x,y,z)$ satisfying the PDE
+	        	\begin{align*}
+	        		\frac{\partial^2 \phi}{\partial x^2} = \frac{\partial^2 \phi}{\partial y^2} = \frac{\partial^2 \phi}{\partial x\partial z} - \frac{\partial^3 \phi}{\partial y \partial z^2} = 0
+	        	\end{align*}
+	        	</p>
+	        </section>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 2:</span> find functions $\phi(x,y,z)$ satisfying the PDE
+	        	\begin{align*}
+	        		\frac{\partial^2 \phi}{\partial x^2} = \frac{\partial^2 \phi}{\partial y^2} = \frac{\partial^2 \phi}{\partial x\partial z} - \frac{\partial^3 \phi}{\partial y \partial z^2} = 0
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:#268bd2">Answer:</span> $\phi$ is a solution if and only if it decomposes into four summands
+	        		\begin{align*}
+	        		\phi = \xi(z) + (y\psi(z) + x \psi'(z)) + \alpha xy + \beta x,
+	        		\end{align*}
+	        		where $\psi(z), \xi(z)$ are arbitrary functions in a single variable, $\alpha,\beta$ are complex constants.
+	        	</p>
+
+	        </section>
+	    </section>
+
+        <section data-auto-animate>
+	        <section data-auto-animate style="font-size: 20px">
+	        	<p> <span style="color:red">Question 1:</span> solve the system of polynomials
+	        	\begin{align*}
+	        		x^2 = y^2 = xz - yz^2 = 0
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:#268bd2">Answer:</span> Clearly $x =0$, $y=0$ and $z$ can be any complex number. The solution set is the $z$-axis.
+	        	</p>
+	        	<p> <span style="color:red">Question 2:</span> find functions $\phi(x,y,z)$ satisfying the PDE
+	        	\begin{align*}
+	        		\frac{\partial^2 \phi}{\partial x^2} = \frac{\partial^2 \phi}{\partial y^2} = \frac{\partial^2 \phi}{\partial x\partial z} - \frac{\partial^3 \phi}{\partial y \partial z^2} = 0
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:#268bd2">Answer:</span> $\phi$ is a solution if and only if it decomposes into four summands
+	        		\begin{align*}
+	        		\phi = \xi(z) + (y\psi(z) + x \psi'(z)) + \alpha xy + \beta x,
+	        		\end{align*}
+	        		where $\psi(z), \xi(z)$ are arbitrary functions in a single variable, $\alpha,\beta$ are complex constants.
+	        	</p>
+	        	<p> <span style="color:red">Question 3:</span> find differential conditions for membership in the ideal
+	        	\begin{align*}
+	        		I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:red">Question 4:</span> describe the scheme structure of the subscheme of affine 3-space given by $I$.
+	        	</p>
+	        </section>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 3:</span> find differential conditions for membership in the ideal
+	        	\begin{align*}
+	        		I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle
+	        	\end{align*}
+	        	</p>
+	        </section>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 3:</span> find differential conditions for membership in the ideal
+	        	\begin{align*}
+	        		I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:#268bd2">Answer:</span> A polynomial $f \in I$ if and only if the four conditions hold
+	        	</p>
+
+	        	<p> $f$ and $\frac{\partial f}{\partial y} +z \frac{\partial f}{\partial x}$ both vanish on the $z$-axis</p>
+
+	        	<p> $\frac{\partial^2 f}{\partial x\partial y}$ and $\frac{\partial f}{\partial x}$ both vanish at the point $(0,0,0)$.
+
+	        </section>
+	    </section>
+
+        <section data-auto-animate>
+	        <section data-auto-animate style="font-size: 15px">
+	        	<p> <span style="color:red">Question 1:</span> solve the system of polynomials
+	        	\begin{align*}
+	        		x^2 = y^2 = xz - yz^2 = 0
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:#268bd2">Answer:</span> Clearly $x =0$, $y=0$ and $z$ can be any complex number. The solution set is the $z$-axis.
+	        	</p>
+	        	<p> <span style="color:red">Question 2:</span> find functions $\phi(x,y,z)$ satisfying the PDE
+	        	\begin{align*}
+	        		\frac{\partial^2 \phi}{\partial x^2} = \frac{\partial^2 \phi}{\partial y^2} = \frac{\partial^2 \phi}{\partial x\partial z} - \frac{\partial^3 \phi}{\partial y \partial z^2} = 0
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:#268bd2">Answer:</span> $\phi$ is a solution if and only if it decomposes into four summands
+	        		\begin{align*}
+	        		\phi = \xi(z) + (y\psi(z) + x \psi'(z)) + \alpha xy + \beta x,
+	        		\end{align*}
+	        		where $\psi(z), \xi(z)$ are arbitrary functions in a single variable, $\alpha,\beta$ are complex constants.
+	        	</p>
+	        	<p> <span style="color:red">Question 3:</span> find differential conditions for membership in the ideal
+	        	\begin{align*}
+	        		I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle
+	        	\end{align*}
+	        	</p>
+	        	<p> <span style="color:#268bd2">Answer:</span> A polynomial $f \in I$ if and only if the four conditions hold
+	        	</p>
+
+	        	<p> $f$ and $\frac{\partial f}{\partial y} +z \frac{\partial f}{\partial x}$ both vanish on the $z$-axis</p>
+
+	        	<p> $\frac{\partial^2 f}{\partial x\partial y}$ and $\frac{\partial f}{\partial x}$ both vanish at the point $(0,0,0)$.
+
+	        	<p> <span style="color:red">Question 4:</span> describe the scheme structure of the subscheme of affine 3-space given by $I$.
+	        	</p>
+	        </section>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 4:</span> describe the scheme structure of the subscheme of affine 3-space given by $I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle$.
+	        	</p>
+	        </section>
+	        <section data-auto-animate>
+	        	<p> <span style="color:red">Question 4:</span> describe the scheme structure of the subscheme of affine 3-space given by $I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle$.
+	        	</p>
+
+	        	<p> <span style="color:#268bd2">Answer:</span> The scheme is a double $z$-axis with an embedded point of length 2 at the origin.
+	        	</p>
+
+	        	<h4 class="fragment">Length of the point on the line in Macaulay2</h4>
+	        	<pre class="fragment"><code data-trim data-noescape class="plaintext">
+	        	R = QQ[x,y,z]
+	        	I = ideal(x^2, y^2, x*z - y*z^2)
+	        	P = ideal(x,y,z)
+	        	degree(saturate(I,P)/I)/degree(P)
+	        	</code></pre>
+
+
+	        </section>
+	    </section>	    
+
+        <section data-auto-animate style="font-size: 15px">
+        	<p> <span style="color:red">Question 1:</span> solve the system of polynomials
+        	\begin{align*}
+        		x^2 = y^2 = xz - yz^2 = 0
+        	\end{align*}
+        	</p>
+        	<p> <span style="color:#268bd2">Answer:</span> Clearly $x =0$, $y=0$ and $z$ can be any complex number. The solution set is the $z$-axis.
+        	</p>
+        	<p> <span style="color:red">Question 2:</span> find functions $\phi(x,y,z)$ satisfying the PDE
+        	\begin{align*}
+        		\frac{\partial^2 \phi}{\partial x^2} = \frac{\partial^2 \phi}{\partial y^2} = \frac{\partial^2 \phi}{\partial x\partial z} - \frac{\partial^3 \phi}{\partial y \partial z^2} = 0
+        	\end{align*}
+        	</p>
+			<p> <span style="color:#268bd2">Answer:</span> $\phi$ is a solution if and only if it decomposes into <span class="fragment highlight-current-green" data-fragment-index="1">four</span> summands
+				\begin{align*}
+				\phi = \xi(z) + (y\psi(z) + x \psi'(z)) + \alpha xy + \beta x,
+				\end{align*}
+				where $\psi(z), \xi(z)$ are arbitrary functions in a single variable, $\alpha,\beta$ are complex constants.
+			</p>
+        	<p> <span style="color:red">Question 3:</span> find differential conditions for membership in the ideal
+        	\begin{align*}
+        		I = \langle x^2, y^2, x-yz \rangle \cap \langle x^2, y^2, z \rangle
+        	\end{align*}
+        	</p>
+			<p> <span style="color:#268bd2">Answer:</span> A polynomial $f \in I$ if and only if the <span class="fragment highlight-current-green" data-fragment-index="1">four</span> conditions hold
+			</p>
+
+			<p> $f$ and $\frac{\partial f}{\partial y} +z \frac{\partial f}{\partial x}$ both vanish on the $z$-axis</p>
+
+			<p> $\frac{\partial^2 f}{\partial x\partial y}$ and $\frac{\partial f}{\partial x}$ both vanish at the point $(0,0,0)$.
+
+        	<p> <span style="color:red">Question 4:</span> describe the scheme structure of the subscheme of affine 3-space given by $I$.
+        	</p>
+        	<p> <span style="color:#268bd2">Answer:</span> The scheme is a <span class="fragment highlight-current-green" data-fragment-index="1">double</span> $z$-axis with an embedded point of length <span class="fragment highlight-current-green" data-fragment-index="1">2</span> at the origin. <span class="fragment" data-fragment-index="1"><span class="fragment highlight-current-green" data-fragment-index="1">2+2=4</span></span>
+	        	</p>
+        </section>
+
+		<section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
+			<script type="text/template">
+				### Towards the Ehrenpreis-Palamodov fundamental principle
+
+				#### Notation
+				Let $R := \mathbb{C}[x_1,\dotsc,x_n]$ be a polynomial ring in $n$ variables. <!-- .element: class="fragment"  -->
+
+				Let $\partial_i := \frac{\partial}{\partial x_i}$ denote the partial derivative with respect to $x_i$. <!-- .element: class="fragment"  -->
+
+				For each $\alpha \in \mathbb{N}^n$, we denote $\partial^\alpha := \partial_1^{\alpha_1}\dotsb\partial_n^{\alpha_n} :=  \frac{\partial^{\alpha_1 + \dotsb + \alpha_n}}{\partial x_1^{\alpha_1} \dotsb \partial x_n^{\alpha_n}}$ <!-- .element: class="fragment"  -->
+
+				The commutative ring $\mathbb{C}[\partial_1,\dotsc,\partial_n]$ is the ring of differential operators with constant coefficients. <!-- .element: class="fragment"  -->
+
+				Let $\bullet$ denote the application of a differential operator to a smooth function. <!-- .element: class="fragment"  -->
+
+				e.g. $(\partial_1 - 1) \bullet \sin (x_2x_1) = x_2 \cos (x_2x_1) - \sin (x_2x_1)$. <!-- .element: class="fragment"  -->
+
+
+				---
+
+				### Towards the Ehrenpreis-Palamodov fundamental principle
+
+				#### Notation
+
+				We want to find functions $f(x_1,\dotsc,x_n) \colon \mathbb{C}^n \to \mathbb{C}$ that satisfy a homogeneous system of PDE with constant coefficients:
+
+				\begin{align} \label{pdesystem}
+				P_1(\partial) \bullet f = \dotsb = P_s(\partial) \bullet f = 0,
+				\end{align}
+				where $P_1,\dotsc, P_s \in \mathbb{C}[\partial_1,\dotsc,\partial_n]$.
+
+				Note that $f$ satisfies system \eqref{pdesystem} if and only if <!-- .element: class="fragment" data-fragment-index="1"  -->
+
+				$P(\partial) \bullet f = 0$ for all $P \in \langle P_1,\dotsc,P_s \rangle \subseteq \mathbb{C}[\partial_1,\dotsc,\partial_n]$. <!-- .element: class="fragment" data-fragment-index="1" -->
+
+				---
+
+				### The Ehrenpreis-Palamodov fundamental principle
+
+				Let $I$ be an ideal, here thought of as a system of PDE. Every _sufficiently nice_ solution $f : \mathbb{C}^n \to \mathbb{C}$ admits an integral representation
+
+				$$
+				f(z_1,\dotsc,z_n) = \sum_{t=1}^T \sum_{r=1}^{R_t} \int_{V_t} M_{t,r}(z,x) e^{z^T x} d\mu_{t,r}(x),
+				$$
+				where $M_{t,r}(z,x)$ is a polynomial in $2n$ variables, and $\mu_{t,r}$ is a measure, and $V_t$ is an algebraic variety.
+
+				---
+
+				### The shortest introduction to algebraic geometry ever:
+				**Radical of an ideal**: `$\sqrt{I} = \{ f \in R : f^k \in I \text{ for some integer }n\}$`
+
+				**I is prime**: $fg \in I \implies f \in I \text { or } g \in I$
+
+				**I is primary**: $fg \in I \implies f \in I \text{ or } g \in \sqrt I$
+
+				**Algebraic variety**: `$V(I) = \{ x\in \mathbb{C}^n : f(x) = 0 \text{ for all } f \in I\}.$`
+
+			</script>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+			<ul>
+				<li>The ideal $I = \langle x^2, y^2, y-xz \rangle \subseteq \mathbb{C}[x,y,z]$ is primary</li>
+				<li>Its radical is $\sqrt I = \langle x,y \rangle$ is prime</li>
+				<li>The variety corresponding to $I$ is $V(I) = V(\sqrt I) = \{(0,0,z) \mid z \in \mathbb{C}\}$</li>
+				<li>This variety is irreducible (it is not the union of smaller varieties)</li>
+			</ul>
+			<pre class="fragment"><code data-trim data-noescape data-line-numbers="1|3-7|9-14|16-20" class="plaintext">
+Macaulay2, version 1.17.2.1
+
+i1 : R = QQ[x,y,z]
+
+o1 = R
+
+o1 : PolynomialRing
+
+i2 : I = ideal(x^2, y^2, y-x*z)
+
+             2   2
+o2 = ideal (x , y , - x*z + y)
+
+o2 : Ideal of R
+
+i3 : radical I
+
+o3 = ideal (y, x)
+
+o3 : Ideal of R
+	        	</code></pre>
+		</section>
+
+		<section>
+			<h3>Intuitive idea</h3>
+			<h4>Proposition</h4>
+			<p>
+				Let $I$ be an ideal, and let $z \in \mathbb{C}^n$. The exponential function $e^{z^T \cdot x}$ is a solution to the PDE given by $I$ if and only if $z \in V(I)$.
+			</p>
+			<h4 class="fragment" data-fragment-index="1">Proof</h4>
+			<p class="fragment" data-fragment-index="1">
+				<span class="fragment" data-fragment-index="2">$P(\partial_1, \dotsc, \partial_n) \bullet e^{z_1x_1 + \dotsb + z_nx_n}$</span> <span class="fragment" data-fragment-index="3">$= P(z_1,\dotsc,z_n) e^{z_1x_1 + \dotsb + z_nx_n} = 0$ for all $P\in I$</span> <span class="fragment" data-fragment-index="4">if and only if $P(z_1,\dotsc, z_n) = 0$ for all $P \in I$.</span><span class="fragment" data-fragment-index="5"> This is happens if and only if $z \in V(I)$. $\blacksquare$</span>
+			</p>
+
+			<p class="fragment" data-fragment-index="6">
+				The integrals in Ehrenpreis-Palamodov are taken over subvarieties of $V(I)$. Thus the solutions are nothing but fancy sums of exponential functions:
+			</p>
+			<p class="fragment" data-fragment-index="6">
+							$$
+				f(z_1,\dotsc,z_n) = \sum_{t=1}^T \sum_{r=1}^{R_t} \int_{V_t} M_{t,r}(z,x) e^{z^T x} d\mu_{t,r}(x),
+				$$
+			</p>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Ehrenpreis-Palamodov for primary ideals</h3>
+			<p>Let $I$ be a <span class="fragment highlight-red">primary</span> ideal, here thought of as a system of PDE. Every (sufficiently nice) solution $f : \mathbb{C}^n \to \mathbb{C}$ admits an integral representation
+
+			$$
+				f(z_1,\dotsc,z_n) = \sum_{r=1}^R \int_{V(I)} M_{r}(z,x) e^{z^T x} d\mu_{r}(x),
+			$$
+				where $M_{r}(z,x)$ is a polynomial in $2n$ variables, $\mu_{r}$ is a measure.</p>
+		</section>
+		<section data-auto-animate>
+			<h3>Ehrenpreis-Palamodov for primary ideals</h3>
+			<p>Let $I$ be a <span style="color:red">primary</span> ideal, here thought of as a system of PDE. Every (sufficiently nice) solution $f : \mathbb{C}^n \to \mathbb{C}$ admits an integral representation
+
+			$$
+				f(z_1,\dotsc,z_n) = \sum_{r=1}^R \int_{V(I)} M_{r}(z,x) e^{z^T x} d\mu_{r}(x),
+			$$
+				where $M_{r}(z,x)$ is a polynomial in $2n$ variables, $\mu_{r}$ is a measure.</p>
+
+			<h4>Notes</h4>
+			<ul>
+				<li class="fragment">The quantity $R$ is the multiplicity of $I$ over $\sqrt I$
+				</li>
+				<li class="fragment">The Noetherian multipliers $M_r(z,x)$ correspond to a set of Noetherian operators $M_r(x, \partial)$ which characterize membership in $I$.</li>
+			</ul>
+		</section>
+		<section data-auto-animate>
+			<h3>Example</h3>
+			<p>Let $I = \langle x^2, y^2, y-xz \rangle$.
+			This can be interpreted as the PDE system
+			$$
+			\frac{\partial^2 f}{\partial x^2} = \frac{\partial^2 f}{\partial y^2} = \frac{\partial f}{\partial y} - \frac{\partial^2 f}{\partial x \partial z} = 0$$</p>
+		</section>
+		<section data-auto-animate>
+			<h3>Example</h3>
+			<p>Let $I = \langle x^2, y^2, y-xz \rangle$.
+			This can be interpreted as the PDE system
+			$$
+			\frac{\partial^2 f}{\partial x^2} = \frac{\partial^2 f}{\partial y^2} = \frac{\partial f}{\partial y} - \frac{\partial^2 f}{\partial x \partial z} = 0$$</p>
+
+			<pre><code data-trim data-noescape class="plaintext">
+i21 : I = ideal(x^2, y^2, y-x*z)
+
+              2   2
+o21 = ideal (x , y , - x*z + y)
+
+o21 : Ideal of R
+
+i22 : netList solvePDEpunctual I
+
+      +--------------+---------------------+
+o22 = |ideal (iy, ix)|{| 1 |, | y*iz + x |}|
+      +--------------+---------------------+
+
+			</code></pre>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+			<p>Let $I = \langle x^2, y^2, y-xz \rangle$.
+			This can be interpreted as the PDE system
+			$$
+			\frac{\partial^2 f}{\partial x^2} = \frac{\partial^2 f}{\partial y^2} = \frac{\partial f}{\partial y} - \frac{\partial^2 f}{\partial x \partial z} = 0$$</p>
+
+			<pre><code data-trim data-noescape class="plaintext">
+i21 : I = ideal(x^2, y^2, y-x*z)
+
+              2   2
+o21 = ideal (x , y , - x*z + y)
+
+o21 : Ideal of R
+
+i22 : netList solvePDEpunctual I
+
+      +--------------+---------------------+
+o22 = |ideal (iy, ix)|{| 1 |, | y*iz + x |}|
+      +--------------+---------------------+
+
+			</code></pre>
+		<p>Hence any solution is a sum of integrals over the variety $V = V(\langle iy, ix \rangle)$</p>
+		<p>
+			\begin{split}
+			f(x,y,z) &= \int_V 1 \cdot e^{x\cdot ix+y\cdot iy+z\cdot iz}\, d\mu_1(ix,iy,iz) \\
+			&\quad + \int_V (y\cdot iz + x) \cdot e^{x\cdot ix+y\cdot iy+z\cdot iz}\, d\mu_2(ix,iy,iz)
+			\end{split}
+		</p>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+		<p>Hence any solution is a sum of integrals over the variety $V = V(\langle iy, ix \rangle)$</p>
+			<p>\begin{split}
+			f(x,y,z) &= \int_V 1 \cdot e^{x\cdot ix+y\cdot iy+z\cdot iz}\, d\mu_1(ix,iy,iz) \\
+			&\quad + \int_V (y\cdot iz + x) \cdot e^{x\cdot ix+y\cdot iy+z\cdot iz}\, d\mu_2(ix,iy,iz)
+			\end{split}
+		</p>
+		<p>Note that the variety $V$ is the $iz$-axis. Hence $ix = iy = 0$ in the integral.</p> 
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+		<p>Hence any solution is a sum of integrals over the variety $V = V(\langle iy, ix \rangle)$</p>
+			<p>\begin{split}
+			f(x,y,z) &= \int_{iz \in \mathbb{C}} e^{z\cdot iz}\, d\mu_1(iz) \\
+			&\quad + \int_{iz \in \mathbb{C}} (y\cdot iz + x) \cdot e^{z\cdot iz}\, d\mu_2(iz)
+			\end{split}
+		</p>
+		<p>Note that the variety $V$ is the $iz$-axis. Hence $ix = iy = 0$ in the integral.</p> 
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+		<p>Hence any solution is a sum of integrals over the variety $V = V(\langle iy, ix \rangle)$</p>
+			<p>\begin{split}
+			f(x,y,z) &= \int_{iz \in \mathbb{C}} e^{z\cdot iz}\, d\mu_1(iz) \\
+			&\quad + \int_{iz \in \mathbb{C}} (y\cdot iz + x) \cdot e^{z\cdot iz}\, d\mu_2(iz)
+			\end{split}
+		</p>
+		<p>Note that the first summand is just any function in $z$. We will denote it as $\psi(z)$.</p> 
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+		<p>Hence any solution is a sum of integrals over the variety $V = V(\langle iy, ix \rangle)$</p>
+			<p>\begin{split}
+			f(x,y,z) &= \psi(z) \\
+			&\quad + \int_{iz \in \mathbb{C}} (y\cdot iz + x) \cdot e^{z\cdot iz}\, d\mu_2(iz)
+			\end{split}
+		</p>
+		<p>Note that the first summand is just any function in $z$. We will denote it as $\psi(z)$.</p>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+		<p>Hence any solution is a sum of integrals over the variety $V = V(\langle iy, ix \rangle)$</p>
+			<p>\begin{split}
+			f(x,y,z) &= \psi(z) \\
+			&\quad + \int_{iz \in \mathbb{C}} (y\cdot iz + x) \cdot e^{z\cdot iz}\, d\mu_2(iz)
+			\end{split}
+		</p>
+		<p>The second summand can be rewritten as
+		\begin{align*}
+			y \int_{iz \in \mathbb{C}} iz \cdot e^{z\cdot iz}\, d\mu_2(iz) + x \int_{iz \in \mathbb{C}} e^{z\cdot iz}\, d\mu_2(iz)
+		\end{align*}
+	</p>
+		<p class="fragment">If $\xi(z) = \int_{iz \in \mathbb{C}} e^{z\cdot iz}\, d\mu_2(iz)$ denotes any function in $z$, then the expresson above is $y\xi'(z) + x\xi(z)$.</p>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+		<p>Hence any solution is a sum of integrals over the variety $V = V(\langle iy, ix \rangle)$</p>
+			<p>\begin{split}
+			f(x,y,z) &= \psi(z) \\
+			&\quad + y\xi'(z) + x\xi(z)
+			\end{split}
+		</p>
+		<p>The second summand can be rewritten as
+		\begin{align*}
+			y \int_{iz \in \mathbb{C}} iz \cdot e^{z\cdot iz}\, d\mu_2(iz) + x \int_{iz \in \mathbb{C}} e^{z\cdot iz}\, d\mu_2(iz)
+		\end{align*}
+	</p>
+		<p>If $\xi(z) = \int_{iz \in \mathbb{C}} e^{z\cdot iz}\, d\mu_2(iz)$ denotes any function in $z$, then the expresson above is $y\xi'(z) + x\xi(z)$.</p>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+			<p>Let $I = \langle x^2, y^2, y-xz \rangle$.
+			This can be interpreted as the PDE system
+			$$
+			\frac{\partial^2 f}{\partial x^2} = \frac{\partial^2 f}{\partial y^2} = \frac{\partial f}{\partial y} - \frac{\partial^2 f}{\partial x \partial z} = 0$$</p>
+
+			<p>Any solution $f(x,y,z)$ is of the form</p>
+				<p>\begin{split}
+				f(x,y,z) &= \psi(z) \\
+				&\quad + y\xi'(z) + x\xi(z)
+				\end{split}
+			</p>
+			<p>where $\psi(z), \xi(z)$ are some functions.</p>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Noetherian multipliers vs operators</h3>
+			<p>Let $I = \langle x^2, y^2, y-xz \rangle$.
+			This can be interpreted as the PDE system
+			$$
+			\frac{\partial^2 f}{\partial x^2} = \frac{\partial^2 f}{\partial y^2} = \frac{\partial f}{\partial y} - \frac{\partial^2 f}{\partial x \partial z} = 0$$</p>
+
+			<p> We had the <span style="color:#268bd2">Noetherian multipliers</span> $\{1, y\cdot iz + x\}$</p>
+
+			<pre><code data-trim data-noescape class="plaintext" data-line-numbers="10-12">
+i21 : I = ideal(x^2, y^2, y-x*z)
+
+              2   2
+o21 = ideal (x , y , - x*z + y)
+
+o21 : Ideal of R
+
+i22 : netList solvePDEpunctual I
+
+      +--------------+---------------------+
+o22 = |ideal (iy, ix)|{| 1 |, | y*iz + x |}|
+      +--------------+---------------------+
+
+			</code></pre>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Noetherian multipliers vs operators</h3>
+			<p>Let $I = \langle x^2, y^2, y-xz \rangle$.
+			This can be interpreted as the PDE system
+			$$
+			\frac{\partial^2 f}{\partial x^2} = \frac{\partial^2 f}{\partial y^2} = \frac{\partial f}{\partial y} - \frac{\partial^2 f}{\partial x \partial z} = 0$$</p>
+
+			<p> We had the <span style="color:#268bd2">Noetherian multipliers</span> $\{1, y\cdot iz + x\}$</p>
+
+
+			<p>These correspond to vanishing conditions for membership in $I$:</p>
+
+			<p>$f \in I$</p>
+
+			<p>$\iff$</p>
+
+			<p>$1\bullet f = 0$ on $V(I)$, and</p>
+
+			<p>$(z \partial_y + \partial_x) \bullet f = 0$ on $V(I)$</p>
+
+			<p>Thus we have a set $\{1, z \partial_y + \partial_x\}$ of <span style="color: red">Noetherian operators</span>.</p>
+		</section>
+
+		<section>
+			<h3>General ideals</h3>
+
+			<p>If $I$ is not primary, we can find a <span style="font-size:smaller">(minimal, irredundant)</span> primary decomposition</p>
+			<p>$I = I_1 \cap I_2 \cap \dotsb \cap I_T$</p>
+			<p>Apply the Ehrenpreis-Palamodov fundamental principle to each primary component</p>
+			<p>$$
+				f(z) = \sum_{t=1}^T \sum_{r=1}^{R_T} \int_{V(I_t)} M_{r,t}(z,x) e^{x^T \cdot z} \,d\mu_{r,t}(x)
+			$$</p>
+		</section>
+		<section data-auto-animate>
+			<h3>Gröbner's dream</h3>
+
+			<p>If $I$ is not primary, we can find a <span style="font-size:smaller">(minimal, irredundant)</span> primary decomposition</p>
+			<p>$I = I_1 \cap I_2 \cap \dotsb \cap I_T$</p>
+			<p>The dual statement yields a <span class="fragment highlight-red"data-fragment-index="1">differential primary decomposition</span>:</p>
+			<p class="fragment" data-fragment-index="2">A differential primary decomposition is a list $(P_1, \mathfrak{A}_1),\dotsc,(P_T, \mathfrak{A}_T)$, where the $P_i$ are prime ideals, and the $\mathfrak{A}_i$ are finite sets of differential operators in $\mathbb{C}[x_1,\dotsc,x_n,\partial_1,\dotsc,\partial_n]$ such that</p>
+
+			<p class="fragment" data-fragment-index="2">$f \in I \iff D \bullet f \in P_i \text{ for all } D \in \mathfrak{A_i}, i=1,\dotsc,T$</p>
+
+			<p class="fragment" data-fragment-index="3" style="font-size: smaller">Note: the $P_i = \sqrt{I_i}$ are the associated primes of $I$.</p> 
+		</section>
+
+		<section data-auto-animate>
+			<h3>Gröbner's dream</h3>
+
+			<p>A differential primary decomposition is a list $(P_1, \mathfrak{A}_1),\dotsc,(P_T, \mathfrak{A}_T)$, where the $P_i$ are prime ideals, and the $\mathfrak{A}_i$ are finite sets of differential operators in $\mathbb{C}[x_1,\dotsc,x_n,\partial_1,\dotsc,\partial_n]$ such that</p>
+
+			<p>$f \in I \iff D \bullet f \in P_i \text{ for all } D \in \mathfrak{A_i}, i=1,\dotsc,T$</p>
+
+			<h4>Theorem (Cid-Ruiz, Sturmfels 2021)</h4>
+			<p>The minimal size of a differential primary decomposition is the arithmetic multiplicity of $I$</p>
+
+			<p>$\operatorname{amult}(I) = \sum_{P \in \operatorname{Ass}(I)} \operatorname{mult}_I(P)$</p>
+
+			<p>$\operatorname{mult}_I(P)$ is the length of the largest ideal of finite length in $R_P/IR_P$.</p>
+			<pre><code data-trim data-noescape class="plaintext">
+			amult = sum(associatedPrimes I, P -> degree(saturate(I,P)/I)/degree(P))
+			</code></pre>
+
+		</section>
+
+		<section>
+			<h3>Example</h3>
+			<pre><code data-trim data-noescape class="plaintext">
+i13 : I = ideal(x^2, y^2, x*z-y*z^2);
+
+o13 : Ideal of R
+
+i14 : amult = sum(ass(I), P -> degree(saturate(I,P)/I)/degree(P))
+
+o14 = 4
+
+o14 : QQ
+
+i15 : netList solvePDEpunctual I
+
+      +------------------+---------------------+
+o15 = |ideal (iy, ix)    |{| 1 |, | x*iz + y |}|
+      +------------------+---------------------+
+      |ideal (iz, iy, ix)|{| x |, | x*y |}     |
+      +------------------+---------------------+
+  </code></pre>
+
+  		<p>$f \in I = \langle x^2, y^2, xz-yz^2\rangle$ iff
+  			\begin{align*}
+  				\begin{cases}
+  					1 \bullet f &\in \langle x,y \rangle \\
+  					(z\partial_x + \partial_y) \bullet f &\in \langle x,y \rangle\\
+  					\partial_x \bullet f &\in \langle x,y,z \rangle\\
+  					\partial_x \partial_y \bullet f &\in \langle x,y,z \rangle
+  				\end{cases}
+  			\end{align*}
+  		</p>
+		</section>
+
+		<section data-auto-animate>
+			<h3>Modules</h3>
+
+			<p>A linear homogeneous PDE with constant coefficients describing a function $f = (f_1,\dotsc,f_k) : \mathbb{C}^n \to \mathbb{C}^k$ is of the form</p>
+
+			<p>$\sum_{i=1}^k P_{i,1}(\partial) \bullet f_i = \dotsb = \sum_{i=1}^k P_{i,l}(\partial) \bullet f_i = 0$,</p>
+
+			<p>where $P_{i,j} \in \mathbb{C}[\partial_1,\dotsc,\partial_n]$.</p>
+
+			<p class="fragment">The tuple $f = (f_1,\dotsc,f_k)$ is a solution to the above system if and only if
+			\begin{align*}
+				\sum_{i=1}^k P_i(\partial) \bullet f_i = 0
+			\end{align*}
+			for all $P = (P_1,\dotsc,P_k)$ in the $\mathbb{C}[\partial_1,\dotsc,\partial_n]$-submodule of $\mathbb{C}[\partial_1,\dotsc,\partial_n]^k$ generated by columns of the matrix $\{P_{i,j}\}$.</p>
+
+			<p class="fragment"><b>Primary decomposition, Ehrenpreis-Palamodov, vanishing conditions can be extended to modules!</b></p>
+
+		</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+
+			<p>Solve the system
+			\begin{gather*}
+				\frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 g}{\partial y^2} = 
+				\frac{\partial^2 f}{\partial x\partial y} + \frac{\partial^2 g}{\partial y\partial z} =
+				\frac{\partial^2 f}{\partial x\partial z} + \frac{\partial^2 g}{\partial z^2} = 0
+			\end{gather*}
+			</p>
+
+
+			<pre class="fragment"><code data-trim data-noescape class="plaintext" data-line-numbers="">
+i20 : R = QQ[x,y,z];
+
+i21 : U = image(matrix {
+          {x^2,x*y,x*z},
+          {y^2,y*z,z^2}});
+
+i22 : elapsedTime netList solvePDEpunctual U
+ -- 0.149361 seconds elapsed
+
+      +------------------+---------+
+o22 = |ideal ix          |{| 1 |}  |
+      |                  | | 0 |   |
+      +------------------+---------+
+      |        2         |         |
+      |ideal(iy  - ix*iz)|{| -iz |}|
+      |                  | |  ix | |
+      +------------------+---------+
+      |ideal (iz, iy)    |{| 0 |}  |
+      |                  | | z |   |
+      +------------------+---------+
+      		</code></pre>
+
+      	</section>
+
+		<section data-auto-animate>
+			<h3>Example</h3>
+
+			<p>Solve the system
+			\begin{gather*}
+				\frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 g}{\partial y^2} = 
+				\frac{\partial^2 f}{\partial x\partial y} + \frac{\partial^2 g}{\partial y\partial z} =
+				\frac{\partial^2 f}{\partial x\partial z} + \frac{\partial^2 g}{\partial z^2} = 0
+			\end{gather*}
+			</p>
+
+			<h3>Answer</h3>
+      		<p class="r-frame">
+      			\begin{align*}
+      				f &= \phi(y,z) - \frac{\partial \psi}{\partial z}(x,y,z)\\
+      				g &= \xi(x) + \frac{\partial \psi}{\partial x}(x,y,z),
+      			\end{align*}
+      		</p>
+      		<p>
+      			where $\phi(y,z)$, $\xi(x)$ can be chosen arbitrarily, and
+      			\begin{align*}
+      				\psi(x,y,z) = \int_{(s,t) \in \mathbb{C}^2} e^{s^2x + sty + t^2z} \,d\mu(s,t)
+      			\end{align*}
+      			for an arbitrary choice of measure $\mu$.
+      		</p>
+
+      	</section>
+
+      	<section>
+      		<h2>If you want to learn more!</h2>
+
+      		<p class="fragment fade-up"><a href="https://arxiv.org/abs/2006.13881">Chen, J., Härkönen, M., Krone, R., & Leykin, A. (2020). Noetherian operators and primary decomposition. arXiv preprint arXiv:2006.13881</a></p>
+
+      		<p class="fragment fade-up"><a href="https://arxiv.org/abs/2101.01002">Chen, J., Cid-Ruiz, Y., Härkönen, M., Krone, R., & Leykin, A. (2021). Noetherian Operators in Macaulay2. arXiv preprint arXiv:2101.01002.</a></p>
+
+      		<p class="fragment fade-up"><a href="https://arxiv.org/abs/2101.03643">Cid-Ruiz, Y., & Sturmfels, B. (2021). Primary Decomposition with Differential Operators. arXiv preprint arXiv:2101.03643.</a></p>
+
+      		<p class="fragment fade-up"><a href="https://doi.org/10.1007/s10208-020-09485-6">Cid-Ruiz, Y., Homs, R., & Sturmfels, B. (2021). Primary ideals and their differential equations. Foundations of Computational Mathematics, 1-37.</a></p>
+
+      		<p class="fragment fade-up">Analysis: Hörmander, An Introduction to Complex Analysis in Several Variables; Björk, Rings of Differential Operators</p>
+
+      	</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/math/math.js"></script>
+</script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tags: 'ams',
+          // pass other options into `MathJax.Hub.Config()`
+          TeX: { Macros: { RR: "{\\bf R}" }, equationNumbers : { autoNumber : "AMS" } }
+        },
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ]
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,843 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Linear PDE with constant coefficients</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<!-- <a href="https://revealjs.com">
+						<img src="https://static.slid.es/reveal/logo-v1/reveal-white-text.svg" alt="reveal.js logo" style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
+					</a> -->
+					<h3>Linear PDE with constant coefficients</h3>
+					<p style="font-size: 75%" class="r-frame">
+						\begin{gather*}
+							\frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 g}{\partial x \partial y} = 0 \\
+							\frac{\partial^2 f }{\partial y \partial z } + \frac{\partial^2 g}{\partial z^2} = 0 \\
+
+							\frac{\partial^3 f }{\partial x^2 \partial z } + \frac{\partial^3 g}{\partial z \partial y \partial w} = 0
+						\end{gather*}
+					</p>
+					<p>
+						<a href="https://people.math.gatech.edu/~mharkonen3/">Marc Härkönen</a><br>
+						<small>Seminar on Nonlinear Algebra, June 11 2021</small>
+					</p>
+				</section>
+
+				<section data-background="#082828" data-background-transition="zoom">
+					<h3>A series of motivating questions</h3>
+					<p>
+						Study the ideal
+						$$
+							I = (z^2, (x-y)^2-2xz, zy(x-y))
+						$$
+					</p>
+				</section>
+
+				<section data-background="#082828" data-background-transition="zoom">
+					<p>
+						Find the points $(x,y,z)$ satisfying
+						\begin{align*}
+							z^2 = (x-y)^2-2xz = zy(x-y) = 0
+						\end{align*}
+					</p>
+					<p class="fragment">
+						<span style="color: red">Answer: </span> the line $z = 0$, $x = y$.
+					</p>
+				</section>
+
+				<section data-auto-animate data-background="#082828" data-background-transition="zoom">
+					<p>
+						Compute a primary decomposition of $$
+							I = (z^2, (x-y)^2-2xz, zy(x-y))
+						$$
+					</p>
+					<p class="fragment">
+						<span style="color: red">Answer: </span>$$\small I = (z^2, (x-y)z, (x-y)^2-2yz) \\ \cap \\ (y,z^2, x^2-2xz)$$
+					</p>
+				</section>
+
+				<section data-auto-animate data-background="#082828" data-background-transition="zoom">
+					<p>
+						Compute a primary decomposition of $$
+							I = (z^2, (x-y)^2-2xz, zy(x-y))
+						$$
+					</p>
+					<p>
+						<span style="color: red">Answer: </span>$$\small I = (z^2, (x-y)z, (x-y)^2-2yz) \\ \cap \\ (y,z^2, x^2-2xz)$$
+					</p>
+					<p style="color: khaki;">
+						Triple line $z=0, x=y$, <br>embedded point of length 1 at the origin.
+					</p>
+				</section>
+
+				<section data-background="#082828" data-background-transition="zoom">
+					<p>
+						Describe $$
+							I = (z^2, (x-y)^2-2xz, zy(x-y))
+						$$ using differential equations.
+					</p>
+					<div class="fragment">
+						<span style="color: red">Answer: </span> the polynomial $p \in I$ iff
+						<div class="r-frame">
+							<ul>
+								<li>$p$ vanishes on the line $z = x-y = 0$</li>
+								<li>$\partial_x p$ vanishes on the line $z = x-y = 0$</li>
+								<li>$y\partial_x^2 p + \partial_z p$ vanishes on the line $z = x-y = 0$</li>
+								<li>$\partial_x^2 p + \partial_x \partial_z p$ vanishes at the origin</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828" data-background-transition="zoom">
+					<div data-id="diff">
+						Solve the PDE $$
+							\partial_z^2 f = 0\\
+							((\partial_x - \partial_y)^2 - 2\partial_x \partial_z) f = 0 \\
+							\partial_z \partial_y (\partial_x - \partial_y) f = 0
+						$$
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828" data-background-transition="zoom">
+					<div style="font-size: 50%" data-id="diff">
+						Solve the PDE $$
+							\partial_z^2 f = 0\\
+							((\partial_x - \partial_y)^2 - 2\partial_x \partial_z) f = 0 \\
+							\partial_z \partial_y (\partial_x - \partial_y) f = 0
+						$$
+					</div>
+					<p>
+						<span style="color: red">Answer: </span>
+						$$
+						f(x,y,z) = \alpha(x+y) + \\ x\beta(x+y) + \\x^2 \gamma'(x+y) + z \gamma(x+y) +\\ c\cdot(x^2+xz)
+						$$
+						where $\alpha,\beta,\gamma$ are univariate functions, $c$ a constant
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Setup</h3>
+					<div class="fragment">
+						$R = \mathbb{C}[\partial_{z_1},\dotsc,\partial_{z_n}]$
+					</div>
+					<br>
+					<div class="fragment">
+						Elements of $R$ operate on functions $f \in \mathcal{D'}(\mathbb{R}^n)$ 
+						$f(z_1,\dotsc, z_n) \colon \mathbb{R}^n \to \mathbb{C}$
+					</div>
+					<br>
+					<div class="fragment" style="font-size: 70%">
+						E.g. $(2\partial_1^2 - 3) \bullet f = 2\frac{\partial^2 f}{\partial z_1^2} - 3 f$.
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Setup</h3>
+					<div>
+						$R = \mathbb{C}[\partial_{z_1},\dotsc,\partial_{z_n}]$
+					</div>
+					<br>
+					<div>
+						Elements of <span style="color: violet">$R^k$</span> operate on functions $f \in $ <span style="color: violet">$\mathcal{D'}(\mathbb{R}^n)^k$</span> 
+						$f(z_1,\dotsc, z_n) \colon \mathbb{R}^n \to$ <span style="color: violet">$\mathbb{C}^k$</span>.
+					</div>
+					<br>
+					<div class="r-stack">
+						<div class="fragment fade-in-then-out">
+							\begin{align*}
+							R^k \times \mathcal{D}'^k &\to \mathcal{D}' \\
+							p \bullet f &\mapsto \sum_{i=1}^k p_i \bullet f_i
+							\end{align*}
+						</div>
+						<div class="fragment fade-in-then-out" style="font-size: 70%">
+							E.g. $$
+								\begin{bmatrix}
+									\partial_1\partial_2 \\ \partial_3 - 1
+								\end{bmatrix} \bullet
+								\begin{bmatrix} f_1 \\ f_2 \end{bmatrix} = \partial_1 \partial_2 \bullet f_1 + (\partial_3 - 1) \bullet f_2
+							$$ 
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<p>
+						Linear partial differential operators with constant coefficients are encoded as vectors in $R^k = \mathbb{C}[\partial_1, \dotsc, \partial_n]^k$.
+					</p>
+					<p class="fragment">
+						A set of $l$ partial differential operators is encoded by a <span style="color: #1b91ff">$k \times l$ matrix $M$</span> with entries in $R$.
+					</p>
+					<p class="fragment" data-id="afun">
+						A function $f \in \mathcal{D}'^k$ satisfies <span style="color: #17ff2e">the PDE $M$</span> if $M_i \bullet f = 0$ for all $l$ columns $M_i$ of $M$.
+					</p>
+
+				</section>
+				<section data-auto-animate data-background="#082828" data-background-transition="zoom">
+					<p data-id="afun">
+						A function $f \in \mathcal{D}'^k$ satisfies <span style="color: #17ff2e">the PDE $M$</span> if $M_i \bullet f = 0$ for all $l$ columns $M_i$ of $M$.
+					</p>
+					<h4>Example</h4>
+					<div class="r-hstack">
+						<p class="fragment" style="font-size: 60%; margin-right: 3em;">
+							$$
+							M = \begin{bmatrix}
+								\partial_x^2 & \partial_x\partial_y & \partial_y^2 + \partial_x\\ \partial_x+1 & \partial_y^2 & -\partial_x + 1
+								\end{bmatrix}
+							$$
+							corresponds to the PDE
+							$$
+								\frac{\partial^2 f_1}{\partial x^2} + \frac{\partial f_2}{\partial x} + f_2 = 0 \\
+								\frac{\partial^2 f_1}{\partial x \partial y} + \frac{\partial^2 f_2}{\partial y^2} = 0\\
+								\frac{\partial^2 f_1}{\partial y^2} + \frac{\partial f_1}{\partial x} - \frac{\partial f_2}{\partial x}+f_2 = 0
+							$$
+						</p>
+						<p class="fragment" style="font-size: 80%; margin-left: 3em;">
+							One solution (among infinitely many) is
+							$$
+								\begin{bmatrix} f_1(x,y) \\ f_2(x,y) \end{bmatrix} = \begin{bmatrix}
+								-\cos x - \sin x \\ - \sin x \end{bmatrix}
+							$$
+						</p>
+					</div>
+				</section>
+
+				<section>
+					<h4>Proposition</h4>
+					The function $f \in \mathcal{D}'^k$ satisfies <span style="color: #17ff2e">the PDE $M$</span> if and only if $m \bullet f = 0$ for all <span style="color: pink;">$m \in U$</span>, where <span style="color: pink;">$U$</span> is the submodule of $R^k$ generated by the columns of $M$.
+					<br>
+					<br>
+					<p class="fragment">
+						PDE $\iff$ <span class="fragment" style="color: #17ff2e">Matrix</span> <span class="fragment fade-up" style="color: pink"> $\iff$ Submodule of $R^k$.</span> 
+					</p>
+					<br>
+					<p class="fragment">
+						If $U \subseteq R^k$, define the $R$-module of solutions <span style="color: pink">$$\mathrm{Sol}(U) := \{f \in \mathcal{D}' \mid m \bullet f =0 \, \forall m \in U \}$$</span>
+					</p>
+				</section>
+
+
+				<section data-background="https://media.giphy.com/media/26gR0OfapamWTkOha/giphy.gif"><p style="background-color: rgba(0, 0, 0, .8)">
+						Simple algebra
+					</p></section>
+				<section>
+					<h3>Varieties</h3>
+					Suppose $k=1$, submodules $I \subseteq R^1$ are <span style="color: red">ideals</span>.
+					<br>
+					<br>
+					<div class="fragment">
+						<h4>Proposition</h4>
+						The function $e^{\xi_1 z_1 + \dotsb + \xi_n z_n} \in \mathrm{Sol}(I)$ if and only if $(\xi_1,\dotsc,\xi_n) \in V(I)$.
+					</div>
+					<br>
+					<div class="r-stack">
+						<div class="fragment fade-in-then-out" style="font-size: 70%">
+							E.g. if $I = (\partial_3^2, (\partial_1-\partial_2)^2-2\partial_1\partial_3, \partial_3\partial_2(\partial_1-\partial_2))$, then the "pure" exponential solutions are parametrized by
+							$$ t \mapsto e^{tz_1 + tz_2 + 0z_3} $$
+						</div>
+						<div class="fragment fade-up" style="font-size: 80%; color: khaki">
+							A similar statement is true for modules ($k>1$). The analogue of $V(I)$ is the characteristic variety $$V_U = \bigcup_{P \in \mathrm{Ass}(R^k/U)} V(P) = V(k\text{-minors of M}) = V(\mathrm{Ann}_R(R^k/U))$$
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3>Syzygies</h3>
+					<p>Suppose $U$ is generated by the columns of matrix $M$. Let $S$ be the matrix whose image is the module of relations between rows of $M$</p>
+					<p class="fragment">
+						$$ R^l \xleftarrow{M^T} R^k \xleftarrow{S} R^{k_1}$$
+					</p>
+					<p class="fragment">
+						Then $S^T \bullet \mathcal{D}'^{k_1} \subset \mathrm{Sol}(U)$, and
+					</p>
+					<p class="fragment">
+						$S^T \bullet \mathcal{D}'^{k_1} = \mathrm{Sol}(U)$ if $R^k/U$ is torsion free.
+					</p> 
+
+				</section>
+
+				<section data-background="#082828" data-background-transition="zoom">
+					<h3>Example</h3>
+					<p style="font-size: 50%;">
+						Let $M = \mathrm{curl} = \begin{bmatrix} -\partial_y & 0 & -\partial_z \\ \partial_x & -\partial_z & 0 \\ 0 & \partial_y & \partial_x \end{bmatrix}$
+					</p>
+					<p style="font-size: 70%;" class="fragment">
+						$$
+							R^3 \xleftarrow{\begin{bmatrix} -\partial_y & \partial_x & 0 \\ 0 & -\partial_z & \partial_y \\ -\partial_z & 0 & \partial_x \end{bmatrix}} R^3 \xleftarrow{\begin{bmatrix} \partial_x \\ \partial_y \\ \partial_z \end{bmatrix}} R^1
+						$$
+					</p>
+					<p style="font-size: 70%;" class="fragment">
+						The operator $\begin{bmatrix} \partial_x & \partial_y & \partial_z \end{bmatrix}$ is the gradient operator.
+					</p>
+					<p style="font-size: 70%;" class="fragment">
+						Furthermore, $R^3/\mathrm{Im}_R(M)$ is torsion-free.
+					</p>
+					<p style="font-size: 100%;" class="fragment">
+						Curl-free functions are precisely gradients
+					</p>
+					<p style="font-size: 50%;" class="fragment">
+						$\mathrm{curl} f = 0 \implies f = \nabla g$ for some function $g$.
+					</p>
+
+				</section>
+
+				<section data-background="https://media.giphy.com/media/l0HlNaQ6gWfllcjDO/giphy.gif">solvePDE</section>
+
+				<section data-auto-animate>
+					<p>
+						Given $U \subseteq R^k$, how do we get all of $\mathrm{Sol}(U)$?
+					</p>
+					<div class="fragment">
+						<h4>Ehrenpreis-Palamodov fundamental principle</h4>
+						<p>
+							There exist varieties $\{V_i\}$ and polynomial vectors $\{B_{i,j}(\mathbf{x},\mathbf{z})\}$ such that every solution $f \in \mathrm{Sol}(U)$ is written as an integral
+						</p>
+						<div class="r-frame" data-id="epft">
+							$$
+								f(\mathbb{z}) = \sum_{i=1}^L \sum_{j=1}^{m_j} \int_{V_i} B_{i,j}(\mathbb{x},\mathbb{z}) e^{\mathbb{x} \cdot \mathbb{z}} \, d\mu_{i,j}(\mathbb{x})
+							$$
+						</div>
+						<p>
+							for some measures $\{\mu_{i,j}\}$.
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="r-frame" data-id="epft">
+						$$
+							f(\mathbb{z}) = \sum_{i=1}^L \sum_{j=1}^{m_j} \int_{V_i} B_{i,j}(\mathbb{x},\mathbb{z}) e^{\mathbb{x} \cdot \mathbb{z}} \, d\mu_{i,j}(\mathbb{x})
+						$$
+					</div>
+					<p style="margin-top: 3em;">
+						find the <span class="fragment highlight-blue">varieties $V_i$</span> and <span class="fragment highlight-blue">polynomials $B_{i,j}(\mathbf{x},\mathbf{z})$</span>
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p>
+						find the <span style="color: #1b91ff">varieties $V_i$</span> and polynomials $B_{i,j}(\mathbf{x},\mathbf{z})$
+					</p>
+					<div class="r-hstack" style="margin-top: -1em">
+						<div>
+							<p style="font-size: 70%;">
+								<span style="color: khaki;">Ehrenpreis-Palamodov:</span><br>
+								These are the varieties corresponding to <strong>associated primes</strong> of $R^k/U$
+							</p>
+						</div>
+						<pre><code class="plaintext" data-trim data-noescape style="height: auto; margin-left: 2em; transform: scale(0.7); max-height: 800px;">
+Macaulay2, version 1.18.0.1
+
+i1 : R = QQ[x,y,z];
+
+i2 : M = matrix {{x^2,x*y},{x+1,y^2}}
+
+o2 = | x2  xy |
+     | x+1 y2 |
+
+             2       2
+o2 : Matrix R  <--- R
+
+i3 : associatedPrimes coker M
+
+o3 = {ideal y, ideal x, ideal(x*y - x - 1)}
+
+o3 : List
+						</code></pre>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div>
+						<p>
+							find the varieties $V_i$ and <span style="color: #1b91ff">polynomials $B_{i,j}(\mathbf{x},\mathbf{z})$</span>
+						</p>
+						<p class="fragment">
+							We call the <span style="color: #1b91ff">$B_{ij}(\mathbb{x},\mathbb{z})$</span> <span style="color: khaki">Noetherian multipliers</span>
+						</p>
+						<div class="fragment r-frame" style="font-size: 80%;">
+							<h4 style="">Dual problem: Differential primary decomposition</h4>
+							<p>
+								Denote $R = \mathbb{C}[\partial_{z_1}, \dotsc, \partial_{z_n}] := \mathbb{C}[x_1,\dotsc,x_n]$. Find the differential operators $B_{i,j}(\mathbf{x}, \partial_\mathbf{x})$ such that
+								$$ f \in U \iff B_{i,j} \bullet f \in P_i \text { for all } P_i \in \mathrm{Ass}(R^k/U)$$
+							</p>
+						</div>
+					</div>
+					<p class="fragment">
+							We call the <span style="color: #1b91ff">$B_{ij}(\mathbb{x},\partial_x)$</span> <span style="color: khaki">Noetherian operators</span>
+					</p>
+					<div class="fragment" style="font-size: 40%;">
+						Cid-Ruiz, Y., & Sturmfels, B. (2021). Primary Decomposition with Differential Operators. <a href="https://arxiv.org/abs/2101.03643">arXiv:2101.03643.</a><br>Chen, J., & Cid-Ruiz, Y. (2021). Primary decomposition of modules: a computational differential approach. <a href="https://arxiv.org/abs/2104.03385">arXiv:2104.03385.</a>
+
+					</div>
+					<div class="fragment fade-in-then-out" style="position:  fixed; top: 0px; right: 100px;width: 700px; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(255, 255, 255, 1); color: black; padding: 20px; font-size: 70%">
+						
+						<p>
+							Describe $$
+								I = (z^2, (x-y)^2-2xz, zy(x-y))
+							$$ using differential equations.
+						</p>
+						<div>
+							<span style="color: red">Answer: </span> the polynomial $p \in I$ iff
+							<div class="r-frame">
+								<ul>
+									<li>$p$ vanishes on the line $z = x-y = 0$</li>
+									<li>$\partial_x p$ vanishes on the line $z = x-y = 0$</li>
+									<li>$y\partial_x^2 p + \partial_z p$ vanishes on the line $z = x-y = 0$</li>
+									<li>$\partial_x^2 p + \partial_x \partial_z p$ vanishes at the origin</li>
+								</ul>
+							</div>
+						</div>
+					
+					</div>
+
+				</section>
+
+				<section data-background-iframe="https://faculty.math.illinois.edu/Macaulay2/doc/Macaulay2/share/doc/Macaulay2/NoetherianOperators/html/_solve__P__D__E_lp__Module_rp.html" data-background-interactive>
+					<div style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
+						<h2>solvePDE</h2>
+						<p>Distributed with Macaulay2 from version 1.18 in the package NoetherianOperators</p>
+					</div>
+				</section>
+
+				<section data-transition="fade">
+					<div>
+						Study the PDE
+						$$
+							M = \begin{bmatrix}
+								\partial_1^2 - 4\partial_1\partial_2-\partial_2 & \partial_1^2 \partial_2 - \partial_2^2 & \partial_1^3 - \partial_1 \partial_2 \\ 2\partial_1^2-2\partial_2 & 0 & 0 \end{bmatrix}
+						$$
+					</div>
+					<div class="fragment" style="font-size: 70%;">
+						i.e. find $f_1(z_1,z_2)$, $f_2(z_1,z_2)$ such that
+						\begin{align*}
+							(\partial_1^2 - 4\partial_1\partial_2-\partial_2)f_1 + (2\partial_1^2-2\partial_2)f_2 &= 0\\
+							(\partial_1^2 \partial_2 - \partial_2^2)f_1 &= 0\\
+							(\partial_1^3 - \partial_1 \partial_2)f_1 &= 0
+						\end{align*}
+					</div>
+				</section>
+
+				<section data-transition="fade">
+					<div>
+						Study the module $U \subseteq \mathbb{C}[x_1,x_2]$ generated by the columns of
+						$$
+							M = \begin{bmatrix}
+								x_1^2 - 4x_1x_2-x_2 & x_1^2 x_2 - x_2^2 & x_1^3 - x_1 x_2 \\ 2x_1^2-2x_2 & 0 & 0 \end{bmatrix}
+						$$
+					</div>
+				</section>
+
+				<section>
+					<div class="r-hstack">
+						<pre><code class="plaintext" data-trim data-noescape style="width: 450px; margin-right: 2em; max-height: 800px; font-size: 60%; line-height: 1.2em;"
+							data-line-numbers="1|3|5|7-13|15-21">
+Macaulay2, version 1.18.0.1
+
+i1 : needsPackage "NoetherianOperators";
+
+i2 : R = QQ[x_1,x_2];
+
+i3 : U = image matrix {{x_1^2-4*x_1*x_2-x_2, x_1^2*x_2-x_2^2, x_1^3-x_1*x_2}, {2*x_1^2-2*x_2, 0, 0}}
+
+o3 = image | x_1^2-4x_1x_2-x_2 x_1^2x_2-x_2^2 x_1^3-x_1x_2 |
+           | 2x_1^2-2x_2       0              0            |
+
+                             2
+o3 : R-module, submodule of R
+
+i4 : differentialPrimaryDecomposition U
+
+              2
+o4 = {{ideal(x  - x ), {| 0 |, |    1    |}}, {ideal (x , x ), {| -2dx_2 |}}}
+              1    2    | 1 |  | x_2dx_1 |             2   1    |  dx_2  |
+
+o4 : List
+						</code></pre>
+						<div style="font-size: 50%;">
+							<p class="fragment">
+								Associated primes $P_1 = (x_1^2 - x_2)$, $P_2 = (x_1,x_2)$.
+							</p>
+
+							<div class="fragment" style="margin-top: 2em;">
+								Noetherian operators $B_{1,1} = (0, 1)^T$, $B_{1,2} = (1, x_2\partial_{x_1})^T$, $B_{2,1} = (-2\partial_{x_2}, \partial_{x_2})^T$.
+							</div>
+
+							<div class="fragment" style="margin-top: 2em;"><p>
+								$(p_1,p_2) \in U$ if and only if
+								<ul>
+									<li>$p_2 \in P_1$</li>
+									<li>$p_1 + x_2 \partial_{x_1} p_2 \in P_1$</li>
+									<li>$-2\partial_{x_2} p_1 + \partial_{x_2} p_2 \in P_2$</li>
+								</ul>
+							</p></div>
+							
+							<div class="fragment" style="margin-top: 2em;"><p>
+								$U = U_1 \cap U_2$ is a primary decomposition, where $$
+								U_1 = \{p \in R^2 \mid B_{1,1} \bullet p \in P_1, B_{1,2} \bullet p \in P_1\}$$
+								$$
+								U_2 = \{p \in R^2 \mid B_{2,1} \bullet p \in P_2\}$$
+							</p></div>
+
+
+					</div>
+				</section>
+
+				<section>
+					<div class="r-hstack">
+						<pre><code class="plaintext" data-trim data-noescape style="width: 450px; margin-right: 2em; max-height: 800px; font-size: 60%; line-height: 1.2em;"
+							data-line-numbers="1-32|5|7-13|15-21|23-32">
+Macaulay2, version 1.18.0.1
+
+i1 : needsPackage "NoetherianOperators";
+
+i2 : R = QQ[x_1,x_2];
+
+i3 : U = image matrix {{x_1^2-4*x_1*x_2-x_2, x_1^2*x_2-x_2^2, x_1^3-x_1*x_2}, {2*x_1^2-2*x_2, 0, 0}}
+
+o3 = image | x_1^2-4x_1x_2-x_2 x_1^2x_2-x_2^2 x_1^3-x_1x_2 |
+           | 2x_1^2-2x_2       0              0            |
+
+                             2
+o3 : R-module, submodule of R
+
+i4 : solvePDE U
+
+              2
+o4 = {{ideal(x  - x ), {| 0 |, |    1    |}}, {ideal (x , x ), {| -2dx_2 |}}}
+              1    2    | 1 |  | x_2dx_1 |             2   1    |  dx_2  |
+
+o4 : List
+
+i5 : netList oo
+
+     +--------------+--------------------+
+     |       2      |                    |
+o5 = |ideal(x  - x )|{| 0 |, |    1    |}|
+     |       1    2 | | 1 |  | x_2dx_1 | |
+     +--------------+--------------------+
+     |ideal (x , x )|{| -2dx_2 |}        |
+     |        2   1 | |  dx_2  |         |
+     +--------------+--------------------+
+						</code></pre>
+						<div style="font-size: 50%;">
+							<p class="fragment" data-fragment-index="1">
+								Solving PDEs:<br>
+								the $x_i$ variables correspond to $\partial_{z_i}$,<br>the $z_i$ variables correspond to $\partial_{z_i}$.
+							</p>
+
+							<div class="fragment" style="margin-top: 2em;">
+								Output is the same as <tt>differentialPrimaryDecomposition</tt>!
+							</div>
+
+							<div class="fragment" style="margin-top: 2em;"><p>
+								Varieties: $V_1 = V(x_1^2 - x_2)$, $V_2 = V(x_1,x_2)$.
+							</p></div>
+
+							<div class="fragment" style="margin-top: 2em;"><p>
+								Noetherian multipliers $B_{1,1} = (0, 1)^T$, $B_{1,2} = (1, x_1z_1)^T$, $B_{2,1} = (-2z_2, z_2)^T$.
+							</p></div>
+							<div class="r-stack">
+							
+								<div class="fragment fade-in-then-out" style="margin-top: 2em;"><p>
+									Solutions:
+									\begin{align*}
+										\begin{bmatrix} f_1(z_1,z_2) \\ f_2(z_1,z_2) \end{bmatrix} =& \int_{V_1} \begin{bmatrix} 0 \\ 1 \end{bmatrix} e^{x_1z_1 + x_2z_2} \, d\mu_{1,1}(x_1,x_2) \\
+										&+\int_{V_1} \begin{bmatrix} 1 \\ x_1z_1 \end{bmatrix} e^{x_1z_1 + x_2z_2} \, d\mu_{1,2}(x_1,x_2)\\
+										&+\int_{V_2} \begin{bmatrix} -2z_2 \\ z_2 \end{bmatrix} e^{x_1z_1 + x_2z_2} \, d\mu_{2,1}(x_1,x_2)
+									\end{align*}
+								</p></div>
+
+								<div class="fragment fade-in-then-out" style="margin-top: 2em;"><p>
+									Solutions:
+									\begin{align*}
+										\begin{bmatrix} f_1(z_1,z_2) \\ f_2(z_1,z_2) \end{bmatrix} =& \int_{V_1} \begin{bmatrix} 0 \\ 1 \end{bmatrix} e^{x_1z_1 + x_2z_2} \, d\mu_{1,1}(x_1,x_2) \\
+										&+\int_{V_1} \begin{bmatrix} 1 \\ x_1z_1 \end{bmatrix} e^{x_1z_1 + x_2z_2} \, d\mu_{1,2}(x_1,x_2)\\
+										&+c\begin{bmatrix} -2z_2 \\ z_2 \end{bmatrix}
+									\end{align*}
+								</p></div>
+
+								<div class="fragment fade-in-then-out" style="margin-top: 2em;"><p>
+									Solutions:
+									\begin{align*}
+										\begin{bmatrix} f_1(z_1,z_2) \\ f_2(z_1,z_2) \end{bmatrix} =& \begin{bmatrix} 0 \\ 1 \end{bmatrix} \int_{V_1}  e^{x_1z_1 + x_2z_2} \, d\mu_{1,1}(x_1,x_2) \\
+										&+\begin{bmatrix} 1 \\ \partial_{z_1}z_1 \end{bmatrix} \int_{V_1} e^{x_1z_1 + x_2z_2} \, d\mu_{1,2}(x_1,x_2)\\
+										&+c\begin{bmatrix} -2z_2 \\ z_2 \end{bmatrix}
+									\end{align*}
+								</p></div>
+
+							</div>
+						</div>
+					</div>
+				</section>
+
+
+				<section data-background="https://media.giphy.com/media/5nh8FKSRtxFEyuajGc/giphy.gif">
+					<h3>Making waves</h3>
+				</section>
+
+				<section data-background="https://media.giphy.com/media/l2JdWvM6QjK1JVonC/giphy.gif">
+					<p style="background-color: rgba(0, 0, 0, .5)">
+						A <strong>wave</strong> is a function that is constant along affine spaces
+					</p>
+
+					<p style="background-color: rgba(0, 0, 0, .5)" class="fragment">
+						If $f \colon \mathbb{R}^\ell \to \mathbb{C}^k$ is any $n-\ell$-variate function, then $f(\xi_1 \cdot x, \dotsc, \xi_{n-\ell} \cdot x)$ is a wave for all $\xi_i \in \mathbb{R}^k$, constant on $\ell$-dimensional hyperplanes.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p class="fragment">
+						Suppose $M \in \mathbb{C}[\partial_1,\dotsc,\partial_n]^{k\times l}$ has entries that are homogeneous of the same degree.
+					</p>
+
+					<p class="fragment">
+						The solutions are $k$-vectors
+					</p>
+
+					<p class="fragment">
+						Suppose we want to find solutions of the form
+						$$
+							vf(\xi_1\cdot x, \dotsc, \xi_{n-\ell} \cdot x),
+						$$
+						where $v \in \mathbb{P}^{k-1}$, $\xi_i \in \mathbb{P}^{n-1}$, and $f \colon \mathbb{R}^{n-\ell} \to \mathbb{C}$
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="font-size: 70%;">
+						Suppose we want to find solutions of the form
+						$$
+							vf(\xi_1\cdot x, \dotsc, \xi_{n-\ell} \cdot x),
+						$$
+						where $v \in \mathbb{P}^{k-1}$, $\xi_i \in \mathbb{P}^{n-1}$, and $f \colon \mathbb{R}^{n-\ell} \to \mathbb{C}$
+					</p>
+					<p style="margin-top: 2em" class="r-frame">
+						We need
+						$$
+						v \in \mathcal{N}^\ell := \bigcup_{\pi \in \mathrm{Gr}(n-\ell, n) }\bigcap_{\xi \in \pi \setminus \{0\}} \mathrm{ker} M^T(\xi)
+						$$
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="font-size: 70%; margin-top: -2em;">
+						Suppose we want to find solutions of the form
+						$$
+							vf(\xi_1\cdot x, \dotsc, \xi_{n-\ell} \cdot x),
+						$$
+						where $v \in \mathbb{P}^{k-1}$, $\xi_i \in \mathbb{P}^{n-1}$, and $f \colon \mathbb{R}^{n-\ell} \to \mathbb{C}$
+					</p>
+					<p style="margin-top: 2em; font-size: 70%;" class="r-frame">
+						We need
+						$$
+						v \in \mathcal{N}^\ell := \bigcup_{\pi \in \mathrm{Gr}(n-\ell, n) }\bigcap_{\xi \in \pi \setminus \{0\}} \mathrm{ker} M^T(\xi)
+						$$
+					</p>
+					<p style="font-size: 100%; margin-top: 2em;">
+						<span style="color: khaki;">$ \mathcal{N}^0 \subseteq \dotsb \subseteq \mathcal{N}^{n-1}$</span>
+					</p>
+				</section>
+
+								<section data-background="#082828" data-background-transition="zoom">
+					<div style="position: absolute; width: 40%; left: 0; font-size: 70%">
+						<p>
+							Let $M = \begin{bmatrix} \partial_1 & \partial_2 & \partial_3 \\ \partial_2 & \partial_1 & \partial_4 \\ \partial_3 & \partial_4 & \partial_1 \end{bmatrix}$
+						</p>
+						<div class="fragment">
+							<pre><code class="plaintext" data-trim data-noescape style="width: 450px; margin-right: 2em; max-height: 800px; font-size: 80%; margin-top: 2em">
+netList solvePDE M
+
++----------------------------------------+------------------------------------------------------+
+|       3      2      2                2 |                                                      |
+|ideal(x  - x x  - x x  + 2x x x  - x x )|{| -x_1^2x_2x_3+x_1x_2^2x_4+x_1x_3^2x_4-x_2x_3x_4^2 |}|
+|       1    1 2    1 3     2 3 4    1 4 | |  x_1x_2^2x_3-x_1^2x_2x_4-x_2x_3^2x_4+x_1x_3x_4^2 | |
+|                                        | |  x_1x_2x_3^2-x_1^2x_3x_4-x_2^2x_3x_4+x_1x_2x_4^2 | |
++----------------------------------------+------------------------------------------------------+
+      						</code></pre>
+      					</div>
+						<p class="fragment">
+							$$V_1 = V(\det M(\mathbf{x}))$$
+						</p>
+						<p class="fragment">
+							$$B_{1,1}(\mathbf{x},\mathbf{z}) = \begin{bmatrix}
+							-(x_1x_3 - x_2x_4)(x_1x_2-x_3x_4) \\
+							(x_2x_3-x_1x_4)(x_1x_2-x_3x_4)\\
+							(x_2x_3-x_1x_4)(x_1x_3-x_2x_4)
+							\end{bmatrix}
+							$$
+						</p>
+
+					</div>
+					<div style="position: absolute; width=50%; right: -230px; top: 50px">
+						<iframe src="renderer.html" frameborder="0" style="width: 750px; height: 550px; transform: scale(0.8);"></iframe>
+					</div>
+				</section>
+
+
+
+				<section data-background="#082828" data-background-transition="zoom">
+					<div style="position: absolute; width: 40%; left: 0; font-size: 70%">
+						<p>
+							Let $M = \begin{bmatrix} \partial_1 & \partial_2 & \partial_3 \\ \partial_2 & \partial_1 & \partial_4 \\ \partial_3 & \partial_4 & \partial_1 \end{bmatrix}$
+						</p>
+						<p style="margin-top: 2em;">
+							Suppose $$v \in \mathcal{N}^2 := \bigcup_{\pi \in \mathrm{Gr}(2, 4) }\bigcap_{\xi \in \pi \setminus \{0\}} \mathrm{ker} M^T(\xi)$$
+						</p>
+						<div class="r-stack">
+							<p style="margin-top: 2em;" class="fragment fade-in-then-out">
+								$0 = M^T(\xi)v $
+							</p>
+							<p style="margin-top: 2em;" class="fragment fade-in-then-out">
+								$0 = M^T(\xi)v = \begin{bmatrix}v_1 & v_2 & v_3 & 0 \\ v_2 & v_1 & 0 & v_3 \\ v_3 & 0 & v_1 & v_2\end{bmatrix} \xi$
+							</p>
+							<p style="margin-top: 2em;" class="fragment fade-in-then-out">
+								$0 = M^T(\xi)v = \begin{bmatrix}v_1 & v_2 & v_3 & 0 \\ v_2 & v_1 & 0 & v_3 \\ v_3 & 0 & v_1 & v_2\end{bmatrix} \xi$
+								<br>
+								$\implies \mathcal{N}^2 $is the variety corresponding to the $3 \times 3$ minors of the matrix above
+							</p>
+						</div>
+
+					</div>
+					<div style="position: absolute; width=50%; right: -230px; top: 100px">
+						<iframe src="renderer.html" frameborder="0" style="width: 750px; height: 550px; transform: scale(0.8);"></iframe>
+					</div>
+				</section>
+
+				<section data-background="#082828" data-background-transition="zoom">
+					<div style="position: absolute; width: 40%; left: 0; font-size: 60%">
+					<p>
+							$\mathcal{N}^2$ consists of six projective points, each of which is the normal of the lines going between the vertices of the elliptope
+					</p>
+					<p class="fragment" style="margin-top: 2em;">
+						e.g. $(1,0,-1)^T \in \mathcal{N}^2$. The function
+						$$
+							f(x_1,x_2,x_3,x_4) = \begin{cases} (1,0,-1)^T, & \text{ if } x_1 + x_3 = x_2 + x_4 = 0\\
+							(0,0,0)^T, & \text{otherwise} \end{cases}
+						$$
+						satisfies the PDE
+						\begin{gather*}
+							\partial_1 f_1 + \partial_2 f_2 + \partial_3 f_3 = 0\\
+							\partial_2 f_1 + \partial_1 f_2 + \partial_4 f_3 = 0\\
+							\partial_3 f_1 + \partial_4 f_2 + \partial_1 f_3 = 0
+						\end{gather*}
+					</p>
+					</div>
+					<div style="position: absolute; width=40%; right: -200px; top: -100px">
+						<iframe src="renderer.html" frameborder="0" style="width: 750px; height: 550px; transform: scale(0.8);"></iframe>
+					</div>
+				</section>
+
+				<section data-background="https://media.giphy.com/media/NxWk4NY7C59Fm/giphy.gif"><p style="background-color: rgba(0, 0, 0, .6)">A numerical future</p></section>
+
+				<section data-auto-animate>
+					<p>
+						We use the data "associated primes" $V(P_i)$ and "Noetherian multipliers" $B_{i,j}(\mathbb{x},\mathbb{z})$ to describe submodules of $\mathbb{C}[\mathbb{x}]^k$.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="font-size: 70%;">
+						We use the data <span style="color: khaki">"associated primes" $V(P_i)$</span> and "Noetherian multipliers" $B_{i,j}(\mathbb{x},\mathbb{z})$ to describe submodules of $\mathbb{C}[\mathbb{x}]^k$.
+					</p>
+
+					<p>
+						$V(P_i)$ are represented by witness sets
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="font-size: 70%;">
+						We use the data "associated primes" $V(P_i)$ and <span style="color: khaki">"Noetherian multipliers" $B_{i,j}(\mathbb{x},\mathbb{z})$</span> to describe submodules of $\mathbb{C}[\mathbb{x}]^k$.
+					</p>
+
+					<p style="font-size: 70%;">
+						$V(P_i)$ are represented by witness sets
+					</p>
+
+					<p>
+						$B_{ij}(\mathbf{x},\mathbf{z})$ could be represented by sets of <span style="color: red">witness solutions</span>
+					</p>
+					<p class="fragment" style="margin-top: 2em;">
+						If $\xi$ lies approximately on $V(P_i)$ and $B(\mathbf x, \mathbf z)$ is a Noetherian multiplier, we say that
+						$$
+							B(\xi, \mathbf{z})e^{\xi \cdot z}
+						$$
+						is a witness solution
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p style="font-size: 50%;">
+						We use the data "associated primes" $V(P_i)$ and <span style="color: khaki">"Noetherian multipliers" $B_{i,j}(\mathbb{x},\mathbb{z})$</span> to describe submodules of $\mathbb{C}[\mathbb{x}]^k$.
+					</p>
+
+					<p style="font-size: 50%;">
+						$V(P_i)$ are represented by witness sets
+					</p>
+
+					<p style="font-size: 70%;">
+						$B_{ij}(\mathbf{x},\mathbf{z})$ could be represented by sets of <span style="color: red">witness solutions</span>
+					</p>
+					<p style="font-size: 70%; margin-top: 2em;">
+						If $\xi$ lies approximately on $V(P_i)$ and $B(\mathbf x, \mathbf z)$ is a Noetherian multiplier, we say that
+						$$
+							B(\xi, \mathbf{z})e^{\xi \cdot z}
+						$$
+						is a witness solution
+					</p>
+					<p>
+						<span class="fragment highlight-current-green"> Numerical module membership test</span>, <span class="fragment highlight-current-green">numerical primary decomposition</span>, <span class="fragment highlight-current-green">numerical module operations: sums, intersections...</span>
+					</p>
+				</section>
+
+				<section>
+					<h3>References</h3>
+					<div style="font-size: 60%;">
+						<p>
+							Härkönen, M., Hirsch, J., & Sturmfels, B. (in preparation). Noetherian Operators and Wave Cones
+						</p>
+						<p>
+							<a href="https://arxiv.org/abs/2104.10146">Ait El Manssour, R., Härkönen, M., & Sturmfels, B. (2021). Linear PDE with Constant Coefficients.</a>
+						</p>
+						<p>
+							<a href="https://arxiv.org/abs/2104.03385">Chen, J., & Cid-Ruiz, Y. (2021). Primary decomposition of modules: a computational differential approach.</a>
+						</p>
+						<p>
+							<a href="https://arxiv.org/abs/2006.13881">Chen, J., Härkönen, M., Krone, R., & Leykin, A. (2020). Noetherian operators and primary decomposition.</a>
+						</p>
+					</div>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ]
+			});
+		</script>
+	</body>
+</html>
