@@ -763,7 +763,7 @@ o4 : List
 					<p>
 						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, e^{-\frac{\|x_1\|^2}{2}} d\mathcal{L}(x_1) $$
 					</p>
-					<p>In practice: Monte-Carlo + numerical solving</p>
+					<p>If $\operatorname{deg}(V) > 1$: Monte-Carlo + numerical solving</p>
 					<div class="box">
 						<p style="font-weight: bold;">1D heat equation: $\partial_t = \partial_x^2$</p>
 						<div class="r-hstack">
@@ -788,13 +788,13 @@ o4 : List
 					<p>$\nabla \cdot E = 0, \qquad \nabla \cdot B = 0, \qquad \nabla \times E = - \frac{\partial B}{\partial t}, \qquad \nabla \times B = \frac{\partial E}{\partial t}$</p>
 					<div class="r-hstack">
 						<div style="margin-right: 3em;">
-							<video data-autoplay>
+							<video data-autoplay loop>
 								<source data-src="figs/eanim.mp4" type="video/mp4" />
 							</video>
 							<p>Electric field $E$</p>
 						</div>
 						<div>
-							<video data-autoplay>
+							<video data-autoplay loop>
 								<source data-src="figs/banim.mp4" type="video/mp4" />
 							</video>
 							<p>Magnetic field $B$</p>
