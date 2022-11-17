@@ -1,0 +1,947 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Marc Härkönen, Polynomials and PDE</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="marc.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h3>Learning solutions to PDE</h3>
+					<div class="r-hstack">
+						<div class="thm", style="padding: 2em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px; margin-right: 1em" class="r-frame">
+						$$
+						\begin{gather*}
+						\frac{\partial f}{\partial x} + \frac{\partial^2 g}{\partial x \partial y} = 0 \\
+						\frac{\partial^2 f }{\partial y \partial z } + \frac{\partial^2 g}{\partial z^2} = 0 \\
+
+						\frac{\partial^3 f }{\partial x^2 \partial z } + \frac{\partial^3 g}{\partial z \partial y \partial w} = 0
+						\end{gather*}
+						$$
+						</div>
+						<div class="thm", style="padding: 1em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px; margin-left: 1em;" class="r-frame">
+							<img src="figs/wave1.gif" style="border-radius: 100px; height: 500px">
+						</div>
+					</div>
+					<p>
+						<a href="https://haerski.github.io/index.html">Marc Härkönen</a><br>
+						<small>Max Planck Institute for Mathematics in the Sciences<br><br>Kolchin Seminar in Differential Algebra,<br>Nov 18, 2022</small>
+					</p>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div>
+							<p>
+								$$ \phi'''(z)-3\phi'(z)+2\phi(z) = 0 $$
+							</p>
+							<p class="fragment" style="padding-top: 1em;">Characteristic polynomial:</p>
+								<p class="fragment"> $$ x^3-3x+2 = 0 $$ </p>
+								<p class="fragment"> $$ (1-x)^2(x+2) = 0 $$ </p>
+							<p class="fragment">Solutions</p>
+							<div class="fragment">
+								<ul>
+									<li>$e^z$</li>
+									<li>$ze^z$</li>
+									<li>$z^{-2z}$</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div>
+							<p>
+								$$ \phi'''(z)-3\phi'(z)+2\phi(z) = 0 $$
+							</p>
+							<p style="padding-top: 1em;">Characteristic polynomial:</p>
+							<div class="r-stack" style="margin-top: -1em;">
+								<p> $$ (1-x)^2(x+2) = 0 $$ </p>
+							</div>
+							<p>Solutions</p>
+							<div>
+								<ul>
+									<li>$e^z$</li>
+									<li>$ze^z$</li>
+									<li>$z^{-2z}$</li>
+								</ul>
+							</div>
+						</div>
+						<div style="margin-left: 2em">
+							<p class="fragment"> $ I = \langle x^3 - 3x + 2 \rangle \subset R := \CC[x]$ </p>
+							<p class="fragment" style="padding-top: 1em">Primary decomposition:</p>
+							<p class="fragment" style="margin-top: -1em"> $$ I = \langle (1-x)^2 \rangle \cap \langle x+2 \rangle $$ </p>
+							<p class="fragment" style="padding-top: 1em"> $I$ is the set of $f \in R$ such that
+								<ul class="fragment">
+									<li> $f(1) = 0$ </li>
+									<li> $ \partial_x f(1) = 0 $</li>
+									<li> $ f(-2) = 0 $ </li>
+								</ul>
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div>
+							<p>
+								$$ \phi'''(z)-3\phi'(z)+2\phi(z) = 0 $$
+							</p>
+							<p style="padding-top: 1em;">Characteristic polynomial:</p>
+							<div class="r-stack" style="margin-top: -1em;">
+								<p> $$ (1-x)^2(x+2) = 0 $$ </p>
+							</div>
+							<p>Solutions</p>
+							<div>
+								<ul>
+									<li>$e^z$</li>
+									<li>$ze^z$</li>
+									<li>$z^{-2z}$</li>
+								</ul>
+							</div>
+						</div>
+						<div style="margin-left: 2em">
+							<p> $ I = \langle x^3 - 3x + 2 \rangle \subset R := \CC[x]$ </p>
+							<p style="padding-top: 1em">Primary decomposition:</p>
+							<p style="margin-top: -1em"> $$ I = \langle (1-x)^2 \rangle \cap \langle x+2 \rangle $$ </p>
+							<p style="padding-top: 1em"> $I$ is the set of $f \in R$ such that
+								<ul>
+									<li> $f(1) = 0$ </li>
+									<li> $ \partial_x f(1) = 0 $</li>
+									<li> $ f(-2) = 0 $ </li>
+								</ul>
+							</p>
+						</div>
+					</div>
+					<div class="box" style="margin-top:0em; padding: 0.5em;">
+						<p> The data $\{(1,1)$, $(\partial_x, 1)$, $(1, 2)\}$ is:<br>1. the solutions to the PDE $I$;<br>2. the differential equations of the ideal $I$.</p>
+					</div>
+				</section>
+
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack" style="margin-top: -3em">
+						<div>
+							<p class="fragment" data-fragment-index="1" >
+								$$ \partial_{z_1}^2 \phi - \partial_{z_2} \phi = 0 \\ \partial_{z_2} \partial_{z_3} \phi = 0 $$
+							</p>
+							<p class="fragment" data-fragment-index="2" style="padding-top: 1em;">Characteristic polynomials:</p>
+							<div class="fragment" data-fragment-index="2" class="r-stack" style="margin-top: -1em;">
+								<p> $$ x_1^2 - x_2 = 0 \\ x_2x_3 = 0 $$ </p>
+							</div>
+							<p class="fragment" data-fragment-index="6">Solutions</p>
+							<div class="fragment" data-fragment-index="6">
+								<ul>
+									<li>$e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$z_1e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$e^{x_1z_1 + x_2z_2 + x_3z_3} $, when<br>$x \in V(x_1^2 -x_2, x_3)$.</li>
+								</ul>
+							</div>
+						</div>
+						<div style="margin: 4em">
+							<p class="fragment" data-fragment-index="3"> $ I = \langle x_1^2 - x_2, x_2x_3 \rangle \subset R := \CC[x_1,x_2,x_3]$ </p>
+							<p class="fragment" data-fragment-index="4" style="padding-top: 1em">Primary decomposition:</p>
+							<p class="fragment" data-fragment-index="4" style="margin-top: -1em"> $$ I = \langle x_1^2, x_2 \rangle \cap \langle x_1^2 - x_2, x_3 \rangle $$ </p>
+							<p class="fragment" data-fragment-index="5" style="padding-top: 1em"> $I$ is the set of $f \in R$ such that
+								<ul class="fragment" data-fragment-index="5">
+									<li> $f(0,0,x_3) = 0$ for all $x_3 \in \CC$ </li>
+									<li> $ \partial_{x_1} f(0,0,x_3) = 0 $ for all $x_3 \in \CC$</li>
+									<li> $ f(x) = 0 $, when $x \in V(x_1^2 - x_2, x_3)$ </li>
+								</ul>
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack" style="margin-top: -3em; font-size: 70%;">
+						<div>
+							<p>
+								$$ \partial_{z_1}^2 \phi - \partial_{z_2} \phi = 0 \\ \partial_{z_2} \partial_{z_3} \phi = 0 $$
+							</p>
+							<p style="padding-top: 1em;">Characteristic polynomials:</p>
+							<div class="r-stack" style="margin-top: -1em;">
+								<p> $$ x_1^2 - x_2 = 0 \\ x_2x_3 = 0 $$ </p>
+							</div>
+							<p>Solutions</p>
+							<div>
+								<ul>
+									<li>$e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$z_1e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$e^{x_1z_1 + x_2z_2 + x_3z_3} $, when<br>$x \in V(x_1^2 -x_2, x_3)$.</li>
+								</ul>
+							</div>
+						</div>
+						<div style="margin: 4em">
+							<p> $ I = \langle x_1^2 - x_2, x_2x_3 \rangle \subset R := \CC[x_1,x_2,x_3]$ </p>
+							<p style="padding-top: 1em">Primary decomposition:</p>
+							<p style="margin-top: -1em"> $$ I = \langle x_1^2, x_2 \rangle \cap \langle x_1^2 - x_2, x_3 \rangle $$ </p>
+							<p style="padding-top: 1em"> $I$ is the set of $f \in R$ such that
+								<ul>
+									<li> $f(0,0,x_3) = 0$ for all $x_3 \in \CC$ </li>
+									<li> $ \partial_{x_1} f(0,0,x_3) = 0 $ for all $x_3 \in \CC$</li>
+									<li> $ f(x) = 0 $, when $x \in V(x_1^2 - x_2, x_3)$ </li>
+								</ul>
+							</p>
+						</div>
+					</div>
+					<div class="box" style="margin-top:-1em; padding: 0.5em;">
+						<p> If $V_1 = V(x_1,x_2)$, $V_2 = V(x_1^2 - x_2, x_3)$, <br>the data $\{(1,V_1)$, $(\partial_{x_1}, V_1)$, $(1, V_2)\}$ is:<br>1. the solutions to the PDE $I$;<br>2. the differential equations of the ideal $I$.</p>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack" style="margin-top: 0em; font-size: 100%;">
+						<div style="margin-right: 2em;">
+							<p>
+								$$ \partial_{z_1}^2 \phi - \partial_{z_2} \phi = 0 \\ \partial_{z_2} \partial_{z_3} \phi = 0 $$
+							</p>
+							<p>Solutions</p>
+							<div>
+								<ul>
+									<li>$e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$z_1e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$e^{x_1z_1 + x_2z_2 + x_3z_3} $, when<br>$x \in V(x_1^2 -x_2, x_3)$.</li>
+								</ul>
+							</div>
+						</div>
+						<div class="thmbox" style="padding: 1em; margin-left: 2em">
+							<h3>Ehrenpreis-Palamodov</h3>
+							<p>Let $V_1 = V(x_1,x_2)$, $V_2 = V(x_1^2 - x_2, x_3)$.<br>All (smooth/distrbutional) solutions are given by
+								$$ \phi(z) = \int_{V_1} e^{x_1z_1+x_2z_2+x_3z_3} d\mu_1(x) \\ + z_1 \int_{V_1} e^{x_1z_1+x_2z_2+x_3z_3} d\mu_2(x) \\ + \int_{V_2} e^{x_1z_1 + x_2z_2 + x_3z_3} d\mu_3(x)$$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack" style="margin-top: 0em; font-size: 100%;">
+						<div style="margin-right: 2em;">
+							<p>
+								$$ \partial_{z_1}^2 \phi - \partial_{z_2} \phi = 0 \\ \partial_{z_2} \partial_{z_3} \phi = 0 $$
+							</p>
+							<p>Solutions</p>
+							<div>
+								<ul>
+									<li>$e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$z_1e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$e^{x_1z_1 + x_2z_2 + x_3z_3} $, when<br>$x \in V(x_1^2 -x_2, x_3)$.</li>
+								</ul>
+							</div>
+						</div>
+						<div class="thmbox" style="padding: 1em; margin-left: 2em">
+							<h3>Ehrenpreis-Palamodov</h3>
+							<p>Let $V_1 = V(x_1,x_2)$, $V_2 = V(x_1^2 - x_2, x_3)$.<br>All (smooth/distrbutional) solutions are given by
+								$$ \phi(z) = \int_{\CC} e^{x_3z_3} d\mu_1(x_3) \\ + z_1 \int_{\CC} e^{x_3z_3} d\mu_2(x_3) \\ + \int_{V_2} e^{x_1z_1 + x_2z_2 + x_3z_3} d\mu_3(x)$$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack" style="margin-top: 0em; font-size: 100%;">
+						<div style="margin-right: 2em;">
+							<p>
+								$$ \partial_{z_1}^2 \phi - \partial_{z_2} \phi = 0 \\ \partial_{z_2} \partial_{z_3} \phi = 0 $$
+							</p>
+							<p>Solutions</p>
+							<div>
+								<ul>
+									<li>$e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$z_1e^{x_3z_3}$ for all $x_3 \in \CC$</li>
+									<li>$e^{x_1z_1 + x_2z_2 + x_3z_3} $, when<br>$x \in V(x_1^2 -x_2, x_3)$.</li>
+								</ul>
+							</div>
+						</div>
+						<div class="thmbox" style="padding: 1em; margin-left: 2em">
+							<h3>Ehrenpreis-Palamodov</h3>
+							<p>Let $V_1 = V(x_1,x_2)$, $V_2 = V(x_1^2 - x_2, x_3)$.<br>All (smooth/distrbutional) solutions are given by
+								$$ \phi(z) = \psi_1(z_3) + z_1 \psi_2(z_3) \\ + \int_{\CC} e^{x_1z_1 + x_1^2z_2} d\mu_3(x_1)$$
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm">
+						<h3>Theorem (Ehrenpreis'54, Palamodov'63)</h3>
+						<p>
+							Let $I \subseteq \CC[x_1,\dotsc,x_n]$ denote a system of PDE.
+							There exists varieties $V_1,\dotsc, V_s$ and polynomials $D_{i,1}, \dotsc, D_{i,t_i}$ such that all distributional solutions $\phi$ are of the form
+							$$
+							\phi(z) = \sum_{i=1}^s \sum_{j=1}^{t_i} \int_{V_i} D_{i,j}(x,z) \exp(x^T \cdot z)\,\mathrm{d}\mu_{i,j}(x)
+							$$
+							for a suitable set of measures $\mu_{i,j}$.
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm" style="font-size: 60%;">
+						<h3>Theorem (Ehrenpreis'54, Palamodov'63)</h3>
+						<p>
+							Let $I \subseteq \CC[x_1,\dotsc,x_n]$ denote a system of PDE.
+							There exists varieties $V_1,\dotsc, V_s$ and polynomials $D_{i,1}, \dotsc, D_{i,t_i}$ such that all distributional solutions $\phi$ are of the form
+							$$
+							\phi(z) = \sum_{i=1}^s \sum_{j=1}^{t_i} \int_{V_i} D_{i,j}(x,z) \exp(x^T \cdot z)\,\mathrm{d}\mu_{i,j}(x)
+							$$
+							for a suitable set of measures $\mu_{i,j}$.
+						</p>
+					</div>
+					<ul>
+						<li class="fragment">$\{V_1,\dotsc, V_s\} = \{V(\pp)\}_{\pp \in \Ass(I)}$</li>
+						<li class="fragment">The polynomials $D_{i,j}$ describe membership in $I$:
+						$$
+							f \in I \iff D_{i,j}(x,\partial_x) f(x) \in I(V_i), \forall i = 1,\dotsc,s;\,j = 1, \dotsc, t_i.
+						$$
+						</li>
+						<li class="fragment">
+							$\operatorname{amult}(I)$ summands needed <span style="font-size: 50%; color: darkgoldenrod;">Cid-Ruiz, Sturmfels (2021)</span>
+						</li>
+					</ul>
+					<p class="fragment box" style="padding: 0.5em">We call the data $$\{(V_i, D_{i,j})\}_{i=1,\dotsc,s;\,j=1,\dotsc,t_i}$$ a <span style="color: lightseagreen;">differential primary decomposition</span> of $I$.</p>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>
+						Let $I = (x(y-z), x^2z, x^3)$: a plane $x=0$ with an embedded line $x=y-z = 0$ with a further embedded point at the origin.
+					</p>
+					<div class="r-hstack">
+						<p class="fragment" data-fragment-index="2">
+							$$
+							\begin{Bmatrix}
+							(V(x), & 1), \\
+							(V(x,y-z), & \partial_x), \\
+							(V(x,y,z), & \partial_x^2)
+							\end{Bmatrix}
+							$$
+						</p>
+						<img src="figs/plane.png" style="height: 300px; margin-left: 5em" class="fragment" data-fragment-index="1">
+				</div>
+					<pre class="fragment" data-fragment-index="3"><code class="plaintext">
+Macaulay2, version 1.20
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : I = ideal(x*y-x*z,x^2*z,x^3);
+i4 : differentialPrimaryDecomposition I
+
+o4 = {{ideal x, {| 1 |}}, {ideal (y - z, x), {| dx |}}, {ideal (z, y, x), {| dx^2 |}}}
+
+o4 : List
+					</code></pre>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>
+						Let $I = (x(y-z), x^2z, x^3)$: a plane $x=0$ with an embedded line $x=y-z = 0$ with a further embedded point at the origin.
+					</p>
+					<div class="r-hstack">
+						<p>
+							$$
+							\begin{Bmatrix}
+							(V(x), & 1), \\
+							(V(x,y-z), & \partial_x), \\
+							(V(x,y,z), & \partial_x^2)
+							\end{Bmatrix}
+							$$
+						</p>
+						<img src="figs/plane.png" style="height: 300px; margin-left: 5em">
+				</div>
+					<pre><code class="plaintext">
+Macaulay2, version 1.20
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y];
+i3 : I = ideal(x*y-x*z,x^2*z,x^3);
+i4 : differentialPrimaryDecomposition I
+
+o4 = {{ideal x, {| 1 |}}, {ideal (y - z, x), {| dx |}}, {ideal (z, y, x), {| dx^2 |}}}
+
+o4 : List
+					</code></pre>
+					<p class="thm cite">
+						J. Chen, Y. Cid-Ruiz, M. Härkönen, R. Krone, and A. Leykin, Noetherian operators in Macaulay2, 2021. <em>arXiv:2101.01002</em>.<br>
+					</p>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>
+						Let $I = (x(y-z), x^2z, x^3)$: a plane $x=0$ with an embedded line $x=y-z = 0$ with a further embedded point at the origin.
+					</p>
+					<div class="r-hstack">
+						<p>
+							$$
+							\begin{Bmatrix}
+							(V(x), & 1), \\
+							(V(x,y-z), & \partial_x), \\
+							(V(x,y,z), & \partial_x^2)
+							\end{Bmatrix}
+							$$
+						</p>
+						<img src="figs/plane.png" style="height: 300px; margin-left: 5em">
+					</div>
+					<div class="r-hstack" style="margin-top: 3em;">
+						<p>
+							Associated primes<br>
+							$P_2 = (x)$<br>
+							$P_1 = (x,y-z)$<br>
+							$P_0 = (x,y,z)$
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>
+						Let $I = (x(y-z), x^2z, x^3)$: a plane $x=0$ with an embedded line $x=y-z = 0$ with a further embedded point at the origin.
+					</p>
+					<div class="r-hstack">
+						<p>
+							$$
+							\begin{Bmatrix}
+							(V(x), & 1), \\
+							(V(x,y-z), & \partial_x), \\
+							(V(x,y,z), & \partial_x^2)
+							\end{Bmatrix}
+							$$
+						</p>
+						<img src="figs/plane.png" style="height: 300px; margin-left: 5em">
+					</div>
+					<div class="r-hstack" style="margin-top: 3em;">
+						<p>
+							Associated primes<br>
+							<span class="fragment highlight-green">$P_2 = (x)$</span><br>
+							$P_1 = (x,y-z)$<br>
+							$P_0 = (x,y,z)$
+						</p>
+						<div style="margin-left: 5em;">
+							<p class="fragment">
+								$S_2 = \kappa(P_2)[x] = \CC(y,z)[x]$
+							</p>
+							<p class="fragment">
+								$I_{P_2}S_2 = (x)$
+							</p>
+							<p class="fragment">
+								<span class="fragment highlight-green">$(I_{P_2}S_2)^\perp = \operatorname{Span}_{\kappa(P_2)}\{1\}$</span>
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>
+						Let $I = (x(y-z), x^2z, x^3)$: a plane $x=0$ with an embedded line $x=y-z = 0$ with a further embedded point at the origin.
+					</p>
+					<div class="r-hstack">
+						<p>
+							$$
+							\begin{Bmatrix}
+							(V(x), & 1), \\
+							(V(x,y-z), & \partial_x), \\
+							(V(x,y,z), & \partial_x^2)
+							\end{Bmatrix}
+							$$
+						</p>
+						<img src="figs/plane.png" style="height: 300px; margin-left: 5em">
+					</div>
+					<div class="r-hstack" style="margin-top: 3em;">
+						<p>
+							Associated primes<br>
+							$P_2 = (x)$<br>
+							<span class="fragment highlight-green">$P_1 = (x,y-z)$</span><br>
+							$P_0 = (x,y,z)$
+						</p>
+						<div style="margin-left: 5em;">
+							<p class="fragment">
+								$S_1 = \kappa(P_1)[x,y] = \CC(z)[x,y]$
+							</p>
+							<p class="fragment">
+								$I_{P_1}S_1 = (x^2, xy)$
+							</p>
+							<p class="fragment">
+								$(I_{P_1}S_1)^\perp = \operatorname{Span}_{\kappa(P_1)}\{1, x, y, y^2, y^3, 
+							\dots\}$
+							</p>
+							<p class="fragment">
+								$((I \colon P_1^\infty)_{P_1}S_1)^\perp = \operatorname{Span}_{\kappa(P_1)}\{1, y, y, y^2, y^3, 
+							\dots\}$
+							</p>
+							<p class="fragment">
+								<span class="fragment highlight-green">quotient = "excess dual space" $= \operatorname{Span}_{\kappa(P_1)}\{x\}$</span>
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h2>Example</h2>
+					<p>
+						Let $I = (x(y-z), x^2z, x^3)$: a plane $x=0$ with an embedded line $x=y-z = 0$ with a further embedded point at the origin.
+					</p>
+					<div class="r-hstack">
+						<p>
+							$$
+							\begin{Bmatrix}
+							(V(x), & 1), \\
+							(V(x,y-z), & \partial_x), \\
+							(V(x,y,z), & \partial_x^2)
+							\end{Bmatrix}
+							$$
+						</p>
+						<img src="figs/plane.png" style="height: 300px; margin-left: 5em">
+					</div>
+					<div class="r-hstack" style="margin-top: 3em;">
+						<p>
+							Associated primes<br>
+							$P_2 = (x)$<br>
+							$P_1 = (x,y-z)$<br>
+							<span class="fragment highlight-green">$P_0 = (x,y,z)$</span>
+						</p>
+						<div style="margin-left: 5em;">
+							<p class="fragment">
+								$S_0 = \kappa(P_0)[x,y,z] = \CC[x,y,z]$
+							</p>
+							<p class="fragment">
+								$I_{P_0}S_0 = IS_0$
+							</p>
+							<p class="fragment">
+								$(I_{P_0}S_0)^\perp = \operatorname{Span}_{\kappa(P_0)}\{1, x, x^2, 
+							\dots\}$
+							</p>
+							<p class="fragment">
+								$((I \colon P_0^\infty)_{P_0}S_0)^\perp = \operatorname{Span}_{\kappa(P_0)}\{1, x, 
+							\dots\}$
+							</p>
+							<p class="fragment">
+								<span class="fragment highlight-green">quotient = "excess dual space" $= \operatorname{Span}_{\kappa(P_0)}\{x^2\}$</span>
+							</p>
+						</div>
+					</div>
+				</section>
+
+
+
+				<section>
+					<h2>Applications</h2>
+					<ul>
+						<li class="fragment">Some numerical approaches possible <span style="font-size: 50%; color: darkgoldenrod;">Chen, H., Krone, Leykin (2022)</span>
+							<ul>
+								<li class="fragment">Embedded primes? <span style="font-size: 50%; color: darkgoldenrod;">Ongoing work</span></li>
+							</ul>
+						</li>
+						<li class="fragment">What do operations on ideal look like dually? <span style="font-size: 50%; color: darkgoldenrod;" class="fragment">H. (2022) (PhD. thesis)</span>
+							<ul>
+								<li class="fragment">Intersection</li>
+								<li class="fragment">Sum</li>
+								<li class="fragment">Saturation, colons</li>
+								<li class="fragment">Elimination</li>
+							</ul>
+						</li>
+						<li class="fragment">Even more minimal representation? Socles, module generators... <span style="font-size: 50%; color: darkgoldenrod;">Ait El Manssour, H., Sturmfels (2021)</span></li>
+						<li class="fragment">Application in analysis, algebra... <span style="font-size: 50%; color: darkgoldenrod;">H., Nicklasson, Raiță(2021)</span>
+				</section>				
+
+				<section>
+					<h3>Machine learning</h3>
+					<div class="thm", style="padding: 1em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px;" class="r-frame">
+						<img src="figs/wave1.gif" style="border-radius: 100px; height: 500px">
+						<p style="font-size: 125%">$ \partial_t^2 u = \Delta u $ </p>
+					</div>
+					<p>Joint with Markus Lange-Hegermann (TH OWL) and Bogdan Raiță (SNS Pisa)</p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Gaussian Processes</h3>
+					<p>Continuous analogue of Gaussian random vectors<br>$ f(\mathbf{z}) \sim \operatorname{GP}(\mu(\mathbf{z}), k(\mathbf{z},\mathbf{z}')) $</p>
+					<p class="fragment" style="margin-top: 2em">For any $z_0 \in \RR^n$, $f(z_0)$ is Gaussian
+					$$ \mathbb{E}[f(z_0)] = \mu(z_0) $$</p>
+					<p class="fragment" style="margin-top: 2em">For any $z_0, z_1 \in \RR^n$, $[f(z_0), f(z_1)]$ is jointly Gaussian
+					$$ \operatorname{Cov}(f(z_0), f(z_1)) = k(z_0,z_1) $$</p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Gaussian Processes</h3>
+					<p>Continuous analogue of Gaussian random variables<br>$ f(\mathbf{z}) \sim \operatorname{GP}(\mu(\mathbf{z}), k(\mathbf{z},\mathbf{z}')) $</p>
+					<p>$ \mathbb{E}[f(\mathbf{z})] = \mu(\mathbf{z}) $</p>
+					<p>$ \operatorname{Cov}(f(\mathbf{z}), f(\mathbf{z}')) = k(\mathbf{z},\mathbf{z}') $</p>
+					<div class="r-hstack">
+						<img src="figs/prior.png" style="height: 500px">
+					</div>
+					<div>
+						<p>$ k(z,z') = e^{-\frac{(z-z')^2}{2}}, \qquad \mu(x) = 0 $</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Gaussian Processes</h3>
+					<p>Continuous analogue of Gaussian random variables<br>$ f(\mathbf{z}) \sim \operatorname{GP}(\mu(\mathbf{z}), k(\mathbf{z},\mathbf{z}')) $</p>
+					<p>$ \mathbb{E}[f(\mathbf{z})] = \mu(\mathbf{z}) $</p>
+					<p>$ \operatorname{Cov}(f(\mathbf{z}), f(\mathbf{z}')) = k(\mathbf{z},\mathbf{z}') $</p>
+					<div class="r-hstack">
+						<div><img src="figs/prior.png" style="height: 450px; margin-right: 1em;"><br>$ k(z,z') = e^{-\frac{(z-z')^2}{2}}, \qquad \mu(x) = 0 $</div>
+						<p>$ \Rightarrow $</p>
+						<div><img src="figs/posterior.png" style="height: 450px; margin-left: 1em"><br>Posterior distribution is also a GP
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Gaussian processes are linear (in many (nice) ways)</h3>
+					<p class="fragment">If $ f(\mathbf{z}) \sim \operatorname{GP}(\mu(\mathbf{z}), k(\mathbf{z},\mathbf{z}')) $</p>
+					<div class="r-stack">
+						<p class="fragment fade-in-then-out">then $ \partial_z f(\mathbf{z}) \sim \operatorname{GP}(\partial_z \mu(\mathbf{z}), \partial_z \partial_{z'}k(\mathbf{z},\mathbf{z}')) $</p>
+						<p class="fragment">then $ A(\partial_z) f(\mathbf{z}) \sim \operatorname{GP}(A(\partial_z) \mu(\mathbf{z}), A(\partial_z)A(\partial_{z'})k(\mathbf{z},\mathbf{z}')) $</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Gaussian processes are linear (in many (nice) ways)</h3>
+					<p>If $ f(\mathbf{z}) \sim \operatorname{GP}(\mu(\mathbf{z}), k(\mathbf{z},\mathbf{z}')) $</p>
+					<div class="r-stack">
+						<p>then $ A(\partial_z) f(\mathbf{z}) \sim \operatorname{GP}(A(\partial_z) \mu(\mathbf{z}), A(\partial_z)A(\partial_{z'})k(\mathbf{z},\mathbf{z}')) $</p>
+					</div>
+					<div class="thm" style="margin-top: 1em">
+						<p>Realizations of $\operatorname{GP}(\mu, k)$ satisfy $A(\partial_z)$ if</p>
+						<ul>
+							<li><span class="fragment semi-fade-out">$ A\mu = 0 $</span><span class="fragment fade-in">$\quad\mu = 0$</span></li>
+							<li>$ A(\partial_{z})A(\partial_{z'})k = 0 $</li>
+						</ul>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm">
+						<p>Realizations of $\operatorname{GP}(\mu, k)$ satisfy $A(\partial_z)$ if</p>
+						<ul>
+							<li>$ A(\partial_{z})A(\partial_{z'})k = 0 $</li>
+						</ul>
+					</div>
+					<p>
+						Find a $k$ that solves the PDE $A$ in $z, z'$.
+					</p>
+					<p class="fragment">
+						$$ k(z,z') = \int_V D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, d\mu(x) $$
+					</p>
+					<p class="fragment">
+						Let $x = (x_1,x_2)$, assume $V$ in Noether normal position with respect to $x_1$.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm">
+						<p>Realizations of $\operatorname{GP}(\mu, k)$ satisfy $A(\partial_z)$ if</p>
+						<ul>
+							<li>$ A(\partial_{z})A(\partial_{z'})k = 0 $</li>
+						</ul>
+					</div>
+					<p>
+						Find a $k$ that solves the PDE $A$ in $z, z'$.
+					</p>
+					<p>
+						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, d\mu(x_1) $$
+					</p>
+					<p>
+						Let $x = (x_1,x_2)$, assume $V$ in Noether normal position with respect to $x_1$.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm">
+						<p>Realizations of $\operatorname{GP}(\mu, k)$ satisfy $A(\partial_z)$ if</p>
+						<ul>
+							<li>$ A(\partial_{z})A(\partial_{z'})k = 0 $</li>
+						</ul>
+					</div>
+					<p>
+						Find a $k$ that solves the PDE $A$ in $z, z'$.
+					</p>
+					<p>
+						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, e^{-\frac{\|x_1\|^2}{2}} d\mathcal{L}(x_1) $$
+					</p>
+					<p>
+						Let $x = (x_1,x_2)$, assume $V$ in Noether normal position with respect to $x_1$.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm">
+						<p>Realizations of $\operatorname{GP}(\mu, k)$ satisfy $A(\partial_z)$ if</p>
+						<ul>
+							<li>$ A(\partial_{z})A(\partial_{z'})k = 0 $</li>
+						</ul>
+					</div>
+					<p>
+						Find a $k$ that solves the PDE $A$ in $z, z'$.
+					</p>
+					<p>
+						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, e^{-\frac{\|x_1\|^2}{2}} d\mathcal{L}(x_1) $$
+					</p>
+					<p>
+						Let $x = (x_1,x_2)$, assume $V$ in Noether normal position with respect to $x_1$.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p>
+						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, e^{-\frac{\|x_1\|^2}{2}} d\mathcal{L}(x_1) $$
+					</p>
+					<p class="fragment">Why is this reasonable?</p>
+					<div class="fragment box">
+						<p>Let $A = 0$. We will generate functions that solve the PDE 0.
+						$$k(z,z') = \int_{\RR^n} e^{i(z-z')^T x} e^{-\frac{x^2}{2}} \, d\mathcal{L}(x) \\ \qquad\quad = \sqrt{2\pi}^n e^{-\frac{(z-z')^2}{2}} $$</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<p>
+						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, e^{-\frac{\|x_1\|^2}{2}} d\mathcal{L}(x_1) $$
+					</p>
+					<p>Why is this reasonable?</p>
+					<div class="box">
+						<p>Let $A = 0$. We will generate functions that solve the PDE 0.
+						$$k(z,z') = \int_{\RR^n} e^{i(z-z')^T x} e^{-\frac{x^2}{2}} \, d\mathcal{L}(x) \\ \qquad\quad = \sqrt{2\pi}^n e^{-\frac{(z-z')^2}{2}} $$</p>
+					</div>
+					<div class="r-hstack">
+						<img src="figs/prior.png" style="height: 400px; margin-right: 5em;">
+						<p>
+							Realizations are <b>dense</b><br> in the space of smooth functions
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<p>
+						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, e^{-\frac{\|x_1\|^2}{2}} d\mathcal{L}(x_1) $$
+					</p>
+					<p>Why is this reasonable?</p>
+					<div class="box">
+						<h4>Theorem <span style="font-size: 50%; color: darkgoldenrod;">(H., Lange-Hegermann, Raita, '22)</span></h4>
+						If $A$ is a differential operator with characteristic variety of degree 1, the set of realizations of a Gaussian Process with the above covariance is dense in the set of smooth solutions.
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<p>
+						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, e^{-\frac{\|x_1\|^2}{2}} d\mathcal{L}(x_1) $$
+					</p>
+					<p class="fragment">If $\operatorname{deg}(V) > 1$: Monte-Carlo + numerical solving</p>
+					<div class="fragment box">
+						<p style="font-weight: bold;">1D heat equation: $\partial_t = \partial_x^2$</p>
+						<div class="r-hstack">
+							<img src="figs/heat1.png" style="width: 850px; margin-right:1em">
+							<img src="figs/heat2.png" style="width: 850px; margin-left: 1em">
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<p>
+						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, e^{-\frac{\|x_1\|^2}{2}} d\mathcal{L}(x_1) $$
+					</p>
+					<p>In practice: Monte-Carlo + numerical solving</p>
+					<div class="box">
+						<p style="font-weight: bold;">1D heat equation: $\partial_t = \partial_x^2$</p>
+						<div class="r-hstack">
+							<img src="figs/heatdata1.png" style="width: 850px; margin-right:1em">
+							<img src="figs/heatdata2.png" style="width: 850px; margin-left: 1em">
+						</div>
+					</div>
+				</section>
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">2D wave equation: $\partial_t^2 = \partial_x^2 + \partial_y^2$</p>
+					<div class="r-hstack">
+						<img src="figs/wave1.gif" style="width: 500px; margin-right:1em">
+						<img src="figs/wave2.gif" style="width: 500px; margin-left: 1em">
+					</div>
+					<img src="figs/wave3.gif" style="width: 500px; margin-top: 1em">
+				</section>
+
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">3D Maxwell equations</p>
+					<p>$\nabla \cdot E = 0, \qquad \nabla \cdot B = 0, \qquad \nabla \times E = - \frac{\partial B}{\partial t}, \qquad \nabla \times B = \frac{\partial E}{\partial t}$</p>
+					<div class="r-hstack">
+						<div style="margin-right: 3em;">
+							<video data-autoplay>
+								<source data-src="figs/eanim.mp4" type="video/mp4" />
+							</video>
+							<p>Electric field $E$</p>
+						</div>
+						<div>
+							<video data-autoplay>
+								<source data-src="figs/banim.mp4" type="video/mp4" />
+							</video>
+							<p>Magnetic field $B$</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">Heat equation: GP vs Physics Informed Neural Network</p>
+					<img src="figs/instance.png" style="width: 1300px; margin-left: 1em">
+				</section>
+
+				<!-- <section data-background="#082828" data-transition="none">
+					<p style="font-weight: bold;">2D wave equation: $\partial_t^2 = \partial_x^2 + \partial_y^2$</p>
+					<div class="r-hstack">
+						<img src="figs/wavepost11.png" style="width: 500px; margin-right:1em">
+						<img src="figs/wavepost21.png" style="width: 500px; margin-left: 1em">
+					</div>
+					<img src="figs/wavepost31.png" style="width: 500px; margin-top: 1em">
+				</section>
+
+				<section data-background="#082828" data-transition="none">
+					<p style="font-weight: bold;">2D wave equation: $\partial_t^2 = \partial_x^2 + \partial_y^2$</p>
+					<div class="r-hstack">
+						<img src="figs/wavepost1.gif" style="width: 500px; margin-right:1em">
+						<img src="figs/wavepost2.gif" style="width: 500px; margin-left: 1em">
+					</div>
+					<img src="figs/wavepost3.gif" style="width: 500px; margin-top: 1em">
+				</section>
+
+
+ -->
+
+ 				<section data-auto-animate>
+					<h3>Learning the Ehrenpreis-Palamodov measure</h3>
+					<p>We approximate the EP-integral with a weighted sum</p>
+					<p>
+						$$
+						f(z) = \sum_{i=1}^m w_i D(z,x_i)e^{x_i^T z}
+						$$
+					</p>
+					<p class="fragment">
+						If we set a Gaussian prior $w \sim \mathcal{N}(0, \Sigma)$, we get a <span style="color: lightseagreen;">sparse</span> Gaussian process.
+					</p>
+					<p class="fragment">
+						<span style="color: lightskyblue;">Goal:</span> Learn the covariance $\Sigma$ and points $x_i \in V$ that maximize the (marginal) log-likelihood.
+					</p>
+				</section>
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">Learning a 2D wave</p>
+					<div>
+							<video data-autoplay width=550 loop>
+								<source data-src="figs/truewave.mp4" type="video/mp4" />
+							</video>
+							<p>Numerical solution</p>
+						</div>
+					<div class="r-hstack">
+						<div style="margin-right: 3em;">
+							<video data-autoplay width=550 loop>
+								<source data-src="figs/gpwave.mp4" type="video/mp4" />
+							</video>
+							<p>Trained Gaussian Process</p>
+						</div>
+						<div>
+							<video data-autoplay width=550 loop>
+								<source data-src="figs/pinnwave.mp4" type="video/mp4" />
+							</video>
+							<p>Trained PINN model</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="r-hstack">
+						<div style="width: 50%">
+							<h1>Thank you!</h1>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="r-hstack">
+						<div style="width: 50%">
+							<p>Homework: Solve the PDE</p>
+							<div class="thm", style="padding: 2em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px;">
+								$
+								\begin{gathered}
+								\frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 g}{\partial x \partial y} = 0 \\
+								\frac{\partial^2 f }{\partial y \partial z } + \frac{\partial^2 g}{\partial z^2} = 0 \\
+
+								\frac{\partial^3 f }{\partial x^2 \partial z } + \frac{\partial^3 g}{\partial z \partial y \partial w} = 0
+								\end{gathered}
+								$
+							</div>
+							<p style="font-size: 0.7em;">Hint: <pre><code style="font-size: 0.7em">needsPackage "NoetherianOperators";
+viewHelp(solvePDE)</code></pre></p>
+						</div>
+						<div style="width: 50%">
+							<h1>Thank you!</h1>
+							<!-- <img src="figs/qr.png" style="width: 400px; margin-top: 2em"> -->
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				width: 1920,
+				height: 1080,
+				backgroundTransition: 'zoom',
+				katex: {
+					macros: {
+						"\\mm": "\\mathfrak{m}",
+						"\\pp": "\\mathfrak{p}",
+						"\\DD": "\\mathcal{D}",
+						"\\ff": "\\mathcal{F}",
+						"\\RR": "\\mathbb{R}",
+						"\\QQ": "\\mathbb{Q}",
+						"\\CC": "\\mathbb{C}",
+						"\\KK": "\\mathbb{K}",
+						"\\tt": "\\mathbf{t}",
+						"\\yy": "\\mathbf{y}",
+						"\\ttt": "{(\\mathbf{t})}",
+						"\\ttp": "{(\\mathbf{t}_\\mathfrak{p})}",
+						"\\Span": "\\operatorname{span}",
+						"\\Ass": "\\operatorname{Ass}",
+						"\\im": "\\operatorname{im}",
+						"\\ker": "\\operatorname{ker}",
+						"\\Sol": "\\operatorname{Sol}",
+						"\\rank": "\\operatorname{rank}",
+					}
+				},
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+			});
+		</script>
+	</body>
+</html>
