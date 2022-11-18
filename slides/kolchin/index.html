@@ -469,7 +469,7 @@ o4 : List
 						</p>
 						<img src="figs/plane.png" style="height: 300px; margin-left: 5em">
 					</div>
-					<div class="r-hstack" style="margin-top: 3em;">
+					<div class="r-hstack" style="margin-top: 1em;">
 						<p>
 							Associated primes<br>
 							$P_2 = (x)$<br>
@@ -515,7 +515,7 @@ o4 : List
 						</p>
 						<img src="figs/plane.png" style="height: 300px; margin-left: 5em">
 					</div>
-					<div class="r-hstack" style="margin-top: 3em;">
+					<div class="r-hstack" style="margin-top: 1em;">
 						<p>
 							Associated primes<br>
 							$P_2 = (x)$<br>
@@ -531,11 +531,11 @@ o4 : List
 							</p>
 							<p class="fragment">
 								$(I_{P_0}S_0)^\perp = \operatorname{Span}_{\kappa(P_0)}\{1, x, x^2, 
-							\dots\}$
+							\dots(y,z)\dots\}$
 							</p>
 							<p class="fragment">
 								$((I \colon P_0^\infty)_{P_0}S_0)^\perp = \operatorname{Span}_{\kappa(P_0)}\{1, x, 
-							\dots\}$
+							\dots(y,z)\dots\}$
 							</p>
 							<p class="fragment">
 								<span class="fragment highlight-green">quotient = "excess dual space" $= \operatorname{Span}_{\kappa(P_0)}\{x^2\}$</span>
@@ -718,11 +718,11 @@ o4 : List
 				</section>
 
 				<section data-auto-animate>
-					<p>
+					<p style="font-size: 75%">
 						$$ k(z,z') = \int_{\RR^d} \sum_{x \in V \colon x=(ix_1, x_2)} D(x,z)D(x,z')e^{x^T z} e^{\overline{x}^T z'} \, e^{-\frac{\|x_1\|^2}{2}} d\mathcal{L}(x_1) $$
 					</p>
-					<p>Why is this reasonable?</p>
-					<div class="box">
+					<p style="font-size: 75%">Why is this reasonable?</p>
+					<div class="box" style="font-size: 75%">
 						<p>Let $A = 0$. We will generate functions that solve the PDE 0.
 						$$k(z,z') = \int_{\RR^n} e^{i(z-z')^T x} e^{-\frac{x^2}{2}} \, d\mathcal{L}(x) \\ \qquad\quad = \sqrt{2\pi}^n e^{-\frac{(z-z')^2}{2}} $$</p>
 					</div>
@@ -845,22 +845,22 @@ o4 : List
 				</section>
 
 				<section data-background="#082828">
-					<p style="font-weight: bold;">Learning a 2D wave</p>
+					<p style="font-weight: bold;">Learning a 2D wave, trained on first 3 frames</p>
 					<div>
-							<video data-autoplay width=550 loop>
+							<video data-autoplay width=500 loop>
 								<source data-src="figs/truewave.mp4" type="video/mp4" />
 							</video>
 							<p>Numerical solution</p>
 						</div>
 					<div class="r-hstack">
 						<div style="margin-right: 3em;">
-							<video data-autoplay width=550 loop>
+							<video data-autoplay width=500 loop>
 								<source data-src="figs/gpwave.mp4" type="video/mp4" />
 							</video>
 							<p>Trained Gaussian Process</p>
 						</div>
 						<div>
-							<video data-autoplay width=550 loop>
+							<video data-autoplay width=500 loop>
 								<source data-src="figs/pinnwave.mp4" type="video/mp4" />
 							</video>
 							<p>Trained PINN model</p>
