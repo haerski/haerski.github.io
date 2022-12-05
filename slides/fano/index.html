@@ -1,0 +1,765 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Marc Härkönen</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="marc.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h3>Learning solutions to PDE</h3>
+					<div class="r-hstack">
+						<div class="thm", style="padding: 2em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px; margin-right: 1em" class="r-frame">
+						$$
+						\begin{gather*}
+						\frac{\partial f}{\partial x} + \frac{\partial^2 g}{\partial x \partial y} = 0 \\
+						\frac{\partial^2 f }{\partial y \partial z } + \frac{\partial^2 g}{\partial z^2} = 0 \\
+
+						\frac{\partial^3 f }{\partial x^2 \partial z } + \frac{\partial^3 g}{\partial z \partial y \partial w} = 0
+						\end{gather*}
+						$$
+						</div>
+						<div class="thm", style="padding: 1em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px; margin-left: 1em;" class="r-frame">
+							<img src="figs/wave1.gif" style="border-radius: 100px; height: 500px">
+						</div>
+					</div>
+					<p>
+						<a href="https://haerski.github.io/index.html">Marc Härkönen</a><br>
+						<small>Max Planck Institute for Mathematics in the Sciences<br><br>Presentation for Fano Labs,<br>Dec 07, 2022</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Introduction</h2>
+					<div class="r-hstack">
+						<ul>
+							<li class="fragment">Deep Neural Networks can be thought of as function approximators
+								<ul><li class="fragment">Data X,Y $\to$ function $f_\theta(x)$ such that $f_\theta(X) \approx Y$</li></ul>
+							</li>
+							<li class="fragment">If the data comes from a physical system, we want to use the physical constraint in learning
+								<ul>
+									<li class="fragment">Heat dissipation $\to$ heat equation</li>
+									<li class="fragment">Waves, vibrations $\to$ wave equation</li>
+									<li class="fragment">Magnetic field $\to$ Maxwell's equations</li>
+								</ul>
+							</li>
+							<li class="fragment">If $A(\partial)$ is a PDE, we want also that $A(\partial) f_\theta = 0$</li>
+						</ul>
+						<video data-autoplay loop>
+							<source data-src="figs/wave_nice.mp4" type="video/mp4" />
+						</video>
+					</div>
+				</section>
+
+				<section>
+					<div class="r-hstack">
+						<ul>
+							<li class="fragment">State-of-the-art: PINN, adds a penalty term $\|A(\partial)f\|^2$ to the loss function</li>
+							<li class="fragment">However:
+								<ul>
+									<li class="fragment">Hard to optimize (many bad local minima)</li>
+									<li class="fragment">How to balance between data fit and PDE fit?</li>
+									<li class="fragment">Only approximately solves the PDE</li>
+								</ul>
+							</li>
+							<li class="fragment"><span style="color:lightgreen">Our contribution:</span> Gaussian process priors that solve PDE</li>
+							<li class="fragment">
+								<ul>
+									<li class="fragment">Fully Bayesian, data-driven training</li>
+									<li class="fragment">Realizations solve the PDE <b>exactly</b></li>
+									<li class="fragment">Describes a distribution on the space of solutions $\to$ generative model</li>
+								</ul>
+							</li>
+						</ul>
+						<video data-autoplay loop>
+							<source data-src="figs/wave_nice.mp4" type="video/mp4" />
+						</video>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div>
+							<p>
+								$$ \phi'''(z)-3\phi'(z)+2\phi(z) = 0 $$
+							</p>
+							<p class="fragment" style="padding-top: 1em;">Characteristic polynomial:</p>
+								<p class="fragment"> $$ x^3-3x+2 = 0 $$ </p>
+								<p class="fragment"> $$ (1-x)^2(x+2) = 0 $$ </p>
+							<p class="fragment">Solutions spanned by</p>
+							<div class="fragment">
+								<ul>
+									<li>$e^z$</li>
+									<li>$ze^z$</li>
+									<li>$e^{-2z}$</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div>
+							<p>
+								$$ \phi'''(z)-3\phi'(z)+2\phi(z) = 0 $$
+							</p>
+							<p style="padding-top: 1em;">Characteristic polynomial:</p>
+							<div class="r-stack" style="margin-top: -1em;">
+								<p> $$ (1-x)^2(x+2) = 0 $$ </p>
+							</div>
+							<p>Solutions spanned by</p>
+							<div>
+								<ul>
+									<li>$e^z$</li>
+									<li>$ze^z$</li>
+									<li>$e^{-2z}$</li>
+								</ul>
+							</div>
+						</div>
+						<div style="margin-left: 2em">
+							<p>We set $$f(z) = c_1 e^z + c_2 z e^z + c_3 e^{-2z}$$ where $(c_1,c_2,c_3) \sim \mathcal{N}(0, \Sigma)$.</p>
+							<p class="fragment">$f(z)$ is a <b>Gaussian process</b>.</p>
+							<p class="fragment">Its realization space is precisely the<br>set of solutions to the ODE.</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div>
+							<p>We set $$f(z) = c_1 e^z + c_2 z e^z + c_3 e^{-2z}$$ where $(c_1,c_2,c_3) \sim \mathcal{N}(0, \Sigma)$.</p>
+							<p>$f(z)$ is a <b>Gaussian process</b>.</p>
+							<p>Its realization space is precisely the<br>set of solutions to the ODE.</p>
+						</div>
+						<div style="margin-left: 3em">
+							<h3>Inference</h3>
+							<p class="fragment">use $f(z)$ as a prior distribution on functions</p>
+							<p class="fragment">condition on (noisy) data $Z, f(Z)$ to get a posterior</p>
+							<p class="fragment">we infer using the posterior mean</p>
+							<p class="fragment">the posterior variance gives a measure of confidence</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Gaussian Processes</h3>
+					<p>Continuous analogue of Gaussian random vectors<br>$ f(\mathbf{z}) \sim \operatorname{GP}(\mu(\mathbf{z}), k(\mathbf{z},\mathbf{z}')) $</p>
+					<p class="fragment" style="margin-top: 2em">For any $z_0 \in \RR^n$, $f(z_0)$ is Gaussian
+					$$ \mathbb{E}[f(z_0)] = \mu(z_0) $$</p>
+					<p class="fragment" style="margin-top: 2em">For any $z_0, z_1 \in \RR^n$, $[f(z_0), f(z_1)]$ is jointly Gaussian
+					$$ \operatorname{Cov}(f(z_0), f(z_1)) = k(z_0,z_1) $$</p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Gaussian Processes</h3>
+					<p>Continuous analogue of Gaussian random variables<br>$ f(\mathbf{z}) \sim \operatorname{GP}(\mu(\mathbf{z}), k(\mathbf{z},\mathbf{z}')) $</p>
+					<p>$ \mathbb{E}[f(\mathbf{z})] = \mu(\mathbf{z}) $</p>
+					<p>$ \operatorname{Cov}(f(\mathbf{z}), f(\mathbf{z}')) = k(\mathbf{z},\mathbf{z}') $</p>
+					<div class="r-hstack">
+						<img src="figs/prior.png" style="height: 500px">
+					</div>
+					<div>
+						<p>$ k(z,z') = e^{-\frac{(z-z')^2}{2}}, \qquad \mu(x) = 0 $</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Gaussian Processes</h3>
+					<p>Continuous analogue of Gaussian random variables<br>$ f(\mathbf{z}) \sim \operatorname{GP}(\mu(\mathbf{z}), k(\mathbf{z},\mathbf{z}')) $</p>
+					<p>$ \mathbb{E}[f(\mathbf{z})] = \mu(\mathbf{z}) $</p>
+					<p>$ \operatorname{Cov}(f(\mathbf{z}), f(\mathbf{z}')) = k(\mathbf{z},\mathbf{z}') $</p>
+					<div class="r-hstack">
+						<div><img src="figs/prior.png" style="height: 450px; margin-right: 1em;"><br>$ k(z,z') = e^{-\frac{(z-z')^2}{2}}, \qquad \mu(x) = 0 $</div>
+						<p>$ \Rightarrow $</p>
+						<div><img src="figs/posterior.png" style="height: 450px; margin-left: 1em"><br>Posterior distribution is also a GP
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<h1>Example</h1>
+					<div class="r-hstack">
+						<div>
+							<p>We set $$f(z) = c_1 e^z + c_2 z e^z + c_3 e^{-2z}$$ where $(c_1,c_2,c_3) \sim \mathcal{N}(0, \Sigma)$.</p>
+							<p>$f(z)$ is a <b>Gaussian process</b>.</p>
+							<p>Its realization space is precisely the<br>set of solutions to the ODE.</p>
+						</div>
+						<div style="margin-left: 3em">
+							<p>$$\mu(z) = \mathbb{E}[f(z)] = 0$$</p>
+							<p>$$ \begin{gather*}k(z,z') = \mathbb{E}[f(z)f(z')] \\ = \begin{bmatrix} e^z & ze^z & e^{-2z}\end{bmatrix} \Sigma \begin{bmatrix} e^{z'} \\ {z'}e^{z'} \\ e^{-2{z'}}\end{bmatrix} \end{gather*}$$</p>
+							<p style="margin-top: 2em;">$$\begin{bmatrix} f(z_1) \\ f(z_2)\end{bmatrix} = \mathcal{N}\left(0, \begin{bmatrix} k(z_1,z_1) & k(z_1,z_2) \\ k(z_2,z_1) & k(z_2,z_2) \end{bmatrix} \right)$$</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Gaussian Processes</h3>
+					<p class="fragment">Derivatives of Gaussian processes are Gaussian processes</p>
+					<p class="fragment">$f(z) \sim \text{GP}(\mu(z), k(z,z'))$</p>
+					<p class="fragment">$\partial_z f(z) \sim \text{GP}(\partial_z \mu(z), \partial_z\partial_{z'} k(z,z'))$</p>
+					<p class="fragment">
+						We say a GP solves the PDE $A(\partial)$ if all realizations solve the PDE $A(\partial)$
+					</p>
+					<p class="fragment" style="margin-top: 2em;">Equivalently: $A(\partial)\mu = 0$ and $A(\partial_z)A(\partial_{z'})^T k(z,z') = 0$</p>
+					<p class="box fragment">Challenge:<br>Set $\mu = 0$. How to find $k(z,z')$ such that $AA^Tk = 0$?</p>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm">
+						<h3>Theorem (Ehrenpreis'54, Palamodov'63)</h3>
+						<p>
+							Let $I \subseteq \CC[x_1,\dotsc,x_n]$ denote a system of PDE.
+							There exists are algebraic varieties $V_1,\dotsc, V_s$ and polynomials $D_{i,1}, \dotsc, D_{i,t_i}$ such that all distributional solutions $\phi$ are of the form
+							$$
+							\phi(z) = \sum_{i=1}^s \sum_{j=1}^{t_i} \int_{V_i} D_{i,j}(x,z) \exp(x^T \cdot z)\,\mathrm{d}\mu_{i,j}(x)
+							$$
+							for a suitable set of measures $\mu_{i,j}$.
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm">
+						<h3>Theorem (Ehrenpreis'54, Palamodov'63)</h3>
+						<p>
+							Let $I \subseteq \CC[x_1,\dotsc,x_n]$ denote a system of PDE.
+							There exists are algebraic varieties $V_1,\dotsc, V_s$ and polynomials $D_{i,1}, \dotsc, D_{i,t_i}$ such that all distributional solutions $\phi$ are of the form
+							$$
+							\phi(z) = \sum_{i=1}^s \sum_{j=1}^{t_i} \int_{V_i} D_{i,j}(x,z) \exp(x^T \cdot z)\,\mathrm{d}\mu_{i,j}(x)
+							$$
+							for a suitable set of measures $\mu_{i,j}$.
+						</p>
+					</div>
+					<pre><code class="plaintext">
+Macaulay2, version 1.20
+i1 : needsPackage "NoetherianOperators";
+i2 : R = QQ[x,y,z];
+i3 : I = ideal(x*y-x*z,x^2*z,x^3);
+i4 : solvePDE I
+
+o4 = {{ideal x, {| 1 |}}, {ideal (y - z, x), {| dx |}}, {ideal (z, y, x), {| dx^2 |}}}
+
+o4 : List
+											</code></pre>
+											<p class="thm cite">
+												J. Chen, Y. Cid-Ruiz, M. Härkönen, R. Krone, and A. Leykin, Noetherian operators in Macaulay2, 2021. <em>arXiv:2101.01002</em>.<br>
+											</p>
+				</section>
+
+				<section data-auto-animate>
+					<div class="thm">
+						<h3>Theorem (Ehrenpreis'54, Palamodov'63)</h3>
+						<p>
+							Let $I \subseteq \CC[x_1,\dotsc,x_n]$ denote a system of PDE.
+							There exists are algebraic varieties $V_1,\dotsc, V_s$ and polynomials $D_{i,1}, \dotsc, D_{i,t_i}$ such that all distributional solutions $\phi$ are of the form
+							$$
+							\phi(z) = \sum_{i=1}^s \sum_{j=1}^{t_i} \int_{V_i} D_{i,j}(x,z) \exp(x^T \cdot z)\,\mathrm{d}\mu_{i,j}(x)
+							$$
+							for a suitable set of measures $\mu_{i,j}$.
+						</p>
+					</div>
+					<p>We have almost everyhting! What about $d\mu_{i,j}$?</p>
+					<ul class="fragment">
+						<li>Impose a measure (uniform,Gaussian,???)</li>
+						<li>Learn a measure</li>
+					</ul>
+				</section>
+
+
+				<section data-auto-animate>
+					<h2>Gaussian measures</h2>
+					<p>
+						$$
+						k(z,z') = \int_V D(x,z) e^{x^T z} \cdot \overline{D(x,z') e^{x^T z'}}^T e^{-\frac{\|x\|^2}{2}} d\mathcal L(x)
+						$$
+					</p>
+					<p class="fragment">
+						Why is this reasonable?
+						<ul class="fragment">
+							<li>Similar to Fourier transform based GP kernels</li>
+							<li>If no PDE conditions, we recover the RBF kernel</li>
+							<li>In many simple cases, realizations cover the whole solution space</li>
+							<li>Excellent for generative tasks</li>
+						</ul>
+					</p>
+				</section>
+
+
+				<section data-auto-animate>
+					<p class="fragment">In practice: Monte-Carlo</p>
+					<div class="fragment box">
+						<p style="font-weight: bold;">1D heat equation: $\partial_t = \partial_x^2$</p>
+						<div class="r-hstack">
+							<img src="figs/heat1.png" style="width: 850px; margin-right:1em">
+							<img src="figs/heat2.png" style="width: 850px; margin-left: 1em">
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<p>In practice: Monte-Carlo</p>
+					<div class="box">
+						<p style="font-weight: bold;">1D heat equation: $\partial_t = \partial_x^2$</p>
+						<div class="r-hstack">
+							<img src="figs/heatdata1.png" style="width: 850px; margin-right:1em">
+							<img src="figs/heatdata2.png" style="width: 850px; margin-left: 1em">
+						</div>
+					</div>
+				</section>
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">2D wave equation: $\partial_t^2 = \partial_x^2 + \partial_y^2$</p>
+					<div class="r-hstack">
+						<img src="figs/wave1.gif" style="width: 500px; margin-right:1em">
+						<img src="figs/wave2.gif" style="width: 500px; margin-left: 1em">
+					</div>
+					<img src="figs/wave3.gif" style="width: 500px; margin-top: 1em">
+				</section>
+
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">3D Maxwell equations</p>
+					<p>$\nabla \cdot E = 0, \qquad \nabla \cdot B = 0, \qquad \nabla \times E = - \frac{\partial B}{\partial t}, \qquad \nabla \times B = \frac{\partial E}{\partial t}$</p>
+					<div class="r-hstack">
+						<div style="margin-right: 3em;">
+							<video data-autoplay loop>
+								<source data-src="figs/eanim.mp4" type="video/mp4" />
+							</video>
+							<p>Electric field $E$</p>
+						</div>
+						<div>
+							<video data-autoplay loop>
+								<source data-src="figs/banim.mp4" type="video/mp4" />
+							</video>
+							<p>Magnetic field $B$</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">Heat equation: GP vs Physics Informed Neural Network</p>
+					<img src="figs/instance.png" style="width: 1200px; margin-left: 1em">
+				</section>
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">Heat equation: GP vs Physics Informed Neural Network</p>
+					<img src="figs/all_time_comp.png" style="height: 850px; margin-left: 1em">
+				</section>
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">As a PDE solver, 2D heat</p>
+					<video data-autoplay loop>
+						<source data-src="figs/happy_heat_gaussian.mp4" type="video/mp4" />
+					</video>
+				</section>
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">As a PDE solver, 2D wave</p>
+					<video data-autoplay loop>
+						<source data-src="figs/wave_nice.mp4" type="video/mp4" />
+					</video>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Learning the measure</h3>
+					<p>We approximate the weighted sum</p>
+					<p>
+						$$
+						f(z) = \sum_{i=1}^m w_i D(z,x_i)e^{x_i^T z}
+						$$
+					</p>
+					<p class="fragment">
+						If we set a Gaussian prior $w \sim \mathcal{N}(0, \Sigma)$, we get a <span style="color: lightseagreen;">sparse</span> Gaussian process.
+					</p>
+					<p class="fragment">
+						<span style="color: lightskyblue;">Goal:</span> Learn the covariance $\Sigma$ and points $x_i \in V$ that maximize the (marginal) log-likelihood.
+					</p>
+					<p class="fragment">
+						<span style="color: lightgreen;">Objective: </span>log marginal likelihood $$\log p(y) = -\frac{1}{2\sigma^2}(yy^T - y^T \Phi^H A^{-1} \Phi y) - \frac{n-m}{2} \log \sigma^2 - \frac{1}{2}\log |A| - \frac{1}{2} \log |\Sigma| + C$$
+					</p>
+				</section>
+
+				<section data-background="#082828">
+					<p style="font-weight: bold;">Learning a 2D wave</p>
+					<div>
+							<video data-autoplay width=500 loop>
+								<source data-src="figs/truewave.mp4" type="video/mp4" />
+							</video>
+							<p>Numerical solution</p>
+						</div>
+					<div class="r-hstack">
+						<div style="margin-right: 3em;">
+							<video data-autoplay width=500 loop>
+								<source data-src="figs/gpwave.mp4" type="video/mp4" />
+							</video>
+							<p>Trained Gaussian Process</p>
+						</div>
+						<div>
+							<video data-autoplay width=500 loop>
+								<source data-src="figs/pinnwave.mp4" type="video/mp4" />
+							</video>
+							<p>Trained PINN model</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="r-hstack">
+						<div style="width: 50%">
+							<h1>Thank you!</h1>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3>Hybird CTC/Attention Architecture<br>for End-To-End Speech Recognition</h3>
+					<div class="thm", style="padding: 1em; background: linear-gradient(135deg, rgba(42,9,68,1) 0%, rgba(59,24,95,1) 50%, rgba(161,37,104,1) 100%); border-radius: 100px; margin-left: 1em;" class="r-frame">
+						<img src="figs/E2E.png" style="border-radius: 0px; height: 500px">
+					</div>
+					<p>
+						<a href="https://haerski.github.io/index.html">Marc Härkönen</a><br>
+						<small><br>Presentation for Fano Labs<br>Dec 7, 2022</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Introduction</h2>
+					<ul>
+						<li class="fragment">Given a sequence of speech $X$, find the most likely sequence $\hat C$ of characters.</li>
+						<li class="fragment">Bayesian decison theory: $\hat C = \argmax_{C} p(C \mid X)$</li>
+						<li class="fragment">Goal: Model the posterior $p(C \mid X)$</li>
+						<li class="fragment">Traditional ASR methods
+							<ul class="fragment">
+								<li>Many modules: language, acoustic, lexicon models</li>
+								<li>Modules trained separately, involve expert information</li>
+								<li>Hard to optimize jointly</li>
+							</ul>
+						</li>
+						<li class="fragment">End-to-end models
+							<ul class="fragment">
+								<li>Simpler architecture, doing all tasks</li>
+								<li>Fully data driven</li>
+								<li>Common architectures: CTC and Attention</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section data-auto-animate>
+					<h2>Connectionist Temporal Classification (CTC)</h2>
+				</section>
+
+				<section data-auto-animate>
+					<h2>Connectionist Temporal Classification (CTC)</h2>
+					<ul>
+						<li class="fragment">Encode speech $X = x_1,\dotsc, x_T$ into framewise characters $Z = z_1,\dotsc,z_T$</li>
+						<li class="fragment">Given the sequence of framewise characters $Z$, reconstruct a readable sequence of characters $C = c_1,\dotsc,c_L$</li>
+					</ul>
+					<p class="fragment">
+						$$
+						p(C \mid X) \approx \sum_Z p(C \mid Z) p(Z \mid X)
+						$$
+					</p>
+					<ul>
+						<li class="fragment">$p(Z \mid X)$: CTC acoustic model</li>
+						<li class="fragment">$p(C \mid Z)$: CTC letter model</li>
+					</ul>
+					<p class="fragment" style="font-size: 75%; color: lightcoral">Detail: to distinguish between repeated letters, we reconstruct $C' = \emptyset, c_1, \emptyset, \dotsc, c_L, \emptyset$</p>
+				</section>
+
+
+				<section data-auto-animate>
+					<p class="fragment"><span style="color: palegreen">$p(Z \mid X)$: CTC acoustic model</span></p>
+					<ul style="margin-top: 2em">
+						<li class="fragment">$p(Z \mid X) \approx \prod_{t=1}^T p(z_t \mid X)$</li>
+						<li class="fragment">We define:
+							$$
+								\begin{align*}
+									\vec{h}_t &= \mathrm{BLSTM}_t(X)\\
+									p(z_t \mid X) &= \mathrm{Softmax}(\mathrm{LinB}(\vec h_t))
+								\end{align*}
+							$$
+						</li>
+					</ul>
+				</section>
+
+				<section data-auto-animate>
+					<p><span style="color: palegreen">$p(C \mid Z)$: CTC letter model</span></p>
+					<ul style="margin-top: 2em">
+						<li class="fragment">$p(C \mid Z) = \frac{p(Z \mid C)p(C)}{p(Z)} \approx \prod_{t=1}^T p(z_t \mid z_{t-1}, C) \frac{p(C)}{p(Z)}$</li>	
+					</ul>
+					<p class="fragment">Possible state transistions $z_{t-1} \to z_t$
+						<ul>
+							<li class="fragment">$z_{t-1} = c_l \implies z_{t} = c_l$</li>
+							<li class="fragment">$z_{t-1} = c_{l-1} \implies z_{t} = c_l$</li>
+							<li class="fragment">$z_{t-1} = c_{l-2} \implies z_{t} = c_l$, if $ c_{l-2} \neq \emptyset$</li>
+						</ul>
+					</p>
+				</section>
+
+
+				<section data-auto-animate>
+					<h2>Connectionist Temporal Classification (CTC)</h2>
+					<p>We have
+						$$
+							p(C \mid X) \approx \sum_Z \prod_{t=1}^T p(z_t \mid z_{t-1}, C) p(z_t \mid X) \frac{p(C)}{p(Z)}
+						$$
+					</p>
+					<ul style="color: lightgreen">
+						<li>Preserves alignment</li>
+					</ul><br>
+					<ul style="color: lightcoral">
+						<li>Conditional independence</li>
+					</ul>
+				</section>
+
+				<section data-auto-animate>
+					<h2>Attention mechanism</h2>
+					<p class="fragment">
+						$$
+							p(C \mid X) = \prod_{l=1}^L p(c_l \mid c_1,\dotsc,c_{l-1}, X)
+						$$
+					</p>
+					<p class="fragment">
+						Define
+						$$
+						\begin{gather*}
+							\vec h_t = \text{BLSTM}_t(X) \\
+							\vec r_l = \sum_{t=1}^T a_{lt} \vec h_t\\
+							p(c_l \mid c_1,\dotsc,c_{l-1}, X) = \text{Decoder}(\vec r_l, \dots)
+						\end{gather*}
+						$$
+					</p>
+					<p class="fragment"><span style="color: lightgreen">No conditional independence assumption</span><br>
+						<span style="color: lightcoral">Alignment issues: matrix $a_{lt}$ may be far from diagonal</span></p>
+				</section>
+
+				<section data-auto-animate>
+					<p>
+						$$
+						\begin{gather*}
+							\vec h_t = \text{BLSTM}_t(X) \\
+							\vec r_l = \sum_{t=1}^T a_{lt} \vec h_t
+						\end{gather*}
+						$$
+					</p>
+					<p>
+						$a_{l,1:T}$ is obtained from $a_{l-1,1:T}, \vec{q}_{l-1}, \vec h_t$ given as follows:
+						<ol>
+							<li class="fragment">Convolve: $\vec f_{1:T} = K * a_{l-1,1:T}$</li>
+							<li class="fragment">Score: $e_{lt} = \vec g^T \tanh( \text{Lin}(\vec q_{l-1}) + \text{Lin}(\vec h_t) + \text{LinB} (\vec f_t) )$</li>
+							<li class="fragment">Softmax: $a_{l,1:T} = \text{Softmax}(e_{l,1:T})$</li>
+						</ol>
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<p>
+						$$
+						\begin{gather*}
+						p(c_l \mid c_1,\dotsc,c_{l-1}, X) = \text{Decoder}(\vec r_l, \vec q_{l-1}, \vec c_{l-1})
+						\end{gather*}
+						$$
+					</p>
+					<p class="fragment">
+						Hidden state $\vec q_l$ is updated using
+						$$
+							\vec q_l = \text{LSTM}_l(\vec r_l, \vec q_{l-1}, c_{l-1}),
+						$$
+					</p>
+					<p class="fragment">
+						and the likelihood is given by
+						$$
+						\begin{gather*}
+						p(c_l \mid c_1,\dotsc,c_{l-1}, X) = \text{Softmax}(\text{LinB}(\vec q_l))
+						\end{gather*}
+						$$
+					</p>
+				</section>
+
+				<section>
+					<img src="figs/E2E.png" style="border-radius: 0px; height: 800px">
+				</section>
+
+				<section>
+					<h2>Training</h2>
+					<p>
+						$$ \mathcal{L} = \lambda \log p_{CTC}(C \mid X) + (1-\lambda) \log p_{ATT}^*(C \mid X), $$
+						where
+					</p>
+					<p class="fragment">$p_{CTC}(C \mid X) = \sum_Z \prod_{t=1}^T p(z_t \mid z_{t-1}, C) p(z_t \mid X)$</p>
+					<p class="fragment">and</p>
+					<p class="fragment">$p_{ATT}^*(C \mid X) = \prod_{l=1}^L p(c_l \mid c_{1}^*, \dotsc, c_{l-1}^*, X)$</p>
+				</section>
+
+				<section>
+					<h2>Decoding</h2>
+					<p>$\hat C = \argmax_{C} \log p(C\mid X)$</p>
+					<p>Beam search as a heuristic</p>
+					<img src="figs/beam_search.svg" style="height: 500px; background-color: white;">
+					<p class="fragment" style="color: lightskyblue">Goal: score prefixes, $\alpha(h,X) = \lambda \alpha_{CTC}(h,X) + (1-\lambda) \alpha_{ATT}(h,X)$</p>
+				</section>
+
+				<section>
+					<h2>Scoring</h2>
+					<p class="fragment">$\alpha_{ATT}(h,X) = \log p_{ATT}(h \mid X)$</p>
+					<p class="fragment">$\alpha_{CTC}(h,X) = \log p_{CTC}(h,\dotsc \mid X) = \log \sum_{h \cdot \nu} p_{CTC}(h \cdot \nu \mid X)$</p>
+					<p class="fragment" style="margin-top: 2em;">Q: How to compute this sum?</p>
+					<p class="fragment">A: Dynamic programming</p>
+				</section>
+
+				<section data-background="#082828">
+					<h2>CTC label sequence score</h2>
+					<p>Suppose we want to score: "<tt>SOS, a, b</tt>" and $T=4$</p>
+					<p>Define $\gamma_t^{(n)}(h)$: probability of all CTC paths of length $t$ decoding to $h$,<br>ending in a non $\square$ character</p>
+					<p>Define $\gamma_t^{(b)}(h)$: probability of all CTC paths of length $t$ decoding to $h$,<br>ending in a $\square$ character</p>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<p>Suppose we want to score: "<tt>SOS, a, b</tt>" and $T=4$</p>
+					<p>h = SOS</p>
+					<p>$\gamma_1^{(n)}(SOS) = \gamma_2^{(n)}(SOS) = \gamma_3^{(n)}(SOS) = \gamma_4^{(n)}(SOS) = 0$</p>
+					<p style="margin-top: 2em;">$\gamma_1^{(b)}(SOS) = p(z_1 = \square \mid X)$</p>
+					<p>$\gamma_2^{(b)}(SOS) = p(z_1 = \square, z_2 = \square \mid X)$</p>
+					<p>$\gamma_3^{(b)}(SOS) = p(z_1 = \square, z_2 = \square, z_3 = \square \mid X)$</p>
+					<p>$\gamma_4^{(b)}(SOS) = p(z_1 = \square, z_2 = \square, z_3 = \square, z_4 = \square \mid X)$</p>
+				</section>
+
+				<section data-auto-animate data-background="#082828">
+					<p>Suppose we want to score: "<tt>SOS, a, b</tt>" and $T=4$</p>
+					<p>h = SOS</p>
+					<p>$\gamma_1^{(n)}(SOS) = \gamma_2^{(n)}(SOS) = \gamma_3^{(n)}(SOS) = \gamma_4^{(n)}(SOS) = 0$</p>
+					<p style="margin-top: 2em;">$\gamma_1^{(b)}(SOS) = \square$</p>
+					<p>$\gamma_2^{(b)}(SOS) = \square \square$</p>
+					<p>$\gamma_3^{(b)}(SOS) = \square \square \square$</p>
+					<p>$\gamma_4^{(b)}(SOS) = \square \square \square \square$</p>
+				</section>
+
+				<section data-background="#082828">
+					<p>Suppose we want to score: "<tt>SOS, a, b</tt>" and $T=4$</p>
+					<p>h = SOS, a</p>
+					<p style="margin-top: 2em;">$\gamma_1^{(n)}(h) = a$</p>
+					<p>$\gamma_2^{(n)}(h) = aa + \square a$</p>
+					<p>$\gamma_3^{(n)}(h) = aaa + \square aa + \square \square a a$</p>
+					<p>$\gamma_4^{(n)}(h) = aaaa + \square aaa + \square \square aa + \square \square \square a$</p>
+					<p style="margin-top: 2em;">$\gamma_1^{(b)}(h) = 0$</p>
+					<p>$\gamma_2^{(b)}(h) = a \square$</p>
+					<p>$\gamma_3^{(b)}(h) = aa\square + \square a \square + a \square \square$</p>
+					<p>$\gamma_4^{(b)}(h) = \gamma_3^{(n)} \square + \gamma_3^{(b)} \square$</p>
+				</section>
+
+				<section data-background="#082828">
+					<p>Suppose we want to score: "<tt>SOS, a, b</tt>" and $T=4$</p>
+					<p>h = SOS, a, b</p>
+					<p style="margin-top: 2em;">$\gamma_1^{(n)}(h) = 0$</p>
+					<p>$\gamma_2^{(n)}(h) = ab$</p>
+					<p>$\gamma_3^{(n)}(h) = abb + aab + \square a b + a \square b$</p>
+					<p>$\gamma_4^{(n)}(h) = (\gamma_3^{(b)}(SOS, a) + \gamma_3^{(n)}(SOS,a) + \gamma_3^{(n)}(h)) b$</p>
+					<p style="margin-top: 2em;">$\gamma_1^{(b)}(h) = 0$</p>
+					<p>$\gamma_2^{(b)}(h) = 0$</p>
+					<p>$\gamma_3^{(b)}(h) = ab\square$</p>
+					<p>$\gamma_4^{(b)}(h) = (\gamma_3^{(n)}(h) + \gamma_3^{(b)}(h)) b$</p>
+				</section>
+
+				<section data-background="#082828">
+					<p>Suppose we want to score: "<tt>SOS, a, b</tt>" and $T=4$</p>
+					<p>h = SOS, a, b</p>
+					<p style="margin-top: 2em">$$
+						\begin{align*}
+						p_{CTC}(h,\dotsc \mid X) =& ab \\ 
+								&+ aab + \square ab + a\square b\\ 
+								&+ aaab + \square aab + \square\square ab + aa\square b + \square a \square b + a \square \square b
+						\end{align*}$$
+					</p>
+				</section>
+
+				<section>
+					<h2>Conclusion</h2>
+					<div class="r-vstack">
+						<div>
+							<ul>
+								<li class="fragment">End-to-End ASR systems are fully data-driven, and don't require linguistic resources</li>
+								<li class="fragment">CTC models align $X$ and $C$, but has many conditional independence assumptions</li>
+								<li class="fragment">Attention based models have no conditional independence assumptions, but the alignment is completely unconstrained</li>
+								<li class="fragment">The hybrid CTC/attention based model tries to balance the two objectives.</li>
+								<li class="fragment">Training and decoding can be done effectively using dynamic programming</li>
+							</ul>
+						</div>
+						<div>
+							<img src="figs/align.png" style="width: 1000px">
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<div class="r-hstack">
+						<div style="width: 50%">
+							<h1>Thank you!</h1>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				width: 1500,
+				height: 1080,
+				backgroundTransition: 'zoom',
+				katex: {
+					macros: {
+						"\\mm": "\\mathfrak{m}",
+						"\\pp": "\\mathfrak{p}",
+						"\\DD": "\\mathcal{D}",
+						"\\ff": "\\mathcal{F}",
+						"\\RR": "\\mathbb{R}",
+						"\\QQ": "\\mathbb{Q}",
+						"\\CC": "\\mathbb{C}",
+						"\\KK": "\\mathbb{K}",
+						"\\tt": "\\mathbf{t}",
+						"\\yy": "\\mathbf{y}",
+						"\\ttt": "{(\\mathbf{t})}",
+						"\\ttp": "{(\\mathbf{t}_\\mathfrak{p})}",
+						"\\Span": "\\operatorname{span}",
+						"\\Ass": "\\operatorname{Ass}",
+						"\\im": "\\operatorname{im}",
+						"\\ker": "\\operatorname{ker}",
+						"\\Sol": "\\operatorname{Sol}",
+						"\\rank": "\\operatorname{rank}",
+					}
+				},
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+			});
+		</script>
+	</body>
+</html>
