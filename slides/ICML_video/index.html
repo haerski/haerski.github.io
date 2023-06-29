@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>GP Priors for Systems of Linear PDE with Constant Coefficients</title>
+
+		<link rel="sheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<div class="r-hstack" style="margin-top: -1em; scale: 70%; border: 3px solid black; border-radius: 1em; padding: 1em">
+						<div>
+							<video data-autoplay src="assets/E.mp4" loop></video>
+						</div>
+						<div style="margin-right: 2em; margin-left: 2em; padding: 1em; scale: 80%">
+							$$ \begin{align*}
+								\nabla \cdot \mathbf{E} &= 0 \\
+								\nabla \cdot \mathbf{B} &= 0 \\
+								\nabla \times \mathbf{E} &= -\frac{\partial \mathbf{B}}{\partial t} \\
+								\nabla \times \mathbf{B} &= \frac{\partial \mathbf{E}}{\partial t}
+							\end{align*} $$
+						</div>
+						<div>
+							<video data-autoplay src="assets/B.mp4" loop></video>
+						</div>
+					</div>
+					<h3>GP Priors for Systems of Linear PDE with Constant Coefficients</h3>
+					<p style="margin-top: 0;">
+						<a href="https://haerski.github.io/index.html">Marc Härkönen<sup>1,2</sup></a>, Markus Lange-Hegermann<sup>3</sup>, Bogdan Raiță<sup>4</sup><br>
+						<small>
+							<sup>1</sup>Max Planck Institute for Mathematics in the Sciences, Leipzig, Germany<br>
+							<sup>2</sup>Fano Labs, Hong Kong SAR, China<br>
+							<sup>3</sup>Institute Industrial IT, TH-OWL, Lemgo, Germany<br>
+							<sup>4</sup>Scuola Normale Superiore di Pisa, Pisa, Italy<br>
+							<br>ICML 2023
+						</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Example</h2>
+					<h3>Damped spring-mass system</h3>
+					<div class="r-hstack">
+						<p>
+							$$ \frac{\mathrm{d}^2y}{\mathrm{d}t^2} + 2 \frac{\mathrm{d}y}{\mathrm{d}t} + 10y = 0 $$
+							Sample 5 noisy points
+						</p>
+						<img height=800px data-src="assets/true_ani.gif" style="margin-left: 3em;">
+					</div>
+				</section>
+
+				<section>
+					<h2>Example</h2>
+					<h3>Neural Network</h3>
+					<div class="r-hstack">
+						<ul style="list-style: none; margin: 0; line-height: 2em;">
+							<li>⚠️ ~300,000 parameters</li>
+							<li>✅ Fast convergence</li>
+							<li>❌ Bad inter/extrapolation</li>
+						</ul>
+						<img height=800px style="margin-left: 3em;" data-src="assets/NN.gif">
+					</div>
+				</section>
+
+				<section>
+					<h2>Example</h2>
+					<h3>Physics Informed Neural Network</h3>
+					<div class="r-hstack">
+						<ul style="list-style: none; margin: 0; line-height: 2em;">
+							<li>⚠️ ~300,000 parameters</li>
+							<li>❌ Slow convergence</li>
+							<li>✅ Good inter/extrapolation</li>
+							<li>⚠️ Requires extra points</li>
+							<li>⚠️ Not an exact solution</li>
+							<li>❌ Hard to optimize</li>
+						</ul>
+						<img height=800px style="margin-left: 3em;" data-src="assets/PINN.gif">
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h2>A more constrained approach</h2>
+					<p>
+						How to solve?
+						$$ \frac{\mathrm{d}^2y}{\mathrm{d}t^2} + 2 \frac{\mathrm{d}y}{\mathrm{d}t} + 10y = 0 $$
+					</p>
+					<p class="fragment" style="color: #0073e6">
+						Algebraic preprocessing
+						$$ z^2 + 2z + 10 = 0 \Rightarrow z = 1 \pm 3i $$
+					</p>
+					<p class="fragment">
+						Solution Space
+						$$ y(t) = e^{-t} (\textcolor{#b51963}{c_1} \cos 3t + \textcolor{#b51963}{c_2} \sin 3t) $$
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<h2>A more constrained approach</h2>
+					<p style="font-size: 66%;">
+						How to solve?
+						$$ \frac{\mathrm{d}^2y}{\mathrm{d}t^2} + 2 \frac{\mathrm{d}y}{\mathrm{d}t} + 10y = 0 $$
+					</p>
+					<p style="font-size: 66%; color: #0073e6">
+						Algebraic preprocessing
+						$$ z^2 + 2z + 10 = 0 \Rightarrow z = 1 \pm 3i $$
+					</p>
+					<p style="font-size: 66%;">
+						Solution Space
+						$$ y(t) = e^{-t} (c_1 \cos 3t + c_2 \sin 3t) $$
+					</p>
+					<p style="font-size: bigger; border: 5px solid black; border-radius: 25px; display: inline-block; padding: 1em">
+						Gaussian process prior
+						$$
+							Y(t) \sim e^{-t} (\textcolor{#b51963}{C_1} \cos 3t + \textcolor{#b51963}{C_2} \sin 3t) + \epsilon
+						$$
+						where
+						$$
+						\textcolor{#b51963}{C_1 \sim \mathcal{N}(0, \sigma_1)}, \textcolor{#b51963}{C_2 \sim \mathcal{N}(0, \sigma_2)}, \textcolor{#b51963}{\epsilon \sim \mathcal{N}(0, \sigma_0)}
+						$$
+					</p>
+				</section>
+
+				<section>
+					<h3>Gaussian Process</h3>
+					<div class="r-hstack">
+						<ul style="list-style: none; margin: 0; line-height: 2em;">
+							<li>✅ 3 parameters</li>
+							<li>✅ Fast convergence</li>
+							<li>✅ Good inter/extrapolation</li>
+							<li>✅ Exact solution</li>
+							<li>✅ No extra points</li>
+						</ul>
+						<img height=800px style="margin-left: 3em;" data-src="assets/EPGP.gif">
+					</div>
+				</section>
+
+				<section data-auto-animate="">
+					<h2>Technical details</h2>
+					<div>
+						<p><b>Ehrenpreis-Palamodov ('70)</b>: Solutions to PDE described by "Fourier" frequencies</p>
+						<p class="fragment">
+							$$ f(x) = \int_{\textcolor{#0073e6}{V}} \textcolor{#0073e6}{D(x,z)} e^{i\langle x, z \rangle} \, \mathrm{d}\textcolor{#b51963}{\mu(z)} $$
+							<span style="color: #0073e6; margin-right: 4em;">Algebraic preprocessing</span> <span style="color: #b51963">Learned</span>
+						</p>	
+						<p class="fragment">
+							Works with <b>arbitrary</b> systems of homogeneous linear PDE with constant coefficients
+							<ul>
+								<li class="fragment"><i>Any</i> input dimension</li>
+								<li class="fragment"><i>Any</i> output dimension</li>
+								<li class="fragment"><i>Any</i> number of equations</li>
+								<li class="fragment"><i>Any</i> analytic property of the PDE (elliptic/hyperbolic/parabolic)</li>
+							</ul>
+						</p>
+					</div>
+				</section>
+
+				<section data-auto-animate="">
+					<h2>Technical details</h2>
+					<div style="font-size: 66%;">
+						<p><b>Ehrenpreis-Palamodov ('70)</b>: Solutions to PDE described by "Fourier" frequencies</p>
+						<p>
+							$$ f(x) = \int_{\textcolor{#0073e6}{V}} \textcolor{#0073e6}{D(x,z)} e^{i\langle x, z \rangle} \, \mathrm{d}\textcolor{#b51963}{\mu(z)} $$
+							<span style="color: #0073e6; margin-right: 4em;">Algebraic preprocessing</span> <span style="color: #b51963">Learned</span>
+						</p>	
+						<p>
+							Works with <b>arbitrary</b> systems of homogeneous linear PDE with constant coefficients
+							<ul>
+								<li><i>Any</i> input dimension</li>
+								<li><i>Any</i> output dimension</li>
+								<li><i>Any</i> number of equations</li>
+								<li><i>Any</i> analytic property of the PDE (elliptic/hyperbolic/parabolic)</li>
+							</ul>
+						</p>
+					</div>
+					<p style="font-size: bigger; border: 5px solid black; border-radius: 25px; display: inline-block; padding: 1em">
+						<b>EPGP: </b> Gaussian Process kernels <i>constrained</i> to PDE solutions
+					</p>
+				</section>
+				
+				<section>
+					<h2>Wave equation</h2>
+					<p>
+						$$ \frac{\partial^2 z}{\partial t^2} = \frac{\partial^2 z}{\partial x^2} + \frac{\partial^2 z}{\partial y^2} $$
+					</p>
+					<div class="r-hstack">
+						<!-- <video data-autoplay src="assets/wave1.mp4" loop style="margin-right: .5em;"></video> -->
+						<video data-autoplay src="assets/wave2.mp4" loop style="margin-right: .5em;"></video>
+					</div>
+				</section>
+
+				<section>
+					<h2>Maxwell's equations</h2>
+					<div class="r-hstack">
+						<div>
+							<p>$ \mathbf{E}(x,y,z,t) $</p>
+							<video data-autoplay src="assets/E.mp4" loop></video>
+						</div>
+						<div style="margin: .5em; padding: .5em; border: 3px solid black; border-radius: 1em;">
+							$$ \begin{align*}
+								\nabla \cdot \mathbf{E} &= 0 \\
+								\nabla \cdot \mathbf{B} &= 0 \\
+								\nabla \times \mathbf{E} &= -\frac{\partial \mathbf{B}}{\partial t} \\
+								\nabla \times \mathbf{B} &= \frac{\partial \mathbf{E}}{\partial t}
+							\end{align*} $$
+						</div>
+						<div>
+							<p>$ \mathbf{B}(x,y,z,t) $</p>
+							<video data-autoplay src="assets/B.mp4" loop></video>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>Conclusion</h2>
+					<div class="r-hstack">
+						<div style="width: 50%;">
+							<ul>
+								<li>
+									<b>EPGP</b>: A class of Gaussian Process priors for solving PDE
+									<ul>
+										<li class="fragment"><b>S-EPGP</b>: Sparse version</li>
+									</ul>
+								</li>
+								<li class="fragment">Fully algorithmic</li>
+								<li class="fragment">No approximations anywhere $\Rightarrow$ exact solutions</li>
+								<li class="fragment">Improved accuracy and convergence speed compared to PINN variants</li>
+								<li class="fragment">Compatible with standard GP techniques</li>
+							</ul>
+							<div class="fragment" style="font-size: smaller;">
+								<img height=300px data-src="assets/qr-code.png"><br>
+								Paper website
+							</div>
+						</div>
+						<div style="margin-left: 0em">
+							<p>
+								$$
+								\frac{\partial u}{\partial t} = \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2}
+								$$
+							</p>
+							<video data-autoplay src="assets/heat.mp4" loop style="margin-right: .5em;"></video>
+						</div>
+					</div>
+					
+				</section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				width: 1920,
+  				height: 1080,
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+			});
+		</script>
+	</body>
+</html>
